@@ -2,8 +2,10 @@
 Sistema de Controle de Abertura de Chamados
 
 # Ferramentas
-- javaspring
-- docker
-- postgrees
-- angular (front)
-- 
+- Java spring (backend) 
+- Docker
+- PostgreSQL
+- Angular (front)
+- Swagger (Postman, insomnia, etc...)
+- Github
+- Ferramenta para kanbam (github projects, trello, etc...)
