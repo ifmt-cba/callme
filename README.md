@@ -26,7 +26,7 @@ git clone https://github.com/ifmt-cba/callme.git
 ### Configurar e Rodar o Backend
 
 ```cmd
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Configurar e Rodar no frontend
