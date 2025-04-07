@@ -1,7 +1,6 @@
 package com.example.login_auth_api.domain.user;
 
 import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 @Entity
 @Table(name = "tb_roles")
@@ -24,14 +23,14 @@ public class Role {
     //Criando as Holes
     private String name;
 
-    public enum values{
+    public enum Values {
 
         RT(2L),
         ADMIN(1L);
 
         long roleId;
 
-        values(long roleId) {
+        Values(long roleId) {
             this.roleId = roleId;
         }
     }
