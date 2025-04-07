@@ -1,9 +1,11 @@
 package com.example.login_auth_api.domain.user;
 
+import com.example.login_auth_api.dto.LoginRequestDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GeneratorType;
 import org.springframework.boot.autoconfigure.web.WebProperties;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
 import java.util.UUID;
@@ -63,5 +65,13 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    // Aqui e feito a comparacao das senhas do DTO e do Encoder
+    public boolean isLoginCorrect(LoginRequestDTO loginRequestDTO, PasswordEncoder passwordEncoder) {
+
+       return passwordEncoder.matches(loginRequestDTO.password(), this.password);
+
+
     }
 }
