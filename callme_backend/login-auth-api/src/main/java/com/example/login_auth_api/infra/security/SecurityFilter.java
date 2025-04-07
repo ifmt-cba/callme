@@ -1,3 +1,4 @@
+/*
 package com.example.login_auth_api.infra.security;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -45,3 +46,4 @@ import java.util.Collections;
         }
     }
 
+*/

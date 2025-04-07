@@ -1,3 +1,4 @@
+/*
 package com.example.login_auth_api.infra.security;
 
 import com.auth0.jwt.JWT;
@@ -55,3 +56,4 @@ public class TokenService {
 
     }
 }
+*/
