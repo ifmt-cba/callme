@@ -1,60 +1,77 @@
 package com.example.login_auth_api.domain.user;
 
+import com.example.login_auth_api.dto.LoginRequestDTO;
 import jakarta.persistence.*;
-import lombok.*;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GeneratorType;
+import org.springframework.boot.autoconfigure.web.WebProperties;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Set;
+import java.util.UUID;
+
 
 @Entity
-@Table(name = "users")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name = "tb_users")
+
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-    private String name;
-    private String email;
+    @Column(name = "user_id")
+    private UUID userid;
+
+    @Column(unique = true)
+    private String username;
+
     private String password;
-    private String setor;
 
-    public String getSetor() {
-        return setor;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+
+            name =  "tb_users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
+
+    public UUID getUserid() {
+        return userid;
     }
 
-    public void setSetor(String setor) {
-        this.setor = setor;
+    public void setUserid(UUID userid) {
+        this.userid = userid;
     }
 
-    public String getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String passoword) {
-        this.password = passoword;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    // Aqui e feito a comparacao das senhas do DTO e do Encoder
+    public boolean isLoginCorrect(LoginRequestDTO loginRequestDTO, PasswordEncoder passwordEncoder) {
+
+       return passwordEncoder.matches(loginRequestDTO.password(), this.password);
+
+
     }
 }
