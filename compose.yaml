@@ -1,0 +1,71 @@
+services:
+  database:
+    image: postgres:17.4-alpine
+    container_name: postgres_db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - callme-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - database
+    networks:
+      - callme-network
+
+  backend:
+    build:
+      context: ./callme_backend/login-auth-api
+      dockerfile: Dockerfile
+    container_name: spring_backend
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:${POSTGRES_PORT}/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - callme-network
+
+  frontend:
+    build:
+      context: ./callme_frontend
+      dockerfile: Dockerfile
+    container_name: angular_frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    networks:
+      - callme-network
+
+networks:
+  callme-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  pgadmin_data:

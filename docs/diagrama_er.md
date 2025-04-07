@@ -11,15 +11,15 @@ classDiagram
         -uuid | id
         -int  | pk_id
         -fk | id_chamado
-        -uuid - a decidir | token
         -str | email -> quem respondeu a mensagem
         -str | autor
     }
     class chamado{
         -uuid | id
         -int | pk_id
-        -int | tier/1 - 5
-        -optional[fk] | funcionario -> gerente insere
+        -uuid - a decidir | token
+        -int | tier/1 - 5 -> definido pelo gerente
+        -fk | funcionario_id
         -str | status/default: aberto
         -str | email/usuario que abriu o chamado
     }
@@ -27,9 +27,9 @@ classDiagram
         -uuid | id
         -int | pk_id
         -str | email
-        -str | senha/hasheada
+        -str | senha -> hasheada
         -int | tier/1 - 5
-        -fk | administrador
+        -fk | created_by -> Administrador que criou a conta
     }
     class administrador{
         -uuid | id
