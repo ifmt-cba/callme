@@ -43,7 +43,8 @@ POSTGRES_PASSWORD=callme
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5433
 ```
-> ⚠️ **Importante:** nunca commit esse arquivo `.env` com credenciais reais em repositórios públicos.
+> [!CAUTION]
+> **Importante:** nunca commit esse arquivo `.env` com credenciais reais em repositórios públicos.
 
 ---
 
@@ -105,6 +106,88 @@ Após o login, clique com o botão direito em “Servers” (ou use o menu “Ad
 - Username: ```callme```</br>
 - Password: ```callme```</br>
 
-### Clique em Save para conectar.
+Clique em Save para se conectar.
 
-   
+---
+
+## Padrão de Commits & Fluxo de Contribuição 
+
+### Commit Messages
+
+> [!IMPORTANT]
+> Para manter uma melhor organização é recomendado que se use o padrão dos coventional commits:
+```cmd
+<tipo>: <descrição-curta>
+```
+> [!TIP]
+> **tipos:** </br></br>
+> 1. **feat:** *Adição de novas funcionalidades* </br>
+> 2. **fix:** *Correção de bugs* </br>
+> 3. **docs:** *Commits refentes a mudanças na documentação* </br>
+> 4. **style:** *Alterações referentes a formatações na apresentação do código que não afetam o significado do código* </br>
+> 5. **refactor:** *Qualquer mudança no código que não altere a funcionalidade dele* </br>
+> 6. **perf:** *Uma alteração de código que melhora o desempenho* </br>
+> 7. **test:** *Adição ou correção de testes* </br>
+> 8. **chore:** *Atualização de tarefas que não ocasionam alteração no código, mas mudanças de ferramentas, mudanças de configuração e bibliotecas* </br>
+
+## Fluxo de Trabalho
+
+### 3. Dar pull
+
+```bash
+git stash
+git pull origin master --rebase
+git stash apply
+```
+> [!TIP]
+> `git stash` e `git stash apply`, só se aplicam caso você já tenha feito mudanças em algum arquivo antes de dar o pull
+
+> [!WARNING]
+> `sempre` que abrirem o código veriquem se não possui mudanças no repositorio `(pulls pendentes)`
+
+### 2. Criar branch
+
+```bash
+git checkout -b <pequena-descrição>
+```
+> [!CAUTION]
+> utilize somente `-` para separar palavras, não utilize `_` e nem `ESPAÇOS`!
+
+### 3. Commitar
+
+```bash
+git add <diretorio do arquivo>
+git commit -m "feat: adicionar endpoint de login"
+```
+> [!TIP]
+> A descrição tem que ser preferencialmente em inglês!
+
+### 4. Push da branch
+
+```bash
+git push origin <nome-da-branch>
+```
+
+### 5. Abrir Pull Request
+
+No github abra um `pull request` e espere alguém revisar, evitem margear sem ter review de outra pessoa, isso pode ajudar caso tenha passado algum erro despercebido!
+
+### 6. Revisão & Merge
+
+Aguarde a aprovação, ajuste o que for solicitado e após alguém revisar faça o merge
+
+### 7. Atualizar GitHub Projects
+
+Mova o cartão da tarefa para `Done`
+
+---
+
+### Boas Práticas
+
+* **Código Limpo:** *siga princípios de Clean Code e Object Calisthenics.*
+* **Revisões de Código:** *todo PR deve ter ao menos 1 review aprovado.*
+* **Testes Automatizados:** *escreva testes unitários e automatizados.*
+* **Documentação:** *mantenha Swagger e README atualizados.*
+* **Segurança:** *nunca exponha credenciais; use variáveis de ambiente.*
+* **Modularidade:** *separe responsabilidades em pacotes/módulos claros.*
+* **Comunicação:** *descreva mudanças relevantes no PR e atualize a equipe via GitHub Projects, Whatsapp ou Discord.*
