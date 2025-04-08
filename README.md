@@ -1,3 +1,6 @@
+> [!caution]
+> .env no repositorio é provisorio
+
 # Call Me - Sistema de Gestão de Chamados
 
 ## Visão do Produto
