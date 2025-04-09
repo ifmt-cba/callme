@@ -8,8 +8,11 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "role_Id")
+    @Column(name = "role_id") // Corrigido: nome da coluna em minúsculo
     private long roleId;
+
+    @Column(name = "name") // Adicionado para garantir mapeamento correto
+    private String name;
 
     public long getRoleId() {
         return roleId;
@@ -19,24 +22,18 @@ public class Role {
         return name;
     }
 
-
-    //Criando as Holes
-    private String name;
-
     public enum Values {
-
         RT(2L),
         ADMIN(1L);
 
-        long roleId;
+        private final long roleId;
 
         Values(long roleId) {
             this.roleId = roleId;
         }
-    }
-    public long getRoleid(){
 
-        return roleId;
+        public long getRoleId() {
+            return roleId;
+        }
     }
-
 }

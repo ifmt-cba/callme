@@ -13,7 +13,7 @@ public class chamado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "chamado_Id")
+    @Column(name = "chamado_id")
     private long chamadoID;
 
     @ManyToOne
