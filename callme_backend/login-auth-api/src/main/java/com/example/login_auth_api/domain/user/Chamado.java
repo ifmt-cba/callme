@@ -8,8 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
 
 @Entity
-@Table(name = "tb_chamadoInterno")
-public class chamado {
+@Table(name = "tb_chamadointerno")
+public class Chamado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
