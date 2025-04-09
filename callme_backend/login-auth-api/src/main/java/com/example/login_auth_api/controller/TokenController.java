@@ -37,7 +37,7 @@ public class TokenController {
 
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, passwordEncoder) ){
 
-            throw new BadCredentialsException("Usuario ou senha invalidos !");
+            throw new BadCredentialsException("Usuario ou senha invalidos leticia !");
 
         }
 
