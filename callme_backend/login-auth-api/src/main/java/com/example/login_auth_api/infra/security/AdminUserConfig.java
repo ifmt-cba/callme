@@ -18,7 +18,9 @@ public class AdminUserConfig implements CommandLineRunner {
     private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
 
-    public AdminUserConfig(RoleRepository roleRepository, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public AdminUserConfig(RoleRepository roleRepository,
+                           UserRepository userRepository,
+                           BCryptPasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
