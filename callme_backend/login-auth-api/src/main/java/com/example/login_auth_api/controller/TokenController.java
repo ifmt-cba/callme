@@ -1,3 +1,4 @@
+
 package com.example.login_auth_api.controller;
 
 import com.example.login_auth_api.dto.LoginRequestDTO;
@@ -37,7 +38,7 @@ public class TokenController {
 
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequestDTO, passwordEncoder) ){
 
-            throw new BadCredentialsException("Usuario ou senha invalidos !");
+            throw new BadCredentialsException("Usuario ou senha invalidos leticia teste !");
 
         }
 
