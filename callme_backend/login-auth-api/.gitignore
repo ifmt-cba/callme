@@ -29,6 +29,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+### IDES ###
 .vscode/
 .idea/
+
+### Maven ###
+/target
