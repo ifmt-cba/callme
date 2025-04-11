@@ -1,4 +1,4 @@
-
+/*
 package com.example.login_auth_api.controller;
 
 import com.example.login_auth_api.dto.LoginRequestDTO;
@@ -12,9 +12,13 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 
+@RestController
+@RequestMapping("/auth")
 public class TokenController {
 
     private final JwtEncoder jwtEncoder;
@@ -59,3 +63,4 @@ public class TokenController {
     }
 
 }
+*/

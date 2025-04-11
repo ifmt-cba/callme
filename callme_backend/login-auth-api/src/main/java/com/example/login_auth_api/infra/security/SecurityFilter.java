@@ -1,4 +1,5 @@
 /*
+
 package com.example.login_auth_api.infra.security;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,10 +21,16 @@ import java.util.Collections;
 
     @Component
     public class SecurityFilter extends OncePerRequestFilter {
+
+
+        private final TokenService tokenService;
+        private final UserRepository userRepository;
+
         @Autowired
-        TokenService tokenService;
-        @Autowired
-        UserRepository userRepository;
+        public SecurityFilter(TokenService tokenService, UserRepository userRepository) {
+            this.tokenService = tokenService;
+            this.userRepository = userRepository;
+        }
 
         @Override
         protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

@@ -1,3 +1,4 @@
+/*
 package com.example.login_auth_api.infra.security;
 
 import com.example.login_auth_api.domain.user.Role;
@@ -48,3 +49,4 @@ public class AdminUserConfig implements CommandLineRunner {
         );
     }
 }
+*/
