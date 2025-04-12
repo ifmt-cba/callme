@@ -43,7 +43,7 @@ As variáveis estão definidas no arquivo `.env` em `./callme_backend`. Certifiq
 POSTGRES_DB=callme
 POSTGRES_USER=callme
 POSTGRES_PASSWORD=callme
-POSTGRES_HOST=localhost
+POSTGRES_HOST=database
 POSTGRES_PORT=5433
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=admin
