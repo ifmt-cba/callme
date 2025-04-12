@@ -45,6 +45,8 @@ POSTGRES_USER=callme
 POSTGRES_PASSWORD=callme
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5433
+PGADMIN_DEFAULT_EMAIL=admin@admin.com
+PGADMIN_DEFAULT_PASSWORD=admin
 ```
 > [!CAUTION]
 > **Importante:** nunca commit esse arquivo `.env` com credenciais reais em repositórios públicos.
