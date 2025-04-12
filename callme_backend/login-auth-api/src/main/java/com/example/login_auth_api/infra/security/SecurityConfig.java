@@ -50,7 +50,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests(authirze -> authirze.anyRequest().authenticated())
+                .authorizeHttpRequests(authirze -> authirze.
+                        requestMatchers(HttpMethod.POST, "/login").permitAll().
+                        requestMatchers(HttpMethod.POST, "/email").permitAll().
+                        anyRequest().authenticated())
                 .csrf(csrf ->csrf.disable())
                 .oauth2ResourceServer(ouath ->ouath.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
