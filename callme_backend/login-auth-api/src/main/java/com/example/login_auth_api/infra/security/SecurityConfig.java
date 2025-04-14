@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,6 +35,7 @@ import java.security.interfaces.RSAPublicKey;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     //Aqui eu fiz a declarei a chave privada e a chave publica
@@ -53,6 +55,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authirze -> authirze.
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
+                        requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())
                 .csrf(csrf ->csrf.disable())
                 .oauth2ResourceServer(ouath ->ouath.jwt(Customizer.withDefaults()))
@@ -69,6 +72,7 @@ public class SecurityConfig {
 
     }
 
+    @Bean
     public JwtEncoder jwtEncoder() {
 
         JWK jwk = new RSAKey.Builder(this.publicKey).privateKey(privateKey).build();
