@@ -17,7 +17,6 @@ classDiagram
     class chamado{
         -uuid | id
         -int | pk_id
-        -uuid - a decidir | token
         -int | tier/1 - 5 -> definido pelo gerente
         -fk | funcionario_id
         -str | status/default: aberto
