@@ -20,6 +20,22 @@ public class Chamado {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void setChamadoID(long chamadoID) {
+        this.chamadoID = chamadoID;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setCreationTimestamp(Instant creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
     public long getChamadoID() {
         return chamadoID;
     }
@@ -40,8 +56,5 @@ public class Chamado {
 
     @CreationTimestamp
     private Instant creationTimestamp;
-
-
-
 
 }
