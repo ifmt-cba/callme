@@ -3,8 +3,12 @@ package com.example.login_auth_api.controller;
 import com.example.login_auth_api.domain.user.Chamado;
 import com.example.login_auth_api.domain.user.Role;
 import com.example.login_auth_api.dto.CreateChamadoDto;
+import com.example.login_auth_api.dto.FeedDto;
+import com.example.login_auth_api.dto.FeedItemDto;
 import com.example.login_auth_api.repositories.ChamadoRepository;
 import com.example.login_auth_api.repositories.UserRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -24,6 +28,22 @@ public class ChamadoController {
 
         this.chamadoRepository = chamadoRepository;
         this.userRepository = userRepository;
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<FeedDto> feed(@RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+
+       var chamados = chamadoRepository.findAll(
+               PageRequest.of(page, pageSize, Sort.Direction.DESC, "creationTimestamp"))
+               .map(chamado ->
+                       new FeedItemDto(chamado.getChamadoID(),
+                                       chamado.getContent(),
+                                       chamado.getUser().getUsername()));
+
+       return ResponseEntity.ok(new FeedDto(chamados.getContent(), page, pageSize,
+                                            chamados.getTotalPages(),
+                                            chamados.getTotalElements()));
     }
 
     @PostMapping("/chamados")
