@@ -53,6 +53,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authirze -> authirze.
+                        requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
                         requestMatchers(HttpMethod.POST, "/users").permitAll().

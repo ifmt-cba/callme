@@ -10,4 +10,5 @@ import java.util.UUID;
 
 public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
 
+
 }
