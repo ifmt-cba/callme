@@ -1,0 +1,32 @@
+<app-default-login-layout
+
+  title = "Login into your accont"
+  primaryBtnText="Login now"
+  secondaryBtnText=" Sign up now"
+  (submit)="submit()"
+  (navigate)="navigate()"
+>
+  <form [formGroup]="loginForm">
+    <app-primary-input
+  formControlName="username"
+      inputName="username"
+      type="text"
+      label="Usuario"
+      placeholder="Digite seu usuario"
+    >
+
+    </app-primary-input>
+
+    <app-primary-input
+      formControlName="password"
+      inputName="password"
+      type="password"
+      label="Sua senha"
+    >
+    </app-primary-input>
+
+    <span>Esqueceu sua senha </span>
+
+  </form>
+
+</app-default-login-layout>
