@@ -52,6 +52,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authirze -> authirze.
                         requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
