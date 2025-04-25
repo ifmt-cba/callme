@@ -1,13 +1,25 @@
 <app-default-login-layout
 
-  title = "Login into your accont"
-  primaryBtnText="Login now"
-  secondaryBtnText=" Sign up now"
+  title = "Sign in your accont"
+  primaryBtnText="Signup now"
+  secondaryBtnText=" Login now"
   (submit)="submit()"
   (navigate)="navigate()"
-  [disablePrimaryBtm] = "!loginForm.valid"
+  [disablePrimaryBtm] = "!signupForm.valid"
 >
-  <form [formGroup]="loginForm">
+  <form [formGroup]="signupForm">
+
+    <app-primary-input
+      formControlName="username"
+      inputName="username"
+      type="text"
+      label="Seu nome"
+      placeholder="Digite seu usuario"
+    >
+
+    </app-primary-input>
+
+
     <app-primary-input
   formControlName="username"
       inputName="username"
@@ -26,7 +38,6 @@
     >
     </app-primary-input>
 
-    <span>Esqueceu sua senha </span>
 
   </form>
 
