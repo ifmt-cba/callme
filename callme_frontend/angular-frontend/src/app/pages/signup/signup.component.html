@@ -1,0 +1,44 @@
+<app-default-login-layout
+
+  title = "Sign in your accont"
+  primaryBtnText="Signup now"
+  secondaryBtnText=" Login now"
+  (submit)="submit()"
+  (navigate)="navigate()"
+  [disablePrimaryBtm] = "!signupForm.valid"
+>
+  <form [formGroup]="signupForm">
+
+    <app-primary-input
+      formControlName="username"
+      inputName="username"
+      type="text"
+      label="Seu nome"
+      placeholder="Digite seu usuario"
+    >
+
+    </app-primary-input>
+
+
+    <app-primary-input
+  formControlName="username"
+      inputName="username"
+      type="text"
+      label="Usuario"
+      placeholder="Digite seu usuario"
+    >
+
+    </app-primary-input>
+
+    <app-primary-input
+      formControlName="password"
+      inputName="password"
+      type="password"
+      label="Sua senha"
+    >
+    </app-primary-input>
+
+
+  </form>
+
+</app-default-login-layout>
