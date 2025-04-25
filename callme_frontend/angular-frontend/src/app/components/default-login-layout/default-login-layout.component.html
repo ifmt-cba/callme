@@ -7,7 +7,7 @@
 
     <div class="btn-wrapper">
 
-      <button class="btn-primary" (click)="submit()">{{primaryBtnText}}</button>
+      <button class="btn-primary" (click)="submit()" [disabled]="disablePrimaryBtm">{{primaryBtnText}}</button>
       <div class="divider">
         <div></div>
         <span>Or</span>
