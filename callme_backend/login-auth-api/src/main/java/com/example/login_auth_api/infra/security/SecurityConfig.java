@@ -57,6 +57,7 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
+                        requestMatchers(HttpMethod.GET, "/email/receber").permitAll().
                         requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())
                 .csrf(csrf ->csrf.disable())
