@@ -30,7 +30,8 @@ export class SignupComponent {
   signupForm!: FormGroup<SignupForm>;
 
   constructor(private router: Router,
-  private loginService: LoginService, private toastService: ToastrService
+              private loginService: LoginService,
+              private toastService: ToastrService
   ) {
 
     this.signupForm = new FormGroup({
@@ -40,9 +41,9 @@ export class SignupComponent {
   }
 
   submit() {
-   this.loginService.login(this.signupForm.value.username, this.signupForm.value.password).subscribe({
-     next: () => this.toastService.success("Login successfull"),
-     error: () => this.toastService.error("Senha ou usuario incorretos "),
+   this.loginService.signup(this.signupForm.value.username, this.signupForm.value.password).subscribe({
+     next: () => this.toastService.success("registro feito com sucesso"),
+     error: () => this.toastService.error("Tente se registrar mais tarde  "),
    })
   }
 
