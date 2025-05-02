@@ -36,8 +36,13 @@ export class LoginComponent {
 
   submit() {
    this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-     next: () => this.toastService.success("Login successfull"),
+     next: () => {
+       this.toastService.success("Login successfull")
+       setTimeout(() => {this.router.navigate(["/home"]);
+         },1000)
+     },
      error: () => this.toastService.error("Senha ou usuario incorretos "),
+
    })
   }
 
