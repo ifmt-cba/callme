@@ -10,7 +10,7 @@ export class LoginService {
 apiUrl: string = "http://localhost:8080";
   constructor(private httpClient: HttpClient) {}
 
-  login(username: string, password: string){
+  login(username: string, password: string,){
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/login", { username, password }).pipe(
       tap((value) => {
         sessionStorage.setItem("auth-token", value.token)
@@ -19,7 +19,7 @@ apiUrl: string = "http://localhost:8080";
     )
   }
 
-  signup(username: string, password: string){
-    return this.httpClient.post<LoginResponse>(this.apiUrl + "/users", { username, password })
+  signup(username: string, password: string, email: string){
+    return this.httpClient.post<LoginResponse>(this.apiUrl + "/users", { username, password, email })
   }
 }

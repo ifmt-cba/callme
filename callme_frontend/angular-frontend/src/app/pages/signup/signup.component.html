@@ -10,6 +10,16 @@
   <form [formGroup]="signupForm">
 
     <app-primary-input
+      formControlName="email"
+      inputName="email"
+      type="text"
+      label="Digite seu E-mail"
+      placeholder="@gmail.com"
+      ng email
+      ></app-primary-input>
+
+
+    <app-primary-input
   formControlName="username"
       inputName="username"
       type="text"

@@ -53,6 +53,7 @@ public class UserController {
         var user = new User();
         user.setUsername(dto.username());
         user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setEmail(dto.email());
         user.setRoles(Set.of(RtRole));
         userRepository.save(user);
 
