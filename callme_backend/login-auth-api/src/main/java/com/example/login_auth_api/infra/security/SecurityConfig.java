@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,8 @@ import javax.swing.plaf.nimbus.NimbusStyle;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
+import static org.springframework.security.authorization.AuthenticatedAuthorizationManager.anonymous;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -54,6 +57,9 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authirze -> authirze.
+                        requestMatchers("/api/auth/**", "/api/password/**").permitAll().
+                        requestMatchers(HttpMethod.POST,"/api/password/reset").permitAll().
+                        requestMatchers(HttpMethod.POST,"/api/password/forgot").permitAll().
                         requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
@@ -61,8 +67,18 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())
                 .csrf(csrf ->csrf.disable())
-                .oauth2ResourceServer(ouath ->ouath.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(ouath ->ouath.jwt(Customizer.withDefaults()).authenticationEntryPoint((request, response, authException) -> {
+                            // se não tiver token, deixa passar se for rota pública
+                            if (request.getRequestURI().startsWith("/api/password")) {
+                                response.setStatus(HttpServletResponse.SC_OK);
+                            } else {
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                            }
+                        })
+                ).anonymous(Customizer.withDefaults())
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
 
         return http.build();
     }
