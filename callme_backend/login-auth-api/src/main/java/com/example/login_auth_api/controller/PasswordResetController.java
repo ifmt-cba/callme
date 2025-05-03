@@ -3,16 +3,18 @@ package com.example.login_auth_api.controller;
 import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.ForgotPasswordDTO;
 import com.example.login_auth_api.repositories.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@PreAuthorize("permitAll()")
 @RestController
 @RequestMapping("/api/password")
 public class PasswordResetController {
@@ -21,20 +23,19 @@ public class PasswordResetController {
     private JavaMailSender mailSender;
 
     @Autowired
-    private UserRepository userRepository;  // Repositório para buscar o usuário
+    private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;  // Para encriptar a senha
+    private PasswordEncoder passwordEncoder;
 
-    // Endpoint para solicitar reset de senha
-    @Transactional
+    @PreAuthorize("permitAll()")
     @PostMapping("/forgot")
-    public String forgotPassword(@RequestBody ForgotPasswordDTO dto) {
-        String email = dto.getEmail().trim().toLowerCase(); // Evita espaços e diferenças de caixa
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDTO dto) {
+        String email = dto.getEmail().trim().toLowerCase();
 
         Optional<User> user = userRepository.findByEmailIgnoreCase(email);
         if (user.isEmpty()) {
-            return "E-mail não encontrado";
+            return ResponseEntity.ok("Email nao encontrado");
         }
 
         User currentUser = user.get();
@@ -48,10 +49,10 @@ public class PasswordResetController {
         String resetLink = "http://localhost:8080/api/password/reset?token=" + token;
         sendResetEmail(email, resetLink);
 
-        return "E-mail de reset enviado";
+        return ResponseEntity.ok("email enviado com sucesso");
     }
 
-    // Endpoint para resetar a senha
+    @PreAuthorize("permitAll()")
     @PostMapping("/reset")
     public String resetPassword(@RequestParam String token, @RequestParam String newPassword) {
         Optional<User> user = userRepository.findByToken(token);
@@ -61,14 +62,15 @@ public class PasswordResetController {
         }
 
         User currentUser = user.get();
-        currentUser.setPassword(passwordEncoder.encode(newPassword));  // Encriptar nova senha
-        currentUser.setToken(null);  // Limpar o token após a alteração
-        currentUser.setResetTokenExpiration(null);  // Limpar a expiração
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+        currentUser.setToken(null);
+        currentUser.setResetTokenExpiration(null);
 
-        userRepository.save(currentUser);  // Salvar a senha alterada
+        userRepository.save(currentUser);
 
         return "Senha alterada com sucesso!";
     }
+
 
     private void sendResetEmail(String email, String resetLink) {
         SimpleMailMessage message = new SimpleMailMessage();
