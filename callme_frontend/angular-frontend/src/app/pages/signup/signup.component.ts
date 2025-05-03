@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {DefaultLoginLayoutComponent} from "../../components/default-login-layout/default-login-layout.component";
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PrimaryInputComponent} from "../../components/primary-input/primary-input.component";
 import {Router} from "@angular/router";
 import {LoginService} from "../../services/login.service";
@@ -18,7 +18,7 @@ interface SignupForm {
   imports: [
     DefaultLoginLayoutComponent,
     ReactiveFormsModule,
-    PrimaryInputComponent
+    PrimaryInputComponent,
   ],
   providers: [
     LoginService
@@ -26,9 +26,12 @@ interface SignupForm {
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
+
 export class SignupComponent {
 
   signupForm!: FormGroup<SignupForm>;
+
+
 
   constructor(private router: Router,
               private loginService: LoginService,
@@ -38,7 +41,7 @@ export class SignupComponent {
     this.signupForm = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
 
     })
   }
@@ -57,5 +60,8 @@ export class SignupComponent {
   navigate(){
     this.router.navigate(["login"]);
   }
+
+
+
 
 }

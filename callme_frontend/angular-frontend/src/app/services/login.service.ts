@@ -23,3 +23,4 @@ apiUrl: string = "http://localhost:8080";
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/users", { username, password, email })
   }
 }
+

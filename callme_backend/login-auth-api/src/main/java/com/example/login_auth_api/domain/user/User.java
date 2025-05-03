@@ -7,6 +7,7 @@ import org.hibernate.annotations.GeneratorType;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -46,6 +47,18 @@ public class User {
     private String token;
 
     private String password;
+
+    public LocalDateTime getResetTokenExpiration() {
+        return resetTokenExpiration;
+    }
+
+    public void setResetTokenExpiration(LocalDateTime resetTokenExpiration) {
+        this.resetTokenExpiration = resetTokenExpiration;
+    }
+
+    @Column(name = "reset_token_expiration")
+    private LocalDateTime resetTokenExpiration;
+
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -95,4 +108,14 @@ public class User {
 
 
     }
+
+    public String generateResetToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    public boolean isTokenExpired() {
+        return LocalDateTime.now().isAfter(this.resetTokenExpiration);
+    }
+
+
 }

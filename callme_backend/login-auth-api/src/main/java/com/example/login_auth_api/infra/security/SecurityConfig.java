@@ -54,6 +54,8 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authirze -> authirze.
+                        requestMatchers(HttpMethod.POST,"/api/password/reset").permitAll().
+                        requestMatchers(HttpMethod.POST,"/api/password/forgot").permitAll().
                         requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
