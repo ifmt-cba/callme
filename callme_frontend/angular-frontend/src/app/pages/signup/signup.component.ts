@@ -9,6 +9,7 @@ import {ToastrService} from "ngx-toastr";
 interface SignupForm {
   username: FormControl,
   password: FormControl,
+  email: FormControl,
 
 }
 @Component({
@@ -37,12 +38,18 @@ export class SignupComponent {
     this.signupForm = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
+      email: new FormControl('', Validators.required),
+
     })
   }
 
   submit() {
-   this.loginService.signup(this.signupForm.value.username, this.signupForm.value.password).subscribe({
-     next: () => this.toastService.success("registro feito com sucesso"),
+   this.loginService.signup(this.signupForm.value.username, this.signupForm.value.password, this.signupForm.value.email).subscribe({
+     next: () => {
+       this.toastService.success("Usuario Criado com sucesso")
+       setTimeout(() => {this.router.navigate(["/login"]);
+       },1200)
+     },
      error: () => this.toastService.error("Tente se registrar mais tarde  "),
    })
   }
