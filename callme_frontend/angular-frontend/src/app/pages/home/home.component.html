@@ -1,1 +1,213 @@
-<p>home works!</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Controle de Chamados - Home</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    /* Sidebar comum */
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: white;
+      padding-top: 20px;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+    }
+
+    .sidebar h2, .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .sidebar button.dropdown-btn {
+      background: none;
+      color: white;
+      padding: 15px 20px;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-size: 16px;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    .sidebar button.dropdown-btn:hover {
+      background-color: #34495e;
+    }
+
+    .sidebar .dropdown-container {
+      display: none;
+      background-color: #34495e;
+    }
+
+    .sidebar .dropdown-container a {
+      padding: 10px 30px;
+      display: block;
+      text-decoration: none;
+      color: white;
+    }
+
+    .sidebar .dropdown-container a:hover {
+      background-color: #3c5d75;
+    }
+
+    /* Esquerda */
+    .sidebar-left {
+      left: 0;
+    }
+
+    /* Direita */
+    .sidebar-right {
+      right: 0;
+    }
+
+    /* Conteúdo principal */
+    .main {
+      margin-left: 220px;
+      margin-right: 220px;
+      padding: 30px;
+      width: calc(100% - 440px);
+    }
+
+    .main h1 {
+      color: #333;
+    }
+
+    .buttons {
+      margin: 20px 0;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      margin-right: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Menu lateral esquerdo -->
+<div class="sidebar sidebar-left">
+  <h2>Chamados</h2>
+
+  <button class="dropdown-btn">Chamados ▾</button>
+  <div class="dropdown-container">
+    <a href="#">Home</a>
+    <a href="#">Abrir Chamado</a>
+    <a href="#">Meus Chamados</a>
+  </div>
+
+  <button class="dropdown-btn">Outros ▾</button>
+  <div class="dropdown-container">
+    <a href="#">Relatórios</a>
+    <a href="#">Histórico</a>
+  </div>
+</div>
+
+<!-- Conteúdo principal -->
+<div class="main">
+  <h1>Bem-vindo(a) ao Sistema de Controle de Chamados</h1>
+
+  <div class="buttons">
+    <button onclick="window.location.href='#'">Abrir Novo Chamado</button>
+    <button onclick="window.location.href='#'">Visualizar Chamados</button>
+  </div>
+
+  <h2>Últimos Chamados</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Assunto</th>
+        <th>Status</th>
+        <th>Data de Abertura</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>#1001</td>
+        <td>Erro no login</td>
+        <td>Aberto</td>
+        <td>05/05/2025</td>
+      </tr>
+      <tr>
+        <td>#1000</td>
+        <td>Solicitação de acesso</td>
+        <td>Fechado</td>
+        <td>04/05/2025</td>
+      </tr>
+      <tr>
+        <td>#0999</td>
+        <td>Atualização de sistema</td>
+        <td>Em andamento</td>
+        <td>03/05/2025</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Menu lateral direito -->
+<div class="sidebar sidebar-right">
+  <h3>Usuário</h3>
+
+  <button class="dropdown-btn">Conta ▾</button>
+  <div class="dropdown-container">
+    <a href="#">Perfil</a>
+    <a href="#">Alterar Senha</a>
+    <a href="#">Configurações</a>
+  </div>
+
+  <button class="dropdown-btn">Sessão ▾</button>
+  <div class="dropdown-container">
+    <a href="#">Sair</a>
+  </div>
+</div>
+
+<!-- Script para ativar dropdown -->
+<script>
+  const dropdowns = document.querySelectorAll(".dropdown-btn");
+  dropdowns.forEach(btn => {
+    btn.addEventListener("click", function () {
+      this.classList.toggle("active");
+      const content = this.nextElementSibling;
+      content.style.display = content.style.display === "block" ? "none" : "block";
+    });
+  });
+</script>
+
+</body>
+</html>
