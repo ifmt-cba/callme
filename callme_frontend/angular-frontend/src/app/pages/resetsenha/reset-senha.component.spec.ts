@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ResetSenhaComponent } from './reset-senha.component';
 
-describe('ResetSenhaComponent', () => {
+describe('LoginComponent', () => {
   let component: ResetSenhaComponent;
   let fixture: ComponentFixture<ResetSenhaComponent>;
 
@@ -11,7 +11,7 @@ describe('ResetSenhaComponent', () => {
       imports: [ResetSenhaComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(ResetSenhaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

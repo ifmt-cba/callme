@@ -50,4 +50,8 @@ export class LoginComponent {
     this.router.navigate(["signup"]);
   }
 
+  navigateToReset() {
+    this.router.navigate(['/resetsenha']);
+  }
+
 }

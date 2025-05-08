@@ -1,0 +1,24 @@
+<main>
+  <div class="content-wrapper">
+    <app-forgot-password-layout
+      title="Recuperação de Senha"
+      primaryBtnText="Solicitar Reset"
+      secondaryBtnText="Login now"
+      (submit)="submit()"
+      (navigate)="navigate()"
+      [disablePrimaryBtm]="!resetForm.valid"
+    >
+      <form [formGroup]="resetForm">
+        <app-primary-input
+          formControlName="email"
+          inputName="email"
+          type="text"
+          label="Digite seu E-mail Cadastrado : *"
+          placeholder="@gmail.com"
+        >
+          <img src="/assets/svg/email-icon.svg" alt="" />
+        </app-primary-input>
+      </form>
+    </app-forgot-password-layout>
+  </div>
+</main>
