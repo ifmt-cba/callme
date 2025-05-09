@@ -1,0 +1,11 @@
+<div class="chamado-container" *ngIf="chamados.length > 0; else vazio">
+  <div class="chamado-card" *ngFor="let item of chamados">
+    <p><strong>#{{ item.chamadoId }}</strong></p>
+    <p><em>{{ item.username }}</em></p>
+    <p>{{ item.content }}</p>
+  </div>
+</div>
+
+<ng-template #vazio>
+  <p>Nenhum chamado interno disponível.</p>
+</ng-template>
