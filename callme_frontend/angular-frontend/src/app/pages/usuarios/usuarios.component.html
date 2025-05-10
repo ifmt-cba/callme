@@ -1,0 +1,23 @@
+<div class="app-usuarios" [ngClass]="collapsed ?'usuario-collapsed': ''">
+
+      <div class="logo-container">
+          <button class="logo">A</button>
+          <div class="logo-text" *ngIf="collapsed">CallMe</div>
+          <button class="btn-close" *ngIf="collapsed"></button>
+            <i class="fal fa-times close-icon"></i>
+
+      </div>
+
+          <ul class="usuarios-nav">
+            <li class="usuarios-nav-item" *ngFor="let data of navData">
+              <a class="usuarios-nav-link" [routerLink]="[data.routerLink]">
+                <i class="usuarios-link-icon" [class]="data.icon"></i>
+                <span class="usuarios-link-text" *ngIf="collapsed">{{data.label}}</span>
+              </a>
+            </li>
+
+
+          </ul>
+
+
+</div>

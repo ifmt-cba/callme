@@ -143,8 +143,8 @@
   <h1>Bem-vindo(a) ao Sistema de Controle de Chamados</h1>
 
   <div class="buttons">
-    <button onclick="window.location.href='#'">Abrir Novo Chamado</button>
-    <button onclick="window.location.href='#'">Visualizar Chamados</button>
+    <button (click)="navigateToChamado()" onclick="window.location.href='http://localhost:4200/ChamadosInternos'">Abrir Novo Chamado</button>
+    <button (close)="navigateToChamado()" onclick="window.location.href='http://localhost:4200/ChamadosInternos'">Visualizar Chamados</button>
   </div>
 
   <h2>Últimos Chamados</h2>

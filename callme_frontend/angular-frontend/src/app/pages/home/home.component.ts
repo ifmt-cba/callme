@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import {FeedService} from "../../services/feed.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -9,4 +11,12 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  constructor(private router: Router) {
+
+    
+  }
+
+  navigateToChamado(){
+    this.router.navigate(['/ChamadoInternos']);
+  }
 }

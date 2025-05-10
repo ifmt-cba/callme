@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {FeedService} from "../../services/feed.service";
 import {FeedItem} from "../../models/feed.models";
 import {CommonModule} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-chamados-internos',
@@ -14,7 +15,9 @@ export class ChamadosInternosComponent {
 
   chamados: FeedItem[] = [];
 
-  constructor(private feedService: FeedService) {}
+  constructor(private feedService: FeedService, private router: Router) {
+
+  }
 
   ngOnInit(): void {
     this.feedService.getFeed().subscribe({
@@ -25,6 +28,11 @@ export class ChamadosInternosComponent {
         console.error('Erro ao carregar chamados:', err);
       }
     });
+  }
+
+  navigateToHome(){
+
+    this.router.navigate(["/home"]);
   }
 
 }
