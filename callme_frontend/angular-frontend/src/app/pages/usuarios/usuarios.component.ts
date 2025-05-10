@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {navbarData} from "./nav-data";
 import {RouterLink} from "@angular/router";
-import {NgClass, NgIf} from "@angular/common";
+import {NgClass, NgIf,NgForOf } from "@angular/common";
+
 
 @Component({
   selector: 'app-usuarios',
@@ -9,7 +10,8 @@ import {NgClass, NgIf} from "@angular/common";
   imports: [
     RouterLink,
     NgClass,
-    NgIf
+    NgIf,
+    NgForOf
   ],
   templateUrl: './usuarios.component.html',
   styleUrl: './usuarios.component.scss'

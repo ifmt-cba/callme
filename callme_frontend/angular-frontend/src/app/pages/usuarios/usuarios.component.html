@@ -10,7 +10,7 @@
 
           <ul class="usuarios-nav">
             <li class="usuarios-nav-item" *ngFor="let data of navData">
-              <a class="usuarios-nav-link" [routerLink]="[data.routerLink]">
+              <a class="usuarios-nav-link" [routerLink]="[data.routeLink]">
                 <i class="usuarios-link-icon" [class]="data.icon"></i>
                 <span class="usuarios-link-text" *ngIf="collapsed">{{data.label}}</span>
               </a>
