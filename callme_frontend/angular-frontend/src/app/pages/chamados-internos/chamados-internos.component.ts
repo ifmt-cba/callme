@@ -3,11 +3,12 @@ import {FeedService} from "../../services/feed.service";
 import {FeedItem} from "../../models/feed.models";
 import {CommonModule} from "@angular/common";
 import {Router} from "@angular/router";
+import {UsuariosComponent} from "../usuarios/usuarios.component";
 
 @Component({
   selector: 'app-chamados-internos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UsuariosComponent],
   templateUrl: './chamados-internos.component.html',
   styleUrl: './chamados-internos.component.scss'
 })
