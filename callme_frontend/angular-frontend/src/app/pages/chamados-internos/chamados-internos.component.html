@@ -1,0 +1,42 @@
+<div class="layout-container">
+
+<app-usuarios></app-usuarios>
+
+  <!-- Conteúdo principal -->
+  <main class="main-content">
+
+    <!-- Cabeçalho -->
+    <div class="feed-header">
+      <div class="left">
+        <label for="filter">Filtrar:</label>
+        <select id="filter">
+          <option value="">Todos os chamados</option>
+          <option value="recentes">Mais recentes</option>
+          <option value="antigos">Mais antigos</option>
+        </select>
+      </div>
+
+      <div class="right">
+        <label for="user">Usuário:</label>
+        <select id="user">
+          <option value="admin">admin</option>
+          <option value="karina">karina</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Listagem -->
+    <div class="chamado-container" *ngIf="chamados.length > 0; else vazio">
+      <div class="chamado-card" *ngFor="let item of chamados">
+        <p class="chamado-id"><strong>#{{ item.chamadoId }}</strong></p>
+        <p class="username"><em>{{ item.username }}</em></p>
+        <p class="content">{{ item.content }}</p>
+      </div>
+    </div>
+
+    <ng-template #vazio>
+      <p>Nenhum chamado interno disponível.</p>
+    </ng-template>
+
+  </main>
+</div>

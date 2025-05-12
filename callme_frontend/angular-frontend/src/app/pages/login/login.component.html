@@ -15,7 +15,7 @@
       label="Usuario"
       placeholder="Digite seu usuario"
     >
-
+      <img src="/assets/svg/password-icon.svg"/>
     </app-primary-input>
 
     <app-primary-input
@@ -24,10 +24,13 @@
       type="password"
       label="Sua senha"
     >
+      <img src="/assets/svg/person-icon.svg" alt="">
     </app-primary-input>
 
-    <span>Esqueceu sua senha </span>
+    <a class="btn-forgot" (click)="navigateToReset()">Forgot password</a>
 
   </form>
+
+
 
 </app-default-login-layout>

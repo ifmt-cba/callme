@@ -60,6 +60,7 @@ public class SecurityConfig {
                         requestMatchers("/api/auth/**", "/api/password/**").permitAll().
                         requestMatchers(HttpMethod.POST,"/api/password/reset").permitAll().
                         requestMatchers(HttpMethod.POST,"/api/password/forgot").permitAll().
+                        requestMatchers(HttpMethod.GET, "/feed").permitAll().
                         requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
