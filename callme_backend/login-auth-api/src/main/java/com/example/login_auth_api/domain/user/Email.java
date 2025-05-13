@@ -2,6 +2,8 @@ package com.example.login_auth_api.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 @Entity
 @Getter
 @Setter
@@ -31,4 +33,8 @@ public class Email {
 
     @Column(length = 10000)
     private String comprovante;
+
+    @OneToMany(mappedBy = "email", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<AnexoEmail> anexos; // Relacionamento com os anexos
 }
+

@@ -2,12 +2,17 @@ package com.example.login_auth_api.service;
 
 import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
 import com.example.login_auth_api.domain.user.Email;
+import com.example.login_auth_api.domain.user.AnexoEmail;
+import com.example.login_auth_api.repositories.AnexoEmailRepository;
 import com.example.login_auth_api.repositories.EmailRepository;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMultipart;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +22,9 @@ import java.util.Properties;
 public class EmailReceiverService {
 
     private final EmailRepository emailRepository;
+
+    @Autowired
+    private AnexoEmailRepository anexoEmailRepository;
 
     public EmailReceiverService(EmailRepository emailRepository) {
         this.emailRepository = emailRepository;
@@ -39,8 +47,6 @@ public class EmailReceiverService {
             Message[] messages = inbox.getMessages();
             System.out.println("Você tem " + messages.length + " mensagens.\n");
 
-            List<String> comprovantes = new ArrayList<>();
-
             for (Message message : messages) {
                 String assunto = message.getSubject();
                 String remetente = message.getFrom()[0].toString();
@@ -54,11 +60,9 @@ public class EmailReceiverService {
                         ? message.getHeader("Message-ID")[0]
                         : "[Sem ID]";
 
-                // Autenticação
                 String spf = getHeaderValue(message, "Received-SPF");
                 String authResults = getHeaderValue(message, "Authentication-Results");
 
-                // Comprovante
                 StringBuilder comprovante = new StringBuilder();
                 comprovante.append("======== MENSAGEM ORIGINAL (COMPROVANTE) ========\n");
                 comprovante.append("ID da mensagem : ").append(messageId).append("\n");
@@ -74,9 +78,7 @@ public class EmailReceiverService {
                 comprovante.append("============================================\n");
 
                 String comprovanteStr = comprovante.toString();
-                comprovantes.add(comprovanteStr);
 
-                // Salvar no banco apenas se ainda não foi salvo
                 if (emailRepository.findByMessageId(messageId).isEmpty()) {
                     Email emailEntity = Email.builder()
                             .remetente(remetente)
@@ -91,10 +93,11 @@ public class EmailReceiverService {
                             .comprovante(comprovanteStr)
                             .build();
                     emailRepository.save(emailEntity);
+
+                    // Salvar anexos
+                    salvarAnexosDaMensagem(message, messageId);
                 }
 
-
-                // Adiciona ao DTO
                 emails.add(new EmailLeituraCompletaDTO(remetente, assunto, conteudo, comprovanteStr));
             }
 
@@ -157,4 +160,45 @@ public class EmailReceiverService {
         if (cabecalho.toLowerCase().contains(tipo + "=neutral")) return "'NEUTRAL'";
         return "[Desconhecido]";
     }
+
+    private void salvarAnexosDaMensagem(Message message, String messageId) {
+        try {
+            if (message.getContent() instanceof Multipart) {
+                Multipart multipart = (Multipart) message.getContent();
+
+                for (int i = 0; i < multipart.getCount(); i++) {
+                    BodyPart part = multipart.getBodyPart(i);
+
+                    if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) ||
+                            (part.getFileName() != null && !part.getFileName().isEmpty())) {
+
+                        String fileName = part.getFileName();
+                        String mimeType = part.getContentType();
+
+                        InputStream is = part.getInputStream();
+                        byte[] bytes = is.readAllBytes();
+
+                        AnexoEmail anexo = new AnexoEmail();
+                        anexo.setNomeArquivo(fileName);
+                        anexo.setTipoMime(mimeType);
+                        anexo.setConteudo(bytes);
+                        anexo.setDataRecebimento(LocalDateTime.now());
+
+                        // Obtém o email associado ao messageId
+                        Email emailEntity = emailRepository.findByMessageId(messageId)
+                                .orElseThrow(() -> new RuntimeException("Email não encontrado para o Message-ID"));
+
+                        // Associando o anexo ao email
+                        anexo.setEmail(emailEntity);
+
+                        // Salvando o anexo no banco
+                        anexoEmailRepository.save(anexo);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
