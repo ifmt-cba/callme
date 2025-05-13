@@ -1,6 +1,5 @@
 package com.example.login_auth_api.controller;
 
-import com.example.login_auth_api.dto.EmailDTO;
 import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
 import com.example.login_auth_api.service.EmailReceiverService;
 import org.springframework.web.bind.annotation.GetMapping;

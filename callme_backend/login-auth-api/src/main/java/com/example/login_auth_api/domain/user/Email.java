@@ -2,7 +2,6 @@ package com.example.login_auth_api.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 @Entity
 @Getter
 @Setter
@@ -16,14 +15,20 @@ public class Email {
     private Long id;
 
     private String remetente;
-
+    private String destinatario;
     private String assunto;
 
     @Column(length = 5000)
     private String corpoSimples;
 
-    @Column(length = 10000)
-    private String comprovante;
+    private String dataHora;
 
     private String messageId;
+
+    private String dkim;
+    private String dmarc;
+    private String spf;
+
+    @Column(length = 10000)
+    private String comprovante;
 }

@@ -80,13 +80,19 @@ public class EmailReceiverService {
                 if (emailRepository.findByMessageId(messageId).isEmpty()) {
                     Email emailEntity = Email.builder()
                             .remetente(remetente)
+                            .destinatario(destinatarios)
                             .assunto(assunto)
                             .corpoSimples(conteudo)
-                            .comprovante(comprovanteStr)
                             .messageId(messageId)
+                            .dataHora(dataHora)
+                            .spf(obterResultado(spf, "spf"))
+                            .dkim(obterResultado(authResults, "dkim"))
+                            .dmarc(obterResultado(authResults, "dmarc"))
+                            .comprovante(comprovanteStr)
                             .build();
                     emailRepository.save(emailEntity);
                 }
+
 
                 // Adiciona ao DTO
                 emails.add(new EmailLeituraCompletaDTO(remetente, assunto, conteudo, comprovanteStr));
