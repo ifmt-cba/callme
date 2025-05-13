@@ -1,0 +1,24 @@
+<!-- criar-chamado-interno.component.html -->
+<div class="layout">
+  <!-- Menu lateral -->
+
+    <app-navbar></app-navbar>
+
+
+  <!-- Conteúdo da tela -->
+  <main class="content">
+
+    <form class="form-container">
+      <label for="conteudo">Conteúdo do Chamado:</label>
+      <textarea
+        id="conteudo"
+        name="conteudo"
+        placeholder="Descreva o problema ou solicitação..."
+      ></textarea>
+
+      <button type="submit">Enviar Chamado</button>
+
+      <p class="mensagem" style="display: none;">Chamado criado com sucesso!</p>
+    </form>
+  </main>
+</div>
