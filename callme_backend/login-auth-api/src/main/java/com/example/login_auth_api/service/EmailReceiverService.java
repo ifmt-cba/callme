@@ -1,6 +1,8 @@
 package com.example.login_auth_api.service;
 
 import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
+import com.example.login_auth_api.domain.user.Email;
+import com.example.login_auth_api.repositories.EmailRepository;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMultipart;
@@ -13,6 +15,12 @@ import java.util.Properties;
 
 @Service
 public class EmailReceiverService {
+
+    private final EmailRepository emailRepository;
+
+    public EmailReceiverService(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
+    }
 
     public List<EmailLeituraCompletaDTO> checkInbox() {
         List<EmailLeituraCompletaDTO> emails = new ArrayList<>();
@@ -50,7 +58,7 @@ public class EmailReceiverService {
                 String spf = getHeaderValue(message, "Received-SPF");
                 String authResults = getHeaderValue(message, "Authentication-Results");
 
-                // Gerar comprovante detalhado estilo Gmail
+                // Comprovante
                 StringBuilder comprovante = new StringBuilder();
                 comprovante.append("======== MENSAGEM ORIGINAL (COMPROVANTE) ========\n");
                 comprovante.append("ID da mensagem : ").append(messageId).append("\n");
@@ -68,21 +76,20 @@ public class EmailReceiverService {
                 String comprovanteStr = comprovante.toString();
                 comprovantes.add(comprovanteStr);
 
-                // Impressão resumida
-                System.out.println("----- E-mail Resumido -----");
-                System.out.println("Remetente: " + remetente);
-                System.out.println("Assunto: " + assunto);
-                System.out.println("Conteúdo: " + conteudo);
-                System.out.println("----------------------------\n");
+                // Salvar no banco apenas se ainda não foi salvo
+                if (emailRepository.findByMessageId(messageId).isEmpty()) {
+                    Email emailEntity = Email.builder()
+                            .remetente(remetente)
+                            .assunto(assunto)
+                            .corpoSimples(conteudo)
+                            .comprovante(comprovanteStr)
+                            .messageId(messageId)
+                            .build();
+                    emailRepository.save(emailEntity);
+                }
 
                 // Adiciona ao DTO
                 emails.add(new EmailLeituraCompletaDTO(remetente, assunto, conteudo, comprovanteStr));
-            }
-
-            // Impressão dos comprovantes
-            System.out.println("========= COMPROVANTES COMPLETOS =========\n");
-            for (String comprovante : comprovantes) {
-                System.out.println(comprovante);
             }
 
             inbox.close(false);
