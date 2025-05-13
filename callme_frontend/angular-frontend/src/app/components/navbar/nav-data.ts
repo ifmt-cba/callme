@@ -12,7 +12,7 @@ export const navbarData = [
   },
 
   {
-    routeLink: 'pages',
+    routeLink: 'login',
     icon: 'fal fa-file',
     label: 'Chamados'
   },

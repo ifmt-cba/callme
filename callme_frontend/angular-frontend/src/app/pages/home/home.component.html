@@ -6,13 +6,7 @@
       <h1>Callme</h1>
     </div>
     <nav class="menu">
-      <a class="active"><i class="bi bi-columns-gap"></i> Dashboard</a>
-      <a><i class="bi bi-plus-circle"></i> Novo Chamado</a>
-      <a><i class="bi bi-file-earmark-plus"></i> Chamado Interno</a>
-      <a><i class="bi bi-people"></i> Gerenciar Usuários</a>
-      <a><i class="bi bi-bar-chart"></i> Relatórios</a>
-      <a><i class="bi bi-gear"></i> Configurações</a>
-      <a><i class="bi bi-journals"></i> Base de Conhecimento</a>
+    <app-navbar></app-navbar>
     </nav>
   </aside>
 
@@ -34,13 +28,14 @@
       </div>
     </header>
 
-    <section class="cards">
-      <div class="card">
-        <div class="icon">💳</div>
+    <section class="cards" >
+      <div class="card" (click)="navigateToChamado()">
+
+        <div  class="icon">💳</div>
         <h3>124</h3>
-        <p>Chamados totais</p>
+        <p >Chamados totais</p>
       </div>
-      <div class="card">
+      <div class="card"(click)="navigateToCreate()">
         <div class="icon">⏳</div>
         <h3>45</h3>
         <p>Em atendimento</p>
@@ -56,24 +51,28 @@
       <h3>Chamados Recentes</h3>
       <table>
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Assunto</th>
-            <th>Solicitante</th>
-            <th>Prioridade</th>
-            <th>Status</th>
-            <th>Data</th>
-          </tr>
+        <tr>
+          <th>ID</th>
+          <th>Assunto</th>
+          <th>Solicitante</th>
+          <th>Prioridade</th>
+          <th>Status</th>
+          <th>Data</th>
+        </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Problema na rede</td>
-            <td>João Silva</td>
-            <td>Alta</td>
-            <td>Em atendimento</td>
-            <td>12/05/2025</td>
-          </tr>
+        <tr *ngFor="let item of chamados">
+          <td><strong>#{{ item.chamadoId }}</strong></td>
+          <td>{{ item.content }}</td>
+          <td><em>{{ item.username }}</em></td>
+          <td>Alta</td>
+          <td>Em atendimento</td>
+          <td>12/05/2025</td>
+        </tr>
+
+        <tr *ngIf="chamados.length === 0">
+          <td colspan="6" style="text-align: center;">Nenhum chamado encontrado.</td>
+        </tr>
         </tbody>
       </table>
     </section>

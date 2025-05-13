@@ -4,33 +4,33 @@
     font-family: 'Segoe UI', sans-serif;
     background-color: #f6f7fb;
   }
-  
+
   .sidebar {
     width: 250px;
     background: white;
     border-right: 1px solid #ddd;
-    padding: 20px;
-  
+    padding: 0px;
+
     .logo {
       display: flex;
       align-items: center;
       margin-bottom: 30px;
-  
+
       img {
         width: 30px;
         margin-right: 10px;
       }
-  
+
       h1 {
         color: #2874f0;
         font-size: 22px;
       }
     }
-  
+
     .menu {
       display: flex;
       flex-direction: column;
-  
+
       a {
         display: flex;
         align-items: center;
@@ -40,11 +40,11 @@
         color: #333;
         border-radius: 8px;
         cursor: pointer;
-  
+
         i {
           margin-right: 10px;
         }
-  
+
         &.active,
         &:hover {
           background-color: #e7efff;
@@ -53,44 +53,44 @@
       }
     }
   }
-  
+
   .main {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-  
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-  
+
       h2 {
         font-size: 24px;
         color: #333;
       }
-  
+
       .user-menu {
         display: flex;
         align-items: center;
-  
+
         img {
           width: 30px;
           border-radius: 50%;
           margin-left: 10px;
         }
-  
+
         select {
           margin-left: 10px;
           padding: 5px;
         }
       }
     }
-  
+
     .cards {
       display: flex;
       gap: 20px;
       margin-top: 20px;
-  
+      cursor: pointer;
       .card {
         background: white;
         padding: 20px;
@@ -98,54 +98,54 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
         flex: 1;
-  
+
         .icon {
           font-size: 30px;
           margin-bottom: 10px;
         }
-  
+
         h3 {
           font-size: 36px;
           margin-bottom: 10px;
         }
-  
+
         p {
           color: #666;
         }
       }
     }
-  
+
     .table-section {
       margin-top: 30px;
-  
+
       table {
         width: 100%;
         border-collapse: collapse;
-  
+
         th,
         td {
           padding: 12px 15px;
           border-bottom: 1px solid #ddd;
         }
-  
+
         th {
           background-color: #f4f6f9;
           text-align: left;
         }
-  
+
         tr:hover {
           background-color: #f1f1f1;
         }
       }
     }
   }
-  
+
   @media (max-width: 768px) {
     .main {
       .cards {
         flex-direction: column;
       }
-  
+
       .table-section table {
         font-size: 14px;
       }
@@ -154,15 +154,14 @@
   .settings-select {
     display: flex;
     align-items: center;
-  
+
     i {
       margin-right: 5px;
       font-size: 18px;
       color: #555;
     }
-  
+
     select {
       padding: 5px;
     }
   }
-    
