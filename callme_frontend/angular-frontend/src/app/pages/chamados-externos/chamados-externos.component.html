@@ -1,1 +1,20 @@
-<p>chamados-externos works!</p>
+<ng-container *ngIf="chamado">
+
+
+  <div *ngFor="let item of chamado" >
+    <p><strong>Assunto:</strong> {{ item.assunto }}</p>
+    <p><strong>Remetente:</strong> {{ item.remetente }}</p>
+    <p><strong>Destinatário:</strong> {{ item.destinatario ?? 'Não informado' }}</p>
+    <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p>
+
+    <pre>{{ item.corpoSimples }}</pre>
+
+    <p><strong>SPF:</strong> {{ item.spf ?? 'Desconhecido' }}</p>
+    <p><strong>DKIM:</strong> {{ item.dkim ?? 'Não informado' }}</p>
+    <p><strong>DMARC:</strong> {{ item.dmarc ?? 'Não informado' }}</p>
+
+    <pre>{{ item.comprovante }}</pre>
+    <hr />
+  </div>
+</ng-container>
+
