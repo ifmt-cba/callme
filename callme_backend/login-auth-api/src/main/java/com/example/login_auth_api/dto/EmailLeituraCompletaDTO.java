@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data
 public class EmailLeituraCompletaDTO {
+    private String token;
     private String remetente;
     private String destinatario;
     private String assunto;
@@ -23,6 +24,7 @@ public class EmailLeituraCompletaDTO {
     }
 
     public EmailLeituraCompletaDTO(String remetente, String assunto, String corpoSimples, String comprovante) {
+        this.token = token;
         this.remetente = remetente;
         this.destinatario = destinatario;
         this.assunto = assunto;

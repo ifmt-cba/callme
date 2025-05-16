@@ -1,8 +1,8 @@
 package com.example.login_auth_api.service;
 
-import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
-import com.example.login_auth_api.domain.user.Email;
 import com.example.login_auth_api.domain.user.AnexoEmail;
+import com.example.login_auth_api.domain.user.Email;
+import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
 import com.example.login_auth_api.repositories.AnexoEmailRepository;
 import com.example.login_auth_api.repositories.EmailRepository;
 import jakarta.mail.*;
@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Service
 public class EmailReceiverService {
@@ -39,26 +37,27 @@ public class EmailReceiverService {
 
             Session session = Session.getDefaultInstance(properties);
             Store store = session.getStore("imaps");
-            store.connect("imap.gmail.com", "callmegerencia@gmail.com", "pvgn peru emdw nvyl");
+            store.connect("imap.gmail.com", "callmegerencia@gmail.com", "pvgn peru emdw nvyl"); // Troque pela sua senha de app
 
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
 
             Message[] messages = inbox.getMessages();
-            System.out.println("Você tem " + messages.length + " mensagens.\n");
 
             for (Message message : messages) {
                 String assunto = message.getSubject();
                 String remetente = message.getFrom()[0].toString();
                 String destinatarios = InternetAddress.toString(message.getRecipients(Message.RecipientType.TO));
                 String conteudo = extrairConteudo(message);
+
                 String dataHora = message.getReceivedDate() != null
                         ? message.getReceivedDate().toInstant().atZone(java.time.ZoneId.systemDefault())
                         .format(DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy 'às' HH:mm"))
                         : "[Data indisponível]";
-                String messageId = message.getHeader("Message-ID") != null
-                        ? message.getHeader("Message-ID")[0]
-                        : "[Sem ID]";
+
+                String messageId = Optional.ofNullable(message.getHeader("Message-ID"))
+                        .map(headers -> headers.length > 0 ? headers[0] : "[Sem ID]")
+                        .orElse("[Sem ID]");
 
                 String spf = getHeaderValue(message, "Received-SPF");
                 String authResults = getHeaderValue(message, "Authentication-Results");
@@ -66,7 +65,7 @@ public class EmailReceiverService {
                 StringBuilder comprovante = new StringBuilder();
                 comprovante.append("======== MENSAGEM ORIGINAL (COMPROVANTE) ========\n");
                 comprovante.append("ID da mensagem : ").append(messageId).append("\n");
-                comprovante.append("Criado em      : ").append(dataHora).append(" (entregue após poucos segundos)\n");
+                comprovante.append("Criado em      : ").append(dataHora).append("\n");
                 comprovante.append("De             : ").append(remetente).append("\n");
                 comprovante.append("Para           : ").append(destinatarios).append("\n");
                 comprovante.append("Assunto        : ").append(assunto).append("\n");
@@ -77,28 +76,29 @@ public class EmailReceiverService {
                 comprovante.append(conteudo).append("\n");
                 comprovante.append("============================================\n");
 
-                String comprovanteStr = comprovante.toString();
-
                 if (emailRepository.findByMessageId(messageId).isEmpty()) {
+                    String token = UUID.randomUUID().toString();
+
                     Email emailEntity = Email.builder()
                             .remetente(remetente)
                             .destinatario(destinatarios)
                             .assunto(assunto)
                             .corpoSimples(conteudo)
-                            .messageId(messageId)
                             .dataHora(dataHora)
+                            .messageId(messageId)
                             .spf(obterResultado(spf, "spf"))
                             .dkim(obterResultado(authResults, "dkim"))
                             .dmarc(obterResultado(authResults, "dmarc"))
-                            .comprovante(comprovanteStr)
+                            .comprovante(comprovante.toString())
+                            .token(token)
                             .build();
+
                     emailRepository.save(emailEntity);
 
-                    // Salvar anexos
                     salvarAnexosDaMensagem(message, messageId);
                 }
 
-                emails.add(new EmailLeituraCompletaDTO(remetente, assunto, conteudo, comprovanteStr));
+                emails.add(new EmailLeituraCompletaDTO(remetente, assunto, conteudo, comprovante.toString()));
             }
 
             inbox.close(false);
@@ -118,13 +118,11 @@ public class EmailReceiverService {
                 return (String) content;
             } else if (content instanceof MimeMultipart) {
                 return extrairTextoDeMimeMultipart((MimeMultipart) content);
-            } else {
-                return "[Conteúdo não suportado]";
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return "[Erro ao extrair conteúdo]";
         }
+        return "[Erro ao extrair conteúdo]";
     }
 
     private String extrairTextoDeMimeMultipart(MimeMultipart mimeMultipart) throws Exception {
@@ -163,9 +161,7 @@ public class EmailReceiverService {
 
     private void salvarAnexosDaMensagem(Message message, String messageId) {
         try {
-            if (message.getContent() instanceof Multipart) {
-                Multipart multipart = (Multipart) message.getContent();
-
+            if (message.getContent() instanceof Multipart multipart) {
                 for (int i = 0; i < multipart.getCount(); i++) {
                     BodyPart part = multipart.getBodyPart(i);
 
@@ -178,20 +174,16 @@ public class EmailReceiverService {
                         InputStream is = part.getInputStream();
                         byte[] bytes = is.readAllBytes();
 
+                        Email emailEntity = emailRepository.findByMessageId(messageId)
+                                .orElseThrow(() -> new RuntimeException("Email não encontrado"));
+
                         AnexoEmail anexo = new AnexoEmail();
                         anexo.setNomeArquivo(fileName);
                         anexo.setTipoMime(mimeType);
                         anexo.setConteudo(bytes);
                         anexo.setDataRecebimento(LocalDateTime.now());
-
-                        // Obtém o email associado ao messageId
-                        Email emailEntity = emailRepository.findByMessageId(messageId)
-                                .orElseThrow(() -> new RuntimeException("Email não encontrado para o Message-ID"));
-
-                        // Associando o anexo ao email
                         anexo.setEmail(emailEntity);
 
-                        // Salvando o anexo no banco
                         anexoEmailRepository.save(anexo);
                     }
                 }
@@ -200,5 +192,4 @@ public class EmailReceiverService {
             e.printStackTrace();
         }
     }
-
 }
