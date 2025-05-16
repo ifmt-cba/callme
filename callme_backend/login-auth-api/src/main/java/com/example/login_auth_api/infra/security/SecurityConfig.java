@@ -63,8 +63,8 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.POST, "/email").permitAll().
-                        requestMatchers(HttpMethod.GET, "/email/receber").permitAll().
-                        requestMatchers(HttpMethod.GET, "/email/resumo").permitAll().
+                        requestMatchers(HttpMethod.GET, "/emails/completo").permitAll().
+                        requestMatchers(HttpMethod.GET, "/emails/resumo").permitAll().
                         requestMatchers(HttpMethod.GET, "/anexos/visualizar/{id}").permitAll().
                         requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())

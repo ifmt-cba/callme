@@ -2,10 +2,6 @@ package com.example.login_auth_api.dto;
 
 import lombok.Data;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-
 @Data
 public class EmailLeituraCompletaDTO {
     private String token;
@@ -23,17 +19,19 @@ public class EmailLeituraCompletaDTO {
         // Construtor padrão necessário para Jackson
     }
 
-    public EmailLeituraCompletaDTO(String remetente, String assunto, String corpoSimples, String comprovante) {
+    // Construtor com todos os parâmetros que você usa no serviço
+    public EmailLeituraCompletaDTO(String token, String remetente, String destinatario,
+                                   String assunto, String corpoSimples, String dataHora,
+                                   String spf, String dkim, String dmarc, String comprovante) {
         this.token = token;
         this.remetente = remetente;
         this.destinatario = destinatario;
         this.assunto = assunto;
         this.corpoSimples = corpoSimples;
-        this.dataHora = dataHora = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        this.dataHora = dataHora;
         this.spf = spf;
         this.dkim = dkim;
         this.dmarc = dmarc;
         this.comprovante = comprovante;
-
     }
 }
