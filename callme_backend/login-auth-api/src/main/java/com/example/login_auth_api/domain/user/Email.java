@@ -16,6 +16,8 @@ public class Email {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+
     private String remetente;
     private String destinatario;
     private String assunto;
@@ -33,6 +35,9 @@ public class Email {
 
     @Column(length = 10000)
     private String comprovante;
+
+    @Column(unique = true, nullable = false)
+    private String token;
 
     @OneToMany(mappedBy = "email", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AnexoEmail> anexos; // Relacionamento com os anexos
