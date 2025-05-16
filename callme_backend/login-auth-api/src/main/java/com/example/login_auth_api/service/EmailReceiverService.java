@@ -3,6 +3,7 @@ package com.example.login_auth_api.service;
 import com.example.login_auth_api.domain.user.AnexoEmail;
 import com.example.login_auth_api.domain.user.Email;
 import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
+import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.repositories.AnexoEmailRepository;
 import com.example.login_auth_api.repositories.EmailRepository;
 import jakarta.mail.*;
@@ -52,7 +53,7 @@ public class EmailReceiverService {
 
                 String dataHora = message.getReceivedDate() != null
                         ? message.getReceivedDate().toInstant().atZone(java.time.ZoneId.systemDefault())
-                        .format(DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy 'às' HH:mm"))
+                        .format(DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy 'às' HH:mm", new Locale("pt", "BR")))
                         : "[Data indisponível]";
 
                 String messageId = Optional.ofNullable(message.getHeader("Message-ID"))
@@ -61,6 +62,10 @@ public class EmailReceiverService {
 
                 String spf = getHeaderValue(message, "Received-SPF");
                 String authResults = getHeaderValue(message, "Authentication-Results");
+
+                String spfResultado = obterResultado(spf, "spf");
+                String dkimResultado = obterResultado(authResults, "dkim");
+                String dmarcResultado = obterResultado(authResults, "dmarc");
 
                 StringBuilder comprovante = new StringBuilder();
                 comprovante.append("======== MENSAGEM ORIGINAL (COMPROVANTE) ========\n");
@@ -96,9 +101,24 @@ public class EmailReceiverService {
                     emailRepository.save(emailEntity);
 
                     salvarAnexosDaMensagem(message, messageId);
+
+                    EmailLeituraCompletaDTO dto = new EmailLeituraCompletaDTO(
+                            token,
+                            remetente,
+                            destinatarios,
+                            assunto,
+                            conteudo,
+                            dataHora,
+                            spfResultado,
+                            dkimResultado,
+                            dmarcResultado,
+                            comprovante.toString()
+                    );
+
+                    emails.add(dto);
                 }
 
-                emails.add(new EmailLeituraCompletaDTO(remetente, assunto, conteudo, comprovante.toString()));
+
             }
 
             inbox.close(false);
@@ -192,4 +212,22 @@ public class EmailReceiverService {
             e.printStackTrace();
         }
     }
+
+    public List<EmailResumoDTO> listarResumosEmails() {
+        List<EmailResumoDTO> resumos = new ArrayList<>();
+
+        List<Email> emails = emailRepository.findAll();
+        for (Email email : emails) {
+            resumos.add(new EmailResumoDTO(
+                    email.getRemetente(),
+                    email.getAssunto(),
+                    email.getCorpoSimples(),
+                    email.getDataHora(),
+                    email.getToken()
+            ));
+        }
+
+        return resumos;
+    }
+
 }
