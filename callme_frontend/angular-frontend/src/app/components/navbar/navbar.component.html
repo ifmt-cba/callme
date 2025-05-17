@@ -2,11 +2,11 @@
 <div class="app-navbar" [ngClass]="collapsed ?'navbar-collapsed': ''">
 
   <div class="logo-container">
-    <button class="logo">C</button>
-    <div class="logo-text" *ngIf="collapsed">CallMe</div>
-    <button class="btn-close" *ngIf="collapsed"></button>
-    <i class="fal fa-times close-icon"></i>
-
+    <button class="logo" (click)="ToggleCollapsed()" >C</button>
+    <div class="logo-text" *ngIf="collapsed"  >CallMe</div>
+    <button class="btn-close"  *ngIf="collapsed" (click)="CloseSidenav">
+      <i class="fal fa-times close-icon"></i>
+    </button>
   </div>
 
   <ul class="navbar-nav">
