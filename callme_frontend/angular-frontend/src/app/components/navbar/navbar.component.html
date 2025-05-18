@@ -1,23 +1,21 @@
-
-<div class="app-navbar" [ngClass]="collapsed ?'navbar-collapsed': ''">
-
+<div class="app-navbar" [ngClass]="collapsed ? 'navbar-collapsed' : ''">
   <div class="logo-container">
-    <button class="logo" (click)="ToggleCollapsed()" >C</button>
-    <div class="logo-text" *ngIf="collapsed"  >CallMe</div>
-    <button class="btn-close"  *ngIf="collapsed" (click)="CloseSidenav">
+    <button class="logo" (click)="ToggleCollapsed()">C</button>
+    <div class="logo-text" *ngIf="collapsed">CallMe</div>
+    <button class="btn-close" *ngIf="collapsed" (click)="CloseSidenav()">
       <i class="fal fa-times close-icon"></i>
     </button>
   </div>
 
   <ul class="navbar-nav">
     <li class="navbar-nav-item" *ngFor="let data of navData">
-      <a class="navbar-nav-link" [routerLink]="[data.routeLink]">
+      <a class="navbar-nav-link"
+         [routerLink]="['/' + data.routeLink]"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }">
         <i class="navbar-link-icon" [class]="data.icon"></i>
-        <span class="navbar-link-text" *ngIf="collapsed">{{data.label}}</span>
+        <span class="navbar-link-text" *ngIf="collapsed">{{ data.label }}</span>
       </a>
     </li>
-
-
   </ul>
-
 </div>

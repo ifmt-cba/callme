@@ -1,11 +1,16 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterModule, Routes} from "@angular/router";
 import {navbarData} from "./nav-data";
+import {HomeComponent} from "../../pages/home/home.component";
 interface SideNavToggle{
   screenWidth: number;
   collapsed: boolean;
 }
+const routes: Routes = [
+  {path : 'Dashboard', component: HomeComponent}
+
+];
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +20,8 @@ interface SideNavToggle{
     NgIf,
     RouterLink,
     NgClass,
-    NgForOf
+    NgForOf,
+    RouterModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
