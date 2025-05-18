@@ -12,7 +12,8 @@
       <a class="navbar-nav-link"
          [routerLink]="['/' + data.routeLink]"
          routerLinkActive="active"
-         [routerLinkActiveOptions]="{ exact: true }">
+         [routerLinkActiveOptions]="{ exact: true }"
+      >
         <i class="navbar-link-icon" [class]="data.icon"></i>
         <span class="navbar-link-text" *ngIf="collapsed">{{ data.label }}</span>
       </a>
