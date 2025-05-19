@@ -223,7 +223,8 @@ public class EmailReceiverService {
                     email.getAssunto(),
                     email.getCorpoSimples(),
                     email.getDataHora(),
-                    email.getToken()
+                    email.getToken(),
+                    email.getMessageId()
             ));
         }
 

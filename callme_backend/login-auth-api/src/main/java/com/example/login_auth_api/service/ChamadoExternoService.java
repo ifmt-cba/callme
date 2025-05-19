@@ -21,7 +21,6 @@ public class ChamadoExternoService {
     // Cria chamados a partir da lista de resumos de email
     public List<ChamadoExterno> criarChamadosAPartirDeEmails(List<EmailResumoDTO> resumos) {
         return resumos.stream().map(resumo -> {
-            // Evita duplicar chamados com o mesmo token do email
             return chamadoRepository.findByTokenEmail(resumo.getToken())
                     .orElseGet(() -> {
                         ChamadoExterno chamado = ChamadoExterno.builder()
@@ -34,15 +33,20 @@ public class ChamadoExternoService {
 
                         ChamadoExterno chamadoSalvo = chamadoRepository.save(chamado);
 
-                        // Envia o e-mail de confirmação com o token
-                        String emailLimpo = extractEmailAddress(resumo.getRemetente());
-                        emailService.sendTokenResponse(emailLimpo, resumo.getToken());
+                        // ✅ Envia e-mail de resposta ao cliente com o token
+                        emailService.sendTokenResponse(
+                                resumo.getRemetente(),
+                                resumo.getToken(),
+                                resumo.getMessageId(),
+                                resumo.getAssunto()
+                        );
 
                         return chamadoSalvo;
                     });
 
         }).collect(Collectors.toList());
     }
+
 
     public List<ChamadoExterno> listarChamados() {
         return chamadoRepository.findAll();

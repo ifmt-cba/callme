@@ -2,8 +2,11 @@ package com.example.login_auth_api.service;
 
 
 import com.example.login_auth_api.dto.SendEmailDTO;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,18 +27,39 @@ public class EmailService {
 
     }
 
-    public void sendTokenResponse(String to, String token) {
-        String subject = "Confirmação de recebimento do chamado";
-        String body = "Olá,\n\nRecebemos sua solicitação com sucesso.\n" +
-                "Seu número de acompanhamento (token) é: " + token + "\n\n" +
-                "Entraremos em contato em breve.\n\n" +
-                "Atenciosamente,\nEquipe CallMe";
+    public void sendTokenResponse(String to, String token, String originalMessageId, String originalSubject) {
+        String subject = "Re: " + originalSubject;
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("callmegerencia@gmail.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        mailSender.send(message);
+        String body = """
+            <html>
+            <body style="font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px;">
+                <div style="background-color: white; padding: 20px; border-radius: 8px;">
+                    <p>Olá,</p>
+                    <p>Recebemos sua solicitação com sucesso. Seu número de acompanhamento é:</p>
+                    <p style="font-size: 18px; font-weight: bold; color: #2b6777;">%s</p>
+                    <p>Entraremos em contato em breve.</p>
+                    <p style="margin-top: 20px;">Atenciosamente,<br>Equipe CallMe</p>
+                </div>
+            </body>
+            </html>
+            """.formatted(token);
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("callmegerencia@gmail.com");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body, true);
+
+            // Adiciona cabeçalhos de resposta
+            message.setHeader("In-Reply-To", originalMessageId);
+            message.setHeader("References", originalMessageId);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Erro ao enviar resposta com token", e);
+        }
     }
+
 }
