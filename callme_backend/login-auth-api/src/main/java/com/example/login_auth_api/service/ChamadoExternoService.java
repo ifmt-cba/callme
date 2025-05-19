@@ -15,6 +15,9 @@ public class ChamadoExternoService {
     @Autowired
     private ChamadoExternoRepository chamadoRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     // Cria chamados a partir da lista de resumos de email
     public List<ChamadoExterno> criarChamadosAPartirDeEmails(List<EmailResumoDTO> resumos) {
         return resumos.stream().map(resumo -> {
@@ -28,8 +31,16 @@ public class ChamadoExternoService {
                                 .dataHora(resumo.getDataHora())
                                 .tokenEmail(resumo.getToken())
                                 .build();
-                        return chamadoRepository.save(chamado);
+
+                        ChamadoExterno chamadoSalvo = chamadoRepository.save(chamado);
+
+                        // Envia o e-mail de confirmação com o token
+                        String emailLimpo = extractEmailAddress(resumo.getRemetente());
+                        emailService.sendTokenResponse(emailLimpo, resumo.getToken());
+
+                        return chamadoSalvo;
                     });
+
         }).collect(Collectors.toList());
     }
 
@@ -37,4 +48,12 @@ public class ChamadoExternoService {
         return chamadoRepository.findAll();
     }
 
+    // Extrai o e-mail limpo de um campo tipo "Nome <email@exemplo.com>"
+    private String extractEmailAddress(String rawRemetente) {
+        if (rawRemetente == null) return "";
+        if (rawRemetente.contains("<") && rawRemetente.contains(">")) {
+            return rawRemetente.substring(rawRemetente.indexOf("<") + 1, rawRemetente.indexOf(">")).trim();
+        }
+        return rawRemetente.trim();
+    }
 }

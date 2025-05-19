@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Email {
+public class SendEmail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
