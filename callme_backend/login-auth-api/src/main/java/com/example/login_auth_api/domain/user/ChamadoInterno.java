@@ -1,7 +1,5 @@
 package com.example.login_auth_api.domain.user;
 
-import com.example.login_auth_api.domain.user.User;
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -9,7 +7,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "tb_chamadointerno")
-public class Chamado {
+public class ChamadoInterno {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -66,6 +66,7 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET, "/emails/completo").permitAll().
                         requestMatchers(HttpMethod.GET, "/emails/resumo").permitAll().
                         requestMatchers(HttpMethod.GET, "/anexos/visualizar/{id}").permitAll().
+                        requestMatchers(HttpMethod.GET, "/chamados/abrir").permitAll().
                         requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())
                 .csrf(csrf ->csrf.disable())
