@@ -1,7 +1,7 @@
 package com.example.login_auth_api.service;
 
 import com.example.login_auth_api.domain.user.AnexoEmail;
-import com.example.login_auth_api.domain.user.Email;
+import com.example.login_auth_api.domain.user.SendEmail;
 import com.example.login_auth_api.dto.EmailLeituraCompletaDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.repositories.AnexoEmailRepository;
@@ -84,7 +84,7 @@ public class EmailReceiverService {
                 if (emailRepository.findByMessageId(messageId).isEmpty()) {
                     String token = UUID.randomUUID().toString();
 
-                    Email emailEntity = Email.builder()
+                    SendEmail emailEntity = SendEmail.builder()
                             .remetente(remetente)
                             .destinatario(destinatarios)
                             .assunto(assunto)
@@ -194,7 +194,7 @@ public class EmailReceiverService {
                         InputStream is = part.getInputStream();
                         byte[] bytes = is.readAllBytes();
 
-                        Email emailEntity = emailRepository.findByMessageId(messageId)
+                        SendEmail emailEntity = emailRepository.findByMessageId(messageId)
                                 .orElseThrow(() -> new RuntimeException("Email não encontrado"));
 
                         AnexoEmail anexo = new AnexoEmail();
@@ -216,14 +216,15 @@ public class EmailReceiverService {
     public List<EmailResumoDTO> listarResumosEmails() {
         List<EmailResumoDTO> resumos = new ArrayList<>();
 
-        List<Email> emails = emailRepository.findAll();
-        for (Email email : emails) {
+        List<SendEmail> emails = emailRepository.findAll();
+        for (SendEmail email : emails) {
             resumos.add(new EmailResumoDTO(
                     email.getRemetente(),
                     email.getAssunto(),
                     email.getCorpoSimples(),
                     email.getDataHora(),
-                    email.getToken()
+                    email.getToken(),
+                    email.getMessageId()
             ));
         }
 

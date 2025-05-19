@@ -25,6 +25,6 @@ public class AnexoEmail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "email_id") // Adiciona a chave estrangeira
-    private Email email; // Relacionamento com o email
+    private SendEmail email; // Relacionamento com o email
 }
 

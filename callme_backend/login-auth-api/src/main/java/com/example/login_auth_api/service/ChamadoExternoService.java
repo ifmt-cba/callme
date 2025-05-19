@@ -15,10 +15,12 @@ public class ChamadoExternoService {
     @Autowired
     private ChamadoExternoRepository chamadoRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     // Cria chamados a partir da lista de resumos de email
     public List<ChamadoExterno> criarChamadosAPartirDeEmails(List<EmailResumoDTO> resumos) {
         return resumos.stream().map(resumo -> {
-            // Evita duplicar chamados com o mesmo token do email
             return chamadoRepository.findByTokenEmail(resumo.getToken())
                     .orElseGet(() -> {
                         ChamadoExterno chamado = ChamadoExterno.builder()
@@ -28,13 +30,34 @@ public class ChamadoExternoService {
                                 .dataHora(resumo.getDataHora())
                                 .tokenEmail(resumo.getToken())
                                 .build();
-                        return chamadoRepository.save(chamado);
+
+                        ChamadoExterno chamadoSalvo = chamadoRepository.save(chamado);
+
+                        // ✅ Envia e-mail de resposta ao cliente com o token
+                        emailService.sendTokenResponse(
+                                resumo.getRemetente(),
+                                resumo.getToken(),
+                                resumo.getMessageId(),
+                                resumo.getAssunto()
+                        );
+
+                        return chamadoSalvo;
                     });
+
         }).collect(Collectors.toList());
     }
+
 
     public List<ChamadoExterno> listarChamados() {
         return chamadoRepository.findAll();
     }
 
+    // Extrai o e-mail limpo de um campo tipo "Nome <email@exemplo.com>"
+    private String extractEmailAddress(String rawRemetente) {
+        if (rawRemetente == null) return "";
+        if (rawRemetente.contains("<") && rawRemetente.contains(">")) {
+            return rawRemetente.substring(rawRemetente.indexOf("<") + 1, rawRemetente.indexOf(">")).trim();
+        }
+        return rawRemetente.trim();
+    }
 }
