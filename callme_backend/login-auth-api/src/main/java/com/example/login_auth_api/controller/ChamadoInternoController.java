@@ -1,11 +1,11 @@
 package com.example.login_auth_api.controller;
 
-import com.example.login_auth_api.domain.user.Chamado;
+import com.example.login_auth_api.domain.user.ChamadoInterno;
 import com.example.login_auth_api.domain.user.Role;
-import com.example.login_auth_api.dto.CreateChamadoDto;
+import com.example.login_auth_api.dto.ChamadoInternoDto;
 import com.example.login_auth_api.dto.FeedDto;
 import com.example.login_auth_api.dto.FeedItemDto;
-import com.example.login_auth_api.repositories.ChamadoRepository;
+import com.example.login_auth_api.repositories.ChamadoInternoRepository;
 import com.example.login_auth_api.repositories.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,13 +18,13 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 
 @RestController
-public class ChamadoController {
+public class ChamadoInternoController {
 
-    private final ChamadoRepository chamadoRepository;
+    private final ChamadoInternoRepository chamadoRepository;
 
     private final UserRepository userRepository;
 
-    public ChamadoController(ChamadoRepository chamadoRepository, UserRepository userRepository) {
+    public ChamadoInternoController(ChamadoInternoRepository chamadoRepository, UserRepository userRepository) {
 
         this.chamadoRepository = chamadoRepository;
         this.userRepository = userRepository;
@@ -32,39 +32,39 @@ public class ChamadoController {
 
     @GetMapping("/feed")
     public ResponseEntity<FeedDto> feed(@RequestParam(value = "page", defaultValue = "0") int page,
-                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+                                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
 
-       var chamados = chamadoRepository.findAll(
-               PageRequest.of(page, pageSize, Sort.Direction.DESC, "creationTimestamp"))
-               .map(chamado ->
-                       new FeedItemDto(chamado.getChamadoID(),
-                                       chamado.getContent(),
-                                       chamado.getUser().getUsername()));
+        var chamados = chamadoRepository.findAll(
+                        PageRequest.of(page, pageSize, Sort.Direction.DESC, "creationTimestamp"))
+                .map(chamado ->
+                        new FeedItemDto(chamado.getChamadoID(),
+                                chamado.getContent(),
+                                chamado.getUser().getUsername()));
 
-       return ResponseEntity.ok(new FeedDto(chamados.getContent(), page, pageSize,
-                                            chamados.getTotalPages(),
-                                            chamados.getTotalElements()));
+        return ResponseEntity.ok(new FeedDto(chamados.getContent(), page, pageSize,
+                chamados.getTotalPages(),
+                chamados.getTotalElements()));
     }
 
     @PostMapping("/chamados")
-    public ResponseEntity<Void>Createchamado(@RequestBody CreateChamadoDto Dto,
+    public ResponseEntity<Void>Createchamado(@RequestBody ChamadoInternoDto Dto,
                                              JwtAuthenticationToken token) {
 
-            var user = userRepository.findById(UUID.fromString(token.getName()));
+        var user = userRepository.findById(UUID.fromString(token.getName()));
 
-           var chamado = new Chamado();
-           chamado.setUser(user.get());
-           chamado.setContent(Dto.content());
+        var chamado = new ChamadoInterno();
+        chamado.setUser(user.get());
+        chamado.setContent(Dto.content());
 
-           chamadoRepository.save(chamado);
-           return ResponseEntity.ok().build();
+        chamadoRepository.save(chamado);
+        return ResponseEntity.ok().build();
     }
     @DeleteMapping("/chamados/{id}")
     public ResponseEntity<Void> deletechamado(@PathVariable ("id") Long chamadoId,
-        JwtAuthenticationToken token){
+                                              JwtAuthenticationToken token){
         var user = userRepository.findById(UUID.fromString(token.getName()));
         var chamado = chamadoRepository.findById(chamadoId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var isAdmin = user.get().getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase(Role.Values.ADMIN.name()));
 
