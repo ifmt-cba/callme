@@ -1,24 +1,22 @@
-import { Component } from '@angular/core';
-import {navbarData} from "./nav-data";
-import {RouterLink} from "@angular/router";
-import {NgClass, NgIf,NgForOf } from "@angular/common";
-
+import { Component, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [
-    RouterLink,
-    NgClass,
-    NgIf,
-    NgForOf
-  ],
+  imports: [],
   templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.scss'
+  styleUrls: ['./usuarios.component.scss']
 })
 export class UsuariosComponent {
+  @ViewChild('container', { static: true }) containerRef!: ElementRef;
 
-  collapsed = true;
-  navData = navbarData;
+  constructor(private renderer: Renderer2) {}
 
+  onSignUp(): void {
+    this.renderer.addClass(this.containerRef.nativeElement, 'sign-up-mode');
+  }
+
+  onSignIn(): void {
+    this.renderer.removeClass(this.containerRef.nativeElement, 'sign-up-mode');
+  }
 }

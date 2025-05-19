@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FeedService } from "../../services/feed.service";
 import { Router } from "@angular/router";
-import { UsuariosComponent } from "../usuarios/usuarios.component";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { FeedItem } from "../../models/feed.models";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
@@ -15,7 +14,6 @@ interface SideNavToggle {
   selector: 'app-home',
   standalone: true,
   imports: [
-    UsuariosComponent,
     NavbarComponent,
     NgForOf,
     NgIf,
