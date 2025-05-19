@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ChamadoExternoRepository extends JpaRepository<ChamadoExterno, Long> {
-    Optional<ChamadoExterno> findByTokenEmail(String tokenEmail);
+    Optional<ChamadoExterno> findByMessageId(String messageId);
+
 }

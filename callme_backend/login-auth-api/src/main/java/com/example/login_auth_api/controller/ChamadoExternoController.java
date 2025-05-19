@@ -20,7 +20,7 @@ public class ChamadoExternoController {
     private ChamadoExternoService chamadoService;
 
     // Endpoint para criar chamados a partir dos emails resumidos
-    @GetMapping("/abrir")
+    @GetMapping(    "/abrir")
     public List<ChamadoExterno> criarChamados() {
         // Pega os resumos de email
         List<EmailResumoDTO> resumos = emailReceiverService.listarResumosEmails();

@@ -218,6 +218,11 @@ public class EmailReceiverService {
 
         List<SendEmail> emails = emailRepository.findAll();
         for (SendEmail email : emails) {
+            // ✅ Evita processar respostas enviadas pelo próprio sistema
+            if (email.getRemetente().equalsIgnoreCase("scallmegerencia@gmail.com")) {
+                continue;
+            }
+
             resumos.add(new EmailResumoDTO(
                     email.getRemetente(),
                     email.getAssunto(),
@@ -230,5 +235,6 @@ public class EmailReceiverService {
 
         return resumos;
     }
+
 
 }
