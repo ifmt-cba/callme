@@ -9,7 +9,7 @@ import {ChamadoResponse} from "../models/Chamados.models";
 })
 export class ChamadosExternosService {
 
-  private apiUrl = 'http://localhost:8080/email/receber';
+  private apiUrl = 'http://localhost:8080/chamados';
 
   constructor(private http: HttpClient ) {}
 

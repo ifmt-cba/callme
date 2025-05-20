@@ -22,4 +22,13 @@ public class ChamadoExterno {
     private String tokenEmail;// token do email para evitar duplicidade
     private String messageId;
 
+    @Enumerated(EnumType.STRING)
+    private StatusChamado status;
+
+    public enum StatusChamado {
+        ABERTO,
+        EM_ANDAMENTO,
+        FECHADO,
+        CANCELADO
+    }
 }

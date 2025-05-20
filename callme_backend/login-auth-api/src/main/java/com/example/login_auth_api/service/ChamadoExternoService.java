@@ -61,4 +61,17 @@ public class ChamadoExternoService {
         }
         return rawRemetente.trim();
     }
+
+    public ChamadoExterno atualizarStatus(Long chamadoId, ChamadoExterno.StatusChamado novoStatus) {
+        ChamadoExterno chamado = chamadoRepository.findById(chamadoId)
+                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
+
+        chamado.setStatus(novoStatus);
+        return chamadoRepository.save(chamado);
+    }
+
+    public ChamadoExterno buscarPorId(Long id) {
+        return chamadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
+    }
 }
