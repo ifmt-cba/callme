@@ -1,10 +1,12 @@
 package com.example.login_auth_api.controller;
 
 import com.example.login_auth_api.domain.user.ChamadoExterno;
+import com.example.login_auth_api.dto.AtualizarStatusDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.service.ChamadoExternoService;
 import com.example.login_auth_api.service.EmailReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,20 @@ public class ChamadoExternoController {
     }
 
     // Opcional: listar todos chamados
-    @GetMapping
+    @GetMapping("/listar")
     public List<ChamadoExterno> listarChamados() {
         return chamadoService.listarChamados();
+    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<String> atualizarStatus(@RequestBody AtualizarStatusDTO dto) {
+        chamadoService.atualizarStatus(dto.getChamadoId(), dto.getNovoStatus());
+        return ResponseEntity.ok("Status atualizado com sucesso.");
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<ChamadoExterno.StatusChamado> consultarStatus(@PathVariable Long id) {
+        ChamadoExterno chamado = chamadoService.buscarPorId(id);
+        return ResponseEntity.ok(chamado.getStatus());
     }
 }
