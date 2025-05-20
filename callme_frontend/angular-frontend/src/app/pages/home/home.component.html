@@ -1,16 +1,15 @@
-<div class="container">
-  <!-- Barra lateral -->
+<div class="container" [ngClass]="{ 'expanded': isSideNavCollapsed }">
+  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="assets/headset-icon.png" alt="" />
-      <h1>Callme</h1>
+      <img src="assets/headset-icon.png" alt="logo" />
     </div>
     <nav class="menu">
-    <app-navbar></app-navbar>
+      <app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
     </nav>
   </aside>
 
-  <!-- Conteúdo principal -->
+  <!-- Main Content -->
   <main class="main">
     <header class="header">
       <h2>Dashboard</h2>
@@ -28,14 +27,13 @@
       </div>
     </header>
 
-    <section class="cards" >
+    <section class="cards">
       <div class="card" (click)="navigateToChamado()">
-
-        <div  class="icon">💳</div>
+        <div class="icon">💳</div>
         <h3>124</h3>
-        <p >Chamados totais</p>
+        <p>Chamados totais</p>
       </div>
-      <div class="card"(click)="navigateToCreate()">
+      <div class="card" (click)="navigateToCreate()">
         <div class="icon">⏳</div>
         <h3>45</h3>
         <p>Em atendimento</p>
@@ -69,7 +67,6 @@
           <td>Em atendimento</td>
           <td>12/05/2025</td>
         </tr>
-
         <tr *ngIf="chamados.length === 0">
           <td colspan="6" style="text-align: center;">Nenhum chamado encontrado.</td>
         </tr>

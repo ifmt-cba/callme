@@ -58,7 +58,7 @@
 }
 
 .navbar-collapsed{
-  width: 16.2rem;
+  width: 15.5rem;
 
 }
 
@@ -97,11 +97,24 @@
     }
   }
 
-  .navbar-link-icon:hover{
+  .navbar-nav-item:hover{
     .navbar-nav-link{
       background-color: #fff;
       color: #000;
+      border-radius: 0.625rem;
 
     }
   }
+
+  .active{
+    background-color: #ffffff;
+    border-radius: 0.625rem;
+    .navbar-link-icon,
+    .navbar-link-text {
+      color: #000000;
+    }
+  }
+
+
+
 }

@@ -6,9 +6,10 @@ import {HomeComponent} from "./pages/home/home.component";
 import {AuthGuard} from "./services/auth-guard.service";
 import {ResetSenhaComponent} from "./pages/resetsenha/reset-senha.component";
 import {ChamadosInternosComponent} from "./pages/chamados-internos/chamados-internos.component";
-import {UsuariosComponent} from "./pages/usuarios/usuarios.component";
 import {ChamadosExternosComponent} from "./pages/chamados-externos/chamados-externos.component";
 import {CriarChamadosComponent} from "./pages/criar-chamados/criar-chamados.component";
+import {UsuariosComponent} from "./pages/usuarios/usuarios.component";
+import {AcompanhamentoComponent} from "./pages/acompanhamento/acompanhamento.component";
 
 export const routes: Routes = [
   {
@@ -38,11 +39,6 @@ export const routes: Routes = [
   },
 
   {
-    path: 'usuarios',
-    component: UsuariosComponent,
-  },
-
-  {
     path: 'chamadosExternos',
     component: ChamadosExternosComponent,
 
@@ -51,6 +47,15 @@ export const routes: Routes = [
   {
     path: 'CriarChamados',
     component: CriarChamadosComponent,
+  },
+
+  {
+    path: 'usuarios',
+    component: UsuariosComponent,
+  },
+  {
+    path:'acompanhamentos',
+    component: AcompanhamentoComponent,
   }
 
 ];

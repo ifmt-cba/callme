@@ -1,29 +1,32 @@
 export const navbarData = [
   {
-    routeLink: 'dashboard',
+    routeLink: 'home',
     icon: 'fal fa-home',
-    label: 'Dashboard'
+    label: 'Início'
   },
-
   {
-    routeLink: 'statistics',
-    icon: 'fal fa-chart-bar',
-    label: 'Statistics'
+    routeLink: 'ChamadosInternos',
+    icon: 'fal fa-file',
+    label: 'Internos'
   },
-
+  {
+    routeLink: 'CriarChamados',
+    icon: 'fal fa-plus-square',
+    label: 'CriarChamado'
+  },
+  {
+    routeLink: 'Externos',
+    icon: 'fal fa-globe',
+    label: 'Externos'
+  },
+  {
+    routeLink: 'usuarios',
+    icon: 'fal fa-users',
+    label: 'Usuários'
+  },
   {
     routeLink: 'login',
-    icon: 'fal fa-file',
-    label: 'Chamados'
-  },
-  {
-    routeLink: 'media',
-    icon: 'fal fa-camera',
-    label: 'Media'
-  },
-  {
-    routeLink: 'settings',
-    icon: 'fal fa-cog',
-    label: 'Settings'
-  },
+    icon: 'fal fa-sign-out',
+    label: 'Sair'
+  }
 ];
