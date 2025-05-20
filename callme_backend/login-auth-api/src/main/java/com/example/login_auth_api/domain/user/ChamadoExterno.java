@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "tb_chamados_Externos")
 public class ChamadoExterno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

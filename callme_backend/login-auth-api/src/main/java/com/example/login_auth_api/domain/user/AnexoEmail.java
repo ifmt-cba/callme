@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "anexos_email")
+@Table(name = "tb_anexos_email")
 public class AnexoEmail {
 
     @Id
