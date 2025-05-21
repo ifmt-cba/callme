@@ -1,29 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // para usar ngFor e outras diretivas
+import { CommonModule } from '@angular/common';
 import { ChamadosExternosService } from '../../services/chamados-externos.service';
-import { ChamadosItem } from '../../models/Chamados.models';
+import { ChamadosItem, ChamadoResponse } from '../../models/Chamados.models';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-chamados-externos',
   standalone: true,
-  imports: [CommonModule],  // diretivas básicas do Angular
+  imports: [CommonModule, NavbarComponent, HttpClientModule],
   templateUrl: './chamados-externos.component.html',
   styleUrls: ['./chamados-externos.component.scss']
 })
-
 export class ChamadosExternosComponent implements OnInit {
-
   chamado: ChamadosItem[] = [];
 
   constructor(private chamadosExternosService: ChamadosExternosService) {}
 
   ngOnInit(): void {
     this.chamadosExternosService.getFeed().subscribe({
-      next: (res) => {
-        this.chamado = res.ChamadoItems;  // verifique o nome do array que seu backend retorna
+      next: (res: ChamadosItem[]) => {
+        this.chamado = res;
       },
       error: (err) => {
-        console.error('Erro ao carregar chamado:', err);
+        console.error('Erro ao carregar chamados:', err);
+        this.chamado = [];
       }
     });
   }
