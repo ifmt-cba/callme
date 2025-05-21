@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/chamados")
@@ -48,4 +49,22 @@ public class ChamadoExternoController {
         ChamadoExterno chamado = chamadoService.buscarPorId(id);
         return ResponseEntity.ok(chamado.getStatus());
     }
+
+    @PutMapping("/{tokenEmail}/status")
+    public ResponseEntity<ChamadoExterno> atualizarStatus(
+            @PathVariable String tokenEmail,
+            @RequestBody Map<String, String> statusPayload) {
+
+        String novoStatus = statusPayload.get("status");
+        if (novoStatus == null || novoStatus.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        ChamadoExterno atualizado = chamadoService.atualizarStatusPorToken(tokenEmail, novoStatus);
+        return ResponseEntity.ok(atualizado);
+    }
+
+
+
+
 }

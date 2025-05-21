@@ -19,7 +19,7 @@ export class ChamadosExternosService {
   }
 
   getChamadoById(id: string): Observable<ChamadosItem> {
-    return this.http.get<ChamadosItem>(`http://localhost:8080/chamados/${id}`);
+    return this.http.get<ChamadosItem>(`/api/chamados/${id}`);
   }
 
   updateChamado(chamado: ChamadosItem): Observable<any> {
