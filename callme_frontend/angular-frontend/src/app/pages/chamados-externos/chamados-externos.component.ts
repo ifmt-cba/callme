@@ -4,11 +4,12 @@ import { ChamadosExternosService } from '../../services/chamados-externos.servic
 import { ChamadosItem, ChamadoResponse } from '../../models/Chamados.models';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http';
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-chamados-externos',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, HttpClientModule],
+  imports: [CommonModule, NavbarComponent, HttpClientModule, RouterLink],
   templateUrl: './chamados-externos.component.html',
   styleUrls: ['./chamados-externos.component.scss']
 })

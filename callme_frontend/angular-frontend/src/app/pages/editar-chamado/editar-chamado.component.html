@@ -1,0 +1,22 @@
+<div class="editar-container" *ngIf="chamado">
+  <h2>Editar Chamado</h2>
+
+  <div class="form-group">
+    <label>Status:</label>
+    <select [(ngModel)]="chamado.status">
+      <option value="Aberto">Aberto</option>
+      <option value="Em andamento">Em andamento</option>
+      <option value="Concluído">Concluído</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Atribuir a técnico:</label>
+    <input type="text" [(ngModel)]="tecnico" placeholder="Nome do técnico">
+  </div>
+
+  <div class="botoes">
+    <button (click)="salvar()">Salvar</button>
+    <button (click)="excluir()" class="btn-excluir">Excluir</button>
+  </div>
+</div>

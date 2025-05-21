@@ -87,3 +87,19 @@ h4 {
   font-size: 1.1rem;
   margin-top: 3rem;
 }
+
+.btn-detalhar {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+}

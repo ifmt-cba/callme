@@ -23,6 +23,8 @@
           }">{{ item.status || 'Sem status' }}</span>
         </p>
         <p><strong>Token:</strong> {{ item.tokenEmail }}</p>
+        <button [routerLink]="['/editar', item.tokenEmail]">Detalhar</button>
+
       </div>
     </div>
   </div>
