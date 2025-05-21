@@ -15,7 +15,7 @@ export const navbarData = [
     label: 'CriarChamado'
   },
   {
-    routeLink: 'Externos',
+    routeLink: 'chamadosExternos',
     icon: 'fal fa-globe',
     label: 'Externos'
   },

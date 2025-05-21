@@ -10,7 +10,7 @@ import {ChamadosExternosComponent} from "./pages/chamados-externos/chamados-exte
 import {CriarChamadosComponent} from "./pages/criar-chamados/criar-chamados.component";
 import {UsuariosComponent} from "./pages/usuarios/usuarios.component";
 import {AcompanhamentoComponent} from "./pages/acompanhamento/acompanhamento.component";
-
+import { EditarChamadoComponent } from './pages/editar-chamado/editar-chamado.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -56,6 +56,11 @@ export const routes: Routes = [
   {
     path:'acompanhamentos',
     component: AcompanhamentoComponent,
+  },
+
+  {
+    path: 'editar/:id',
+    component: EditarChamadoComponent
   }
 
 ];
