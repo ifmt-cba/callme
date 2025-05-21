@@ -11,6 +11,7 @@ import {CriarChamadosComponent} from "./pages/criar-chamados/criar-chamados.comp
 import {UsuariosComponent} from "./pages/usuarios/usuarios.component";
 import {AcompanhamentoComponent} from "./pages/acompanhamento/acompanhamento.component";
 import { EditarChamadoComponent } from './pages/editar-chamado/editar-chamado.component';
+import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
 export const routes: Routes = [
   {
     path: 'login',
@@ -61,6 +62,11 @@ export const routes: Routes = [
   {
     path: 'editar/:id',
     component: EditarChamadoComponent
+  },
+
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent
   }
 
 ];

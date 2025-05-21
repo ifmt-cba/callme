@@ -46,7 +46,7 @@ public class PasswordResetController {
 
         userRepository.save(currentUser);
 
-        String resetLink = "http://localhost:8080/api/password/reset?token=" + token;
+        String resetLink = "http://localhost:4200/reset-password?token=" + token;
         sendResetEmail(email, resetLink);
 
         return ResponseEntity.ok("email enviado com sucesso");
