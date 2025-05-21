@@ -57,7 +57,7 @@ export class UsuariosComponent {
     this.loginService.signup(this.signupForm.value.username, this.signupForm.value.password, this.signupForm.value.email).subscribe({
       next: () => {
         this.toastService.success("Usuario Criado com sucesso")
-        setTimeout(() => {this.router.navigate(["/login"]);
+        setTimeout(() => {this.router.navigate(["/usuarios"]);
         },1200)
       },
       error: () => this.toastService.error("Tente se registrar mais tarde  "),

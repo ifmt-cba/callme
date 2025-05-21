@@ -53,7 +53,7 @@ export class ResetSenhaComponent {
    })
   }
   navigate(){
-    this.router.navigate(["/login"]);
+    this.router.navigate(["/principal"]);
   }
 
 }

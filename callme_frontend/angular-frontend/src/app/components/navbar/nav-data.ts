@@ -25,7 +25,7 @@ export const navbarData = [
     label: 'Usuários'
   },
   {
-    routeLink: 'login',
+    routeLink: 'principal',
     icon: 'fal fa-sign-out',
     label: 'Sair'
   }

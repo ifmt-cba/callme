@@ -50,7 +50,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'usuarios',
+    path: 'principal',
     component: UsuariosComponent,
   },
   {
