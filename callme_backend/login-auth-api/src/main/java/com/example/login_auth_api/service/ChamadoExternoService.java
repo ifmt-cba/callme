@@ -74,4 +74,21 @@ public class ChamadoExternoService {
         return chamadoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
     }
+
+    public ChamadoExterno atualizarStatusPorToken(String tokenEmail, String novoStatus) {
+        ChamadoExterno chamado = chamadoRepository.findByTokenEmail(tokenEmail)
+                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
+
+        try {
+            ChamadoExterno.StatusChamado statusEnum = ChamadoExterno.StatusChamado.valueOf(novoStatus.toUpperCase());
+            chamado.setStatus(statusEnum);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Status inválido: " + novoStatus);
+        }
+
+        return chamadoRepository.save(chamado);
+    }
+
+
+
 }

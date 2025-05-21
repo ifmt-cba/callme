@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface ChamadoExternoRepository extends JpaRepository<ChamadoExterno, Long> {
     Optional<ChamadoExterno> findByMessageId(String messageId);
+    Optional<ChamadoExterno> findByTokenEmail(String tokenEmail);
 
 }
