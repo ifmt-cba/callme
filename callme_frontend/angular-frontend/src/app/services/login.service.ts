@@ -18,17 +18,14 @@ apiUrl: string = "http://localhost:8080";
       })
     )
   }
-
   signup(username: string, password: string, email: string){
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/users", { username, password, email })
   }
-
 
   resetsenha(email: string){
 
     return this.httpClient.post<LoginResponse>(this.apiUrl + "/api/password/forgot", { email })
   }
-
 
 }
 
