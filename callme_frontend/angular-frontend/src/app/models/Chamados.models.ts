@@ -1,5 +1,5 @@
+// src/app/models/models.ts
 export interface ChamadosItem {
-
   remetente: string;
   assunto: string;
   descricao: string;

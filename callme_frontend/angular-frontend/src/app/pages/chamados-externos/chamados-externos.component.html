@@ -1,18 +1,28 @@
 <div class="container">
-  <h2>Listagem de Chamados</h2>
-  <h4>Chamados Detalhados</h4>
+  <app-navbar></app-navbar>
 
-  <div *ngIf="chamado.length === 0" class="sem-chamados">
-    Nenhum chamado encontrado.
-  </div>
+  <div class="conteudo">
+    <h2>📋 Listagem de Chamados</h2>
+    <h4>Chamados Detalhados</h4>
 
-  <div *ngIf="chamado.length > 0">
-    <div *ngFor="let item of chamado" class="chamado-card">
-      <p><strong>Remetente:</strong> {{ item.remetente }}</p>
-      <p><strong>Assunto:</strong> {{ item.assunto }}</p>
-      <p><strong>Descrição:</strong> {{ item.descricao }}</p>
-      <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p>
-      <p><strong>Status:</strong> {{ item.status || 'Sem status' }}</p>
+    <div *ngIf="chamado && chamado.length === 0" class="sem-chamados">
+      Nenhum chamado encontrado.
+    </div>
+
+    <div *ngIf="chamado && chamado.length > 0" class="lista-chamados">
+      <div *ngFor="let item of chamado" class="chamado-card">
+        <h3>{{ item.assunto }}</h3>
+        <p><strong>Remetente:</strong> {{ item.remetente }}</p>
+        <p><strong>Descrição:</strong> {{ item.descricao }}</p>
+        <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p>
+        <p><strong>Status:</strong>
+          <span [ngClass]="{
+            'status-aberto': item.status === 'Aberto',
+            'status-fechado': item.status === 'Fechado',
+            'status-outro': item.status !== 'Aberto' && item.status !== 'Fechado'
+          }">{{ item.status || 'Sem status' }}</span>
+        </p>
+      </div>
     </div>
   </div>
 </div>

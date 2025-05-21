@@ -1,18 +1,89 @@
-.chamados-lista {
-  padding: 1rem;
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f5f9;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.conteudo {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #7f8c8d;
+}
+
+.lista-chamados {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .chamado-card {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+  border-left: 5px solid #3498db;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  h3 {
+    margin-bottom: 1rem;
+    color: #34495e;
+  }
+
+  p {
+    margin: 0.4rem 0;
+    color: #555;
+    font-size: 0.95rem;
+
+    strong {
+      color: #333;
+    }
+  }
+
+  span {
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.85rem;
+  }
+
+  .status-aberto {
+    background-color: #e8f6f3;
+    color: #16a085;
+  }
+
+  .status-fechado {
+    background-color: #f9eaea;
+    color: #c0392b;
+  }
+
+  .status-outro {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+  }
 }
 
 .sem-chamados {
   text-align: center;
-  color: #777;
+  color: #999;
   font-style: italic;
-  margin-top: 2rem;
+  font-size: 1.1rem;
+  margin-top: 3rem;
 }
