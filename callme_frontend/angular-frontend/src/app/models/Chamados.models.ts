@@ -1,15 +1,11 @@
 export interface ChamadosItem {
 
   remetente: string;
-  destinatario: string | null;
   assunto: string;
-  corpoSimples: string;
+  descricao: string;
   dataHora: string;
-  spf: string | null;
-  dkim: string | null;
-  dmarc: string | null;
-  comprovante: string;
-
+  tokenEmail: string;
+  status: string;
 }
 
 export interface ChamadoResponse {

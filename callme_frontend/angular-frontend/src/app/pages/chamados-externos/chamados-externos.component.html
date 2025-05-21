@@ -1,20 +1,18 @@
-<ng-container *ngIf="chamado">
+<div class="container">
+  <h2>Listagem de Chamados</h2>
+  <h4>Chamados Detalhados</h4>
 
-
-  <div *ngFor="let item of chamado" >
-    <p><strong>Assunto:</strong> {{ item.assunto }}</p>
-    <p><strong>Remetente:</strong> {{ item.remetente }}</p>
-    <p><strong>Destinatário:</strong> {{ item.destinatario ?? 'Não informado' }}</p>
-    <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p>
-
-    <pre>{{ item.corpoSimples }}</pre>
-
-    <p><strong>SPF:</strong> {{ item.spf ?? 'Desconhecido' }}</p>
-    <p><strong>DKIM:</strong> {{ item.dkim ?? 'Não informado' }}</p>
-    <p><strong>DMARC:</strong> {{ item.dmarc ?? 'Não informado' }}</p>
-
-    <pre>{{ item.comprovante }}</pre>
-    <hr />
+  <div *ngIf="chamado.length === 0" class="sem-chamados">
+    Nenhum chamado encontrado.
   </div>
-</ng-container>
 
+  <div *ngIf="chamado.length > 0">
+    <div *ngFor="let item of chamado" class="chamado-card">
+      <p><strong>Remetente:</strong> {{ item.remetente }}</p>
+      <p><strong>Assunto:</strong> {{ item.assunto }}</p>
+      <p><strong>Descrição:</strong> {{ item.descricao }}</p>
+      <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p>
+      <p><strong>Status:</strong> {{ item.status || 'Sem status' }}</p>
+    </div>
+  </div>
+</div>

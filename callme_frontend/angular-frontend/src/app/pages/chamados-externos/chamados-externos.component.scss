@@ -1,1 +1,18 @@
+.chamados-lista {
+  padding: 1rem;
+}
 
+.chamado-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+
+.sem-chamados {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  margin-top: 2rem;
+}
