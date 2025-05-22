@@ -1,32 +1,53 @@
+<app-navbar></app-navbar>
 <div class="editar-chamado-container" *ngIf="chamado">
-  <h2>Editar Chamado</h2>
-
   <form (ngSubmit)="salvar()">
-    <div class="form-group">
-      <label for="remetente">Remetente</label>
-      <input id="remetente" type="text" [(ngModel)]="chamado.remetente" name="remetente" disabled />
-    </div>
+    <fieldset>
+      <legend>Editar Chamado</legend>
 
-    <div class="form-group">
-      <label for="assunto">Assunto</label>
-      <input id="assunto" type="text" [(ngModel)]="chamado.assunto" name="assunto" />
-    </div>
+      <div class="form-group">
+        <label for="remetente">Remetente</label>
+        <input id="remetente" type="text" [(ngModel)]="chamado.remetente" name="remetente" disabled />
+      </div>
 
-    <div class="form-group">
-      <label for="descricao">Descrição</label>
-      <textarea id="descricao" [(ngModel)]="chamado.descricao" name="descricao" rows="5"></textarea>
-    </div>
+      <div class="form-group">
+        <label for="assunto">Assunto</label>
+        <input id="assunto" type="text" [(ngModel)]="chamado.assunto" name="assunto" readonly />
+      </div>
 
-    <div class="form-group">
-      <label for="status">Status</label>
-      <select id="status" [(ngModel)]="chamado.status" name="status">
-        <option value="" disabled>Selecione</option>
-        <option value="ABERTO">Aberto</option>
-        <option value="EM_ANDAMENTO">Em andamento</option>
-        <option value="FECHADO">Fechado</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" [(ngModel)]="chamado.descricao" name="descricao" rows="5" readonly></textarea>
+      </div>
 
-    <button type="submit" class="btn-salvar">Salvar</button>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" [(ngModel)]="chamado.status" name="status" required>
+          <option value="" disabled>Selecione</option>
+          <option value="ABERTO">Aberto</option>
+          <option value="EM_ANDAMENTO">Em andamento</option>
+          <option value="FECHADO">Fechado</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="tecnico">Atribuir Nível Técnico</label>
+        <select id="tecnico" [(ngModel)]="chamado.tecnico" name="tecnico" required>
+          <option value="" disabled selected>Selecione um técnico</option>
+          <option value="joao.silva">N1</option>
+          <option value="maria.souza">N2</option>
+          <option value="ana.costa">N3</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="mensagem">Mensagem para o técnico</label>
+        <textarea id="mensagem" [(ngModel)]="chamado.mensagem" name="mensagem" rows="4" placeholder="Ex: Por favor, verificar com urgência..."></textarea>
+      </div>
+
+      <div class="botoes-acoes">
+        <button type="submit" class="btn-salvar">Salvar</button>
+        <button type="button" class="btn-excluir" (click)="excluir()">Excluir Chamado</button>
+      </div>
+    </fieldset>
   </form>
 </div>
