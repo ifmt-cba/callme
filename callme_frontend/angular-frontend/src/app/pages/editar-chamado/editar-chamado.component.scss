@@ -1,48 +1,109 @@
 .editar-chamado-container {
-  max-width: 600px;
-  margin: auto;
-  padding: 2rem;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 3rem;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid #ddd;
 
-  h2 {
-    margin-bottom: 1rem;
+  fieldset {
+    border: none;
+    padding: 0;
+  }
+
+  legend {
     text-align: center;
+    font-size: 2rem;
+    color: #2b6cb0;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1.5rem;
+    gap: 0.5rem;
 
     label {
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #444;
     }
 
     input,
     textarea,
     select {
-      padding: 0.75rem;
+      padding: 0.9rem 1.2rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
+      background-color: #f9f9f9;
+      transition: border 0.2s, box-shadow 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #3182ce;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+        background-color: #fff;
+      }
+    }
+
+    select {
+      background-color: white;
     }
   }
 
-  .btn-salvar {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
+  .botoes-acoes {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn-salvar,
+  .btn-excluir {
+    flex: 1 1 48%;
+    padding: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    color: white;
     cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .btn-salvar {
+    background: linear-gradient(to right, #3182ce, #2b6cb0);
 
     &:hover {
-      background-color: #0056b3;
+      background: linear-gradient(to right, #2b6cb0, #2c5282);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  .btn-excluir {
+    background: linear-gradient(to right, #e53e3e, #c53030);
+
+    &:hover {
+      background: linear-gradient(to right, #c53030, #9b2c2c);
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
   }
 }

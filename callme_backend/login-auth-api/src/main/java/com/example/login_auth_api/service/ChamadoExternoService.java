@@ -70,4 +70,20 @@ public class ChamadoExternoService {
         return chamadoRepository.findByTokenEmail(tokenEmail);
     }
 
+    public Optional<ChamadoExterno> editarChamadoPorToken(String tokenEmail, ChamadoExterno chamadoAtualizado) {
+        return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoExistente -> {
+            chamadoExistente.setRemetente(chamadoAtualizado.getRemetente());
+            chamadoExistente.setAssunto(chamadoAtualizado.getAssunto());
+            chamadoExistente.setDescricao(chamadoAtualizado.getDescricao());
+            chamadoExistente.setDataHora(chamadoAtualizado.getDataHora());
+            chamadoExistente.setStatus(chamadoAtualizado.getStatus());
+            // Atualize outros campos se necessário
+
+            return chamadoRepository.save(chamadoExistente);
+        });
+    }
+
+
+
 }
+

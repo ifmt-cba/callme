@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {FormsModule} from "@angular/forms";
+import {NavbarComponent} from "../../components/navbar/navbar.component";
 
 @Component({
   selector: 'app-editar-chamado',
@@ -10,7 +11,8 @@ import {FormsModule} from "@angular/forms";
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NavbarComponent
   ],
   styleUrls: ['./editar-chamado.component.scss']
 })
@@ -61,4 +63,18 @@ export class EditarChamadoComponent implements OnInit {
         alert('Erro ao salvar.');
       });
   }
+
+  excluir(): void {
+    if (confirm('Tem certeza que deseja excluir este chamado?')) {
+      this.http.delete(`http://localhost:8080/chamados/${this.chamado.id}`)
+        .subscribe(() => {
+          alert('Chamado excluído com sucesso!');
+          this.router.navigate(['/']);
+        }, error => {
+          console.error('Erro ao excluir chamado:', error);
+          alert('Erro ao excluir.');
+        });
+    }
+  }
+
 }
