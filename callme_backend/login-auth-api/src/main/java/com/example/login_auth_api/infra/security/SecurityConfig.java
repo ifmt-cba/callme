@@ -69,7 +69,8 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET, "/anexos/visualizar/{id}").permitAll().
                         requestMatchers(HttpMethod.GET, "/chamados/abrir").permitAll().
                         requestMatchers(HttpMethod.GET, "/chamados/listar").permitAll().
-                        requestMatchers(HttpMethod.PATCH, "/chamados/status").permitAll().
+                        requestMatchers(HttpMethod.GET, "/token/{tokenEmail}").permitAll().
+                        requestMatchers(HttpMethod.GET, "chamados/buscar/{token}").permitAll().
                         requestMatchers(HttpMethod.PUT, "/chamados/{{tokenEmail}}/status").permitAll().
                         requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())

@@ -4,9 +4,13 @@ import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.repositories.ChamadoExternoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,33 +66,8 @@ public class ChamadoExternoService {
         return rawRemetente.trim();
     }
 
-    public ChamadoExterno atualizarStatus(Long chamadoId, ChamadoExterno.StatusChamado novoStatus) {
-        ChamadoExterno chamado = chamadoRepository.findById(chamadoId)
-                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
-
-        chamado.setStatus(novoStatus);
-        return chamadoRepository.save(chamado);
+    public Optional<ChamadoExterno> buscarChamadoPorToken(String tokenEmail) {
+        return chamadoRepository.findByTokenEmail(tokenEmail);
     }
-
-    public ChamadoExterno buscarPorId(Long id) {
-        return chamadoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
-    }
-
-    public ChamadoExterno atualizarStatusPorToken(String tokenEmail, String novoStatus) {
-        ChamadoExterno chamado = chamadoRepository.findByTokenEmail(tokenEmail)
-                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
-
-        try {
-            ChamadoExterno.StatusChamado statusEnum = ChamadoExterno.StatusChamado.valueOf(novoStatus.toUpperCase());
-            chamado.setStatus(statusEnum);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Status inválido: " + novoStatus);
-        }
-
-        return chamadoRepository.save(chamado);
-    }
-
-
 
 }

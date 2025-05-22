@@ -60,7 +60,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'editar/:id',
+    path: 'buscar/:tokenEmail',
     component: EditarChamadoComponent
   },
 

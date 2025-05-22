@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ChamadosExternosService } from '../../services/chamados-externos.service';
-import { ChamadosItem } from '../../models/Chamados.models';
-import {FormsModule} from "@angular/forms";
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-editar-chamado',
@@ -16,40 +15,50 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./editar-chamado.component.scss']
 })
 export class EditarChamadoComponent implements OnInit {
-
-  chamado!: ChamadosItem;
-  tecnico: string = '';
+  chamado: any;
+  tokenEmail!: string;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private chamadosService: ChamadosExternosService
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    console.log('Token recebido na rota:', id);
-    if (id) {
-      this.chamadosService.getChamadoById(id).subscribe((res) => {
-        console.log('Chamado carregado:', res);
-        this.chamado = res;
+    this.tokenEmail = this.route.snapshot.paramMap.get('tokenEmail')!;
+    console.log('Token recebido:', this.tokenEmail); // Verifique se está chegando
+
+    this.http.get(`http://localhost:8080/chamados/buscar/${this.tokenEmail}`)
+      .subscribe({
+        next: (data) => {
+          console.log('Chamado recebido:', data);
+          this.chamado = data;
+        },
+        error: (err) => {
+          console.error('Erro ao buscar chamado:', err);
+          alert('Erro ao carregar os dados do chamado.');
+        }
       });
-    }
   }
 
-  salvar() {
-    this.chamadosService.updateChamado(this.chamado).subscribe(() => {
-      alert('Chamado atualizado com sucesso!');
-      this.router.navigate(['/']);
-    });
+
+  buscarChamado(): void {
+    this.http.get(`http://localhost:8080/chamados/buscar/${this.tokenEmail}`)
+      .subscribe((data) => {
+        this.chamado = data;
+      }, (error) => {
+        console.error('Erro ao buscar chamado:', error);
+      });
   }
 
-  excluir() {
-    if (confirm('Tem certeza que deseja excluir este chamado?')) {
-      this.chamadosService.deleteChamado(this.chamado.tokenEmail).subscribe(() => {
-        alert('Chamado excluído com sucesso!');
-        this.router.navigate(['/']);
+  salvar(): void {
+    this.http.put(`http://localhost:8080/chamados/${this.chamado.id}`, this.chamado)
+      .subscribe(() => {
+        alert('Chamado atualizado com sucesso!');
+        this.router.navigate(['/']); // redirecionar para home ou lista
+      }, (error) => {
+        console.error('Erro ao salvar chamado:', error);
+        alert('Erro ao salvar.');
       });
-    }
   }
 }

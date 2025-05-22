@@ -1,48 +1,48 @@
-.editar-container {
-  background: white;
-  padding: 2rem;
-  margin: 2rem auto;
+.editar-chamado-container {
   max-width: 600px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+  margin: auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
+  h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
 
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.5rem;
-}
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
 
-input, select {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
+    label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
 
-.botoes {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-}
+    input,
+    textarea,
+    select {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  }
 
-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
+  .btn-salvar {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
 
-button:hover {
-  opacity: 0.9;
-}
-
-.btn-excluir {
-  background: #e74c3c;
-  color: white;
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
 }
