@@ -10,7 +10,7 @@ import {ChamadoResponse, ChamadosItem} from '../models/Chamados.models';
 })
 export class ChamadosExternosService {
 
-  private apiUrl = 'http://localhost:8080/chamados/listar';
+  private apiUrl = 'http://localhost:8080/chamados/abrir';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +19,7 @@ export class ChamadosExternosService {
   }
 
   getChamadoById(id: string): Observable<ChamadosItem> {
-    return this.http.get<ChamadosItem>(`/api/chamados/${id}`);
+    return this.http.get<ChamadosItem>(`/chamados/buscar/${id}`);
   }
 
   updateChamado(chamado: ChamadosItem): Observable<any> {
