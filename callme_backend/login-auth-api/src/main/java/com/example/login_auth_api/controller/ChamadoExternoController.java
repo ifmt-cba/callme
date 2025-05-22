@@ -3,6 +3,7 @@ package com.example.login_auth_api.controller;
 import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.AtualizarStatusDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
+import com.example.login_auth_api.repositories.ChamadoExternoRepository;
 import com.example.login_auth_api.service.ChamadoExternoService;
 import com.example.login_auth_api.service.EmailReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,17 @@ public class ChamadoExternoController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
+    @PutMapping("/editar/token/{tokenEmail}")
+    public ResponseEntity<ChamadoExterno> editarChamadoPorToken(
+            @PathVariable String tokenEmail,
+            @RequestBody ChamadoExterno chamadoAtualizado) {
+
+        Optional<ChamadoExterno> chamadoEditado = chamadoService.editarChamadoPorToken(tokenEmail, chamadoAtualizado);
+
+        return chamadoEditado
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 
 
 
