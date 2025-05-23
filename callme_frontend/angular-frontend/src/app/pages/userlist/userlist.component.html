@@ -1,0 +1,37 @@
+class="usuarios-container">
+<div class="header">
+  <h2><i class="fa fa-user-circle"></i> Gerenciamento de Usuários</h2>
+  <button class="novo-btn">+ Novo Usuário</button>
+</div>
+
+<div class="search-bar">
+  <input type="text" placeholder="🔍 Buscar usuários..." [(ngModel)]="filtro" />
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>TOKEN</th>
+    <th>USERNAME</th>
+    <th>EMAIL</th>
+    <th>ROLE</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of usuarios | filtroUsuarios:filtro">
+    <td>{{ user.token }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>
+          <span class="badge" [ngClass]="user.roles.includes('ADMIN') ? 'admin' : 'rt'">
+            {{ user.roles[0] }}
+          </span>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  <p>Mostrando {{ usuarios.length }} usuário(s)</p>
+</div>
+

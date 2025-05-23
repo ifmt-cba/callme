@@ -4,6 +4,9 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 
+interface  LoginResponse{
+  acessToken: string;
+}
 interface SignupForm {
   username: FormControl,
   password: FormControl,
@@ -60,14 +63,20 @@ export class UsuariosComponent {
   }
   submitLogin() {
     this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-      next: () => {
-        this.toastService.success("Login successfull")
-        setTimeout(() => {this.router.navigate(["/home"]);
-        },1000)
+      next: (res: any) => {  // <--- aqui tipa como any
+        const token = res.accessToken; // captura o token
+        localStorage.setItem('authToken', token); // salva no localStorage
+
+        this.toastService.success("Login realizado com sucesso!");
+
+        setTimeout(() => {
+          this.router.navigate(["/home"]);
+        }, 1000);
       },
-      error: () => this.toastService.error("Senha ou usuario incorretos "),
-    })
+      error: () => this.toastService.error("Senha ou usuário incorretos"),
+    });
   }
+
   navigateTosup(){
     this.router.navigate(["signup"]);
   }

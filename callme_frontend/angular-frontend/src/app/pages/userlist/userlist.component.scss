@@ -1,0 +1,81 @@
+.usuarios-container {
+  background: #f9fbfd;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 1000px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h2 {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .novo-btn {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .search-bar {
+    margin-bottom: 1rem;
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+
+    th {
+      text-align: left;
+      background-color: #1e3a8a;
+      color: white;
+      padding: 12px;
+    }
+
+    td {
+      padding: 12px;
+      border-top: 1px solid #eaeaea;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      color: white;
+
+      &.admin {
+        background-color: #ef4444;
+      }
+
+      &.rt {
+        background-color: #10b981;
+      }
+    }
+  }
+
+  .footer {
+    margin-top: 1rem;
+    text-align: right;
+    color: #555;
+  }
+}
