@@ -23,7 +23,7 @@ export class ChamadosExternosService {
   }
 
   updateChamado(chamado: ChamadosItem): Observable<any> {
-    return this.http.put(`/api/chamados/${chamado.tokenEmail}`, chamado);
+    return this.http.put(`http://localhost:8080/chamados/editar/token/${chamado.tokenEmail}`, chamado);
   }
 
   deleteChamado(tokenEmail: string): Observable<any> {
