@@ -1,38 +1,96 @@
-.reset-password-container {
-  max-width: 400px;
-  margin: 80px auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+$primary-dark: #1e3a8a;
+$primary-light: #3b82f6;
+$bg-gradient-start: #93c5fd;
+$bg-gradient-end: #1e40af;
+$gray-muted: #9ca3af;
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, $bg-gradient-start, $bg-gradient-end);
 }
 
-label {
-  display: block;
-  margin-bottom: 6px;
+.reset-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-input {
+.reset-card {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 420px;
   width: 100%;
-  padding: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
 
-button {
-  background: #3498db;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  .reset-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
 
-.success {
-  color: green;
-}
+    .logo {
+      width: 40px;
+      height: 40px;
+      background-color: $primary-dark;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+    }
 
-.error {
-  color: red;
+    h2 {
+      color: $primary-dark;
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    p {
+      color: $gray-muted;
+    }
+  }
+
+  form {
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+      font-weight: 600;
+      color: $primary-dark;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      border: 1px solid #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+
+      input {
+        border: none;
+        flex: 1;
+        outline: none;
+        padding: 0.5rem;
+      }
+
+      .icon {
+        color: #9ca3af;
+        margin: 0 0.5rem;
+      }
+    }
+
+    .submit-btn {
+      background-color: $primary-dark;
+      color: white;
+      padding: 0.75rem;
+      width: 100%;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: $primary-light;
+      }
+    }
+  }
 }

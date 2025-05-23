@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-reset-password',
@@ -31,7 +32,9 @@ export class ResetPasswordComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private toastService: ToastrService,
+    private router: Router,
   ) {
     this.form = this.fb.group({
       newPassword: ['', [Validators.required]]
@@ -67,13 +70,12 @@ export class ResetPasswordComponent implements OnInit {
     this.http.post('http://localhost:8080/api/password/reset', null, { params })
       .subscribe({
         next: () => {
-          this.message = 'Senha alterada com sucesso!';
-          this.error = '';
+          this.toastService.success("Senha Trocada com Sucesso")
+          setTimeout(() => {this.router.navigate(["/principal"]);
+          },1000)
         },
-        error: () => {
-          this.error = 'Erro ao redefinir a senha. Token pode estar expirado.';
-          this.message = '';
-        }
-      });
+        error: () => this.toastService.error("Token inválido ou expirado "),
+
+      })
   }
 }
