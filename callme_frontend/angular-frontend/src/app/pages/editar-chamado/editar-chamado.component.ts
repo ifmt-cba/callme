@@ -54,15 +54,22 @@ export class EditarChamadoComponent implements OnInit {
   }
 
   salvar(): void {
-    this.http.put(`http://localhost:8080/chamados/${this.chamado.id}`, this.chamado)
-      .subscribe(() => {
+    this.http.put(`http://localhost:8080/chamados/editar/token/${this.tokenEmail}`, {
+      status: this.chamado.status
+    }).subscribe({
+      next: () => {
         alert('Chamado atualizado com sucesso!');
-        this.router.navigate(['/']); // redirecionar para home ou lista
-      }, (error) => {
+        this.router.navigate(['/']); // redireciona se quiser
+      },
+      error: (error) => {
         console.error('Erro ao salvar chamado:', error);
-        alert('Erro ao salvar.');
-      });
+        alert('Erro ao salvar chamado.');
+      }
+    });
   }
+
+
+
 
   excluir(): void {
     if (confirm('Tem certeza que deseja excluir este chamado?')) {
