@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-   // @PreAuthorize("hasAuthority('SCOPE_ADMIN')")Testando para ver se como vai listar na pagina
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         var users = userRepository.findAll().stream()
                 .map(UserResponseDTO::fromEntity)
@@ -71,4 +71,22 @@ public class UserController {
 
         return ResponseEntity.ok(users);
     }
+    @Transactional
+    @PostMapping("/users/admin")//Criacao de admin pelo Proprio ADMIN
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<Void> newUserAdmin(@RequestBody CreateUserDto dto){
+        var ADMRole = roleRepository.findByName(Role.Values.ADMIN.name());
+        var userFromDb = userRepository.findByUsername(dto.username());
+        if (userFromDb.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+        var user = new User();
+        user.setUsername(dto.username());
+        user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setEmail(dto.email());
+        user.setRoles(Set.of(ADMRole));
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
 }
