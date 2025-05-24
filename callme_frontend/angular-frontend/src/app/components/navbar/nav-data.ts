@@ -20,7 +20,7 @@ export const navbarData = [
     label: 'Externos'
   },
   {
-    routeLink: 'usuarios',
+    routeLink: 'listar-usuarios',
     icon: 'fal fa-users',
     label: 'Usuários'
   },

@@ -32,7 +32,7 @@ export class ResetSenhaComponent {
     this.loginService.resetsenha(this.resetForm.value.email).subscribe({
       next: () => {
         this.toastService.success('Solicitação enviada com sucesso!');
-        setTimeout(() => this.router.navigate(['/login']), 1200);
+        setTimeout(() => this.router.navigate(['/principal']), 1200);
       },
       error: () => this.toastService.error('Erro ao enviar solicitação. Tente novamente mais tarde.'),
     });
