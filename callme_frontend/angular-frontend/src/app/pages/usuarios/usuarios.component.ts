@@ -64,8 +64,8 @@ export class UsuariosComponent {
   submitLogin() {
     this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: (res: any) => {  // <--- aqui tipa como any
-        const token = res.accessToken; // captura o token
-        localStorage.setItem('authToken', token); // salva no localStorage
+        const token = res.acessToken; // captura o token
+        sessionStorage.setItem('acessToken', token); // salva no localStorage
 
         this.toastService.success("Login realizado com sucesso!");
 

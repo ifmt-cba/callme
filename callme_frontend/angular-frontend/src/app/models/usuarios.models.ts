@@ -1,17 +1,14 @@
-export interface UsuariosModels{
-
-  id : string;
-  nome: string;
+export interface User {
+  id: string;
+  username: string;
   email: string;
-  token : string;
-  roles : string;
-
-
+  roles: string[];
 }
+
 
 export interface UsuariosResponse{
 
-  UsuariosItems : UsuariosModels[];
+  UsuariosItems : User[];
 
 
 }

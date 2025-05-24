@@ -12,6 +12,7 @@ import {UsuariosComponent} from "./pages/usuarios/usuarios.component";
 import {AcompanhamentoComponent} from "./pages/acompanhamento/acompanhamento.component";
 import { EditarChamadoComponent } from './pages/editar-chamado/editar-chamado.component';
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
+import {UserlistersComponent} from "./pages/userlisters/userlisters.component";
 export const routes: Routes = [
   {
     path: 'login',
@@ -69,6 +70,9 @@ export const routes: Routes = [
     component: ResetPasswordComponent
   },
 
-
+  {
+    path: 'listar-usuarios',
+    component :UserlistersComponent
+  }
 
 ];
