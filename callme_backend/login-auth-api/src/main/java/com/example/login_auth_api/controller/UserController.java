@@ -3,6 +3,7 @@ package com.example.login_auth_api.controller;
 import com.example.login_auth_api.domain.user.Role;
 import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.CreateUserDto;
+import com.example.login_auth_api.dto.UserResponseDTO;
 import com.example.login_auth_api.repositories.RoleRepository;
 import com.example.login_auth_api.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -62,10 +63,11 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
-
-        var users = userRepository.findAll();
+   // @PreAuthorize("hasAuthority('SCOPE_ADMIN')")Testando para ver se como vai listar na pagina
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        var users = userRepository.findAll().stream()
+                .map(UserResponseDTO::fromEntity)
+                .toList();
 
         return ResponseEntity.ok(users);
     }

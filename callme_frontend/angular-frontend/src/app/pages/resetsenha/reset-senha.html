@@ -1,25 +1,21 @@
-<main>
-<div class="content-wrapper">
+<div class="reset-container">
+  <div class="reset-card">
+    <div class="reset-header">
+      <div class="logo"></div>
+      <h2>Recuperar Senha</h2>
+      <p>Digite seu e-mail para receber o link de redefinição</p>
+    </div>
 
-  <app-forgot-password-layout
-    title="Recuperação de Senha"
-    primaryBtnText="Solicitar Reset"
-    secondaryBtnText="Entrar"
-    (submit)="submit()"
-    (navigate)="navigate()"
-    [disablePrimaryBtm]="!resetForm.valid"
-  >
-    <form [formGroup]="resetForm">
-      <app-primary-input
-        formControlName="email"
-        inputName="email"
-        type="text"
-        label="Digite seu E-mail Cadastrado : *"
-        placeholder="@gmail.com"
-      >
-        <img src="/assets/svg/email-icon.svg" alt="" />
-      </app-primary-input>
+    <form [formGroup]="resetForm" (ngSubmit)="submit()">
+      <label for="email">E-mail</label>
+      <div class="input-group">
+        <span class="icon">📧</span>
+        <input type="email" id="email" formControlName="email" placeholder="exemplo@email.com" />
+      </div>
+
+      <button type="submit" class="submit-btn" [disabled]="resetForm.invalid">
+        Solicitar Reset
+      </button>
     </form>
-  </app-forgot-password-layout>
+  </div>
 </div>
-</main>

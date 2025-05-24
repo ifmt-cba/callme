@@ -1,0 +1,113 @@
+.container {
+  display: flex;
+  transition: all 0.3s ease;
+}
+
+.sidebar {
+  width: 80px;
+  background-color: #1e3a8a;
+  height: 100vh;
+  transition: width 0.3s ease;
+
+  &.expanded {
+    width: 220px;
+  }
+
+  .logo {
+    text-align: center;
+    padding: 20px;
+
+    img {
+      max-width: 40px;
+    }
+  }
+}
+
+.main {
+  flex-grow: 1;
+  padding: 50px;
+  background-color: #f9f9f9;
+  transition: margin-left 0.3s ease;
+  width: 100%;
+}
+
+.container.expanded .main {
+  margin-left: 140px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    font-weight: bold;
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    input {
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+
+    .novo-btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+}
+
+.table-section {
+  margin-top: 1.5rem;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      background-color: #1e3a8a;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 600;
+
+      &.admin {
+        background-color: #ef4444;
+      }
+
+      &.rt {
+        background-color: #22c55e;
+      }
+    }
+  }
+
+  .summary {
+    margin-top: 12px;
+    font-size: 0.875rem;
+    color: #666;
+  }
+}
