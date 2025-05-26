@@ -3,10 +3,12 @@ package com.example.login_auth_api.controller;
 import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.ForgotPasswordDTO;
 import com.example.login_auth_api.repositories.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -71,14 +73,36 @@ public class PasswordResetController {
         return "Senha alterada com sucesso!";
     }
 
-
     private void sendResetEmail(String email, String resetLink) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("seu_email@gmail.com");
-        message.setTo(email);
-        message.setSubject("Redefinição de Senha");
-        message.setText("Você solicitou a redefinição de sua senha. Clique no link abaixo para redefinir:\n" + resetLink);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        mailSender.send(message);
+            helper.setFrom("seu_email@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("🔐 Redefinição de Senha");
+
+            String htmlContent = """
+                <html>
+                  <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+                    <div style="max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                      <h2 style="color: #333;">Redefinição de Senha</h2>
+                      <p>Olá,</p>
+                      <p>Você solicitou a redefinição da sua senha. Clique no botão abaixo para redefinir:</p>
+                      <div style="text-align: center; margin: 30px 0;">
+                        <a href="%s" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Redefinir Senha</a>
+                      </div>
+                      <p>Se você não solicitou essa alteração, apenas ignore este e-mail.</p>
+                      <p style="font-size: 12px; color: #888;">Este link é válido por 1 hora.</p>
+                    </div>
+                  </body>
+                </html>
+            """.formatted(resetLink);
+
+            helper.setText(htmlContent, true); // HTML mode
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }
