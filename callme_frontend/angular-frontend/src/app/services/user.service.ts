@@ -5,16 +5,49 @@ import { User } from '../models/usuarios.models';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/users';
+  private baseUrl = 'http://localhost:8080/users';
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
+  private getAuthHeaders(): HttpHeaders {
     const token = sessionStorage.getItem('acessToken');
-    const headers = new HttpHeaders({
+    return new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-
-    return this.http.get<User[]>(this.apiUrl, { headers });
   }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+
+  createUser(user: any, role: string): Observable<User> {
+    const endpoint = role === 'ADMIN'
+      ? `${this.baseUrl}/admin`
+      : `${this.baseUrl}`;
+
+    return this.http.post<User>(endpoint, user, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  updateUser(user: User) {
+    const token = sessionStorage.getItem('authToken');
+    return this.http.put(`${this.baseUrl}/${user.id}`, user, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+
 }

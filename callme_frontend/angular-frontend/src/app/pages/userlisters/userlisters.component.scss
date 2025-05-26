@@ -66,6 +66,33 @@
       cursor: pointer;
       font-weight: bold;
     }
+
+    .dropdown {
+      position: relative;
+
+      .dropdown-menu {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        top: 40px;
+        right: 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+
+        button {
+          width: 100%;
+          padding: 8px 12px;
+          text-align: left;
+          background: none;
+          border: none;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #f1f1f1;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -103,11 +130,29 @@
         background-color: #22c55e;
       }
     }
+
+    .delete-btn {
+      background-color: #dc2626;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   }
 
   .summary {
     margin-top: 12px;
     font-size: 0.875rem;
     color: #666;
+  }
+  .edit-btn {
+    background-color: #f97316; // laranja
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
   }
 }
