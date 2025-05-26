@@ -60,7 +60,7 @@ public class User {
     private LocalDateTime resetTokenExpiration;
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(
 
             name =  "tb_users_roles",

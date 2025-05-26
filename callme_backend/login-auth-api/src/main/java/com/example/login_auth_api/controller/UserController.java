@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +20,8 @@ import java.util.List;
 
 
 import java.util.Set;
+import java.util.UUID;
+
 @RestController
 public class UserController {
 
@@ -89,4 +88,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-}
+    @Transactional
+    @DeleteMapping("/users/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+        public ResponseEntity<Void>deleteuser(@PathVariable UUID id ){
+         var user = userRepository.findById(id).
+                 orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND, "usuario nao encontrado"));
+         userRepository.delete(user);
+         return ResponseEntity.noContent().build();
+        }
+    }
+
