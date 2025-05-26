@@ -1,22 +1,25 @@
 <div class="container" [ngClass]="{ 'expanded': isSideNavCollapsed }">
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="logo">
       <img src="assets/headset-icon.png" alt="logo" />
     </div>
-
     <nav class="menu">
       <app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
     </nav>
   </aside>
 
-  <!-- Main Content -->
   <main class="main">
     <header class="header">
       <h2>Gerenciamento de Usuários</h2>
       <div class="right">
         <input type="text" [(ngModel)]="searchText" placeholder="Buscar usuários..." />
-        <button class="novo-btn">+ Novo Usuário</button>
+        <div class="dropdown">
+          <button class="novo-btn" (click)="toggleDropdown()">+ Novo Usuário</button>
+          <div class="dropdown-menu" *ngIf="dropdownOpen">
+            <button (click)="openCreateModal('ADMIN')">Criar Admin</button>
+            <button (click)="openCreateModal('RT')">Criar RT</button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -28,6 +31,7 @@
           <th>USERNAME</th>
           <th>EMAIL</th>
           <th>ROLE</th>
+          <th>Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -36,19 +40,26 @@
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
           <td>
-            <span *ngFor="let role of user.roles" class="badge"
-                  [ngClass]="{
-                    'admin': role === 'ADMIN',
-                    'rt': role === 'RT'
-                  }">
-              {{ role }}
-            </span>
+              <span *ngFor="let role of user.roles" class="badge"
+                    [ngClass]="{ 'admin': role === 'ADMIN', 'rt': role === 'RT' }">
+                {{ role }}
+              </span>
+          </td>
+          <td>
+            <button class="edit-btn" (click)="editUser(user)">Editar</button>
+            <button class="delete-btn" (click)="deleteUser(user.id)">Excluir</button>
           </td>
         </tr>
         </tbody>
       </table>
-
       <p class="summary">Mostrando {{ users.length }} usuário(s)</p>
     </section>
   </main>
+
+  <app-user-create-modal
+    *ngIf="showModal"
+    [role]="selectedRole!"
+    (create)="createUser($event)"
+    (close)="closeModal()"
+  ></app-user-create-modal>
 </div>
