@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/usuarios.models';
@@ -70,22 +69,41 @@ export class UserlistersComponent implements OnInit {
   createUser(userData: { username: string; email: string; password: string }): void {
     if (!this.selectedRole) return;
 
-    const userPayload: User = {
-      ...userData,
-      id: this.editingUser?.id || '',
-      roles: [this.selectedRole]
-    };
-
     if (this.editingUser) {
+      const userPayload: User = {
+        id: this.editingUser.id,
+        username: userData.username,
+        email: userData.email,
+        roles: this.editingUser.roles,
+        password: userData.password
+      };
+
+      console.log('Enviando atualização:', {
+        url: `/users/update/${userPayload.id}`,
+        method: 'PUT',
+        payload: userPayload
+      });
+
       this.userService.updateUser(userPayload).subscribe({
-        next: () => {
+        next: (updatedUser) => {
+          console.log('Usuário atualizado com sucesso:', updatedUser);
           const index = this.users.findIndex(u => u.id === userPayload.id);
-          if (index !== -1) this.users[index] = userPayload;
+          if (index !== -1) this.users[index] = <User>updatedUser;
           this.closeModal();
         },
-        error: (err) => console.error('Erro ao editar usuário:', err),
+        error: (err) => {
+          console.error('Erro ao editar usuário:', err);
+          alert('Erro ao editar usuário. Por favor, tente novamente.');
+        },
       });
     } else {
+      const userPayload = {
+        id: '',
+        username: userData.username,
+        email: userData.email,
+        roles: [this.selectedRole]
+      };
+
       this.userService.createUser(userPayload, this.selectedRole).subscribe({
         next: (createdUser) => {
           this.users.push(createdUser);

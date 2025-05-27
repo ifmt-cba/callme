@@ -12,7 +12,9 @@ export class UserService {
   private getAuthHeaders(): HttpHeaders {
     const token = sessionStorage.getItem('acessToken');
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     });
   }
 
@@ -21,7 +23,6 @@ export class UserService {
       headers: this.getAuthHeaders()
     });
   }
-
 
   createUser(user: any, role: string): Observable<User> {
     const endpoint = role === 'ADMIN'
@@ -39,15 +40,28 @@ export class UserService {
     });
   }
 
-  updateUser(user: User) {
-    const token = sessionStorage.getItem('authToken');
-    return this.http.put(`${this.baseUrl}/${user.id}`, user, {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      })
+  updateUser(user: User): Observable<User> {
+    const url = `${this.baseUrl}/update/${user.id}`;
+    const body = {
+      username: user.username,
+      email: user.email,
+      password: user.password || null
+    };
+
+    console.log('PUT Request:', {
+      url,
+      body,
+      headers: this.getAuthHeaders().keys()
     });
+
+    return this.http.put<User>(
+      url,
+      body,
+      {
+        headers: this.getAuthHeaders(),
+        observe: 'body',
+        responseType: 'json'
+      }
+    );
   }
-
-
 }

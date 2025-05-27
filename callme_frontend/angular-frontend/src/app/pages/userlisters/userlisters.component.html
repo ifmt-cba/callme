@@ -59,6 +59,7 @@
   <app-user-create-modal
     *ngIf="showModal"
     [role]="selectedRole!"
+    [editingUser]="editingUser"
     (create)="createUser($event)"
     (close)="closeModal()"
   ></app-user-create-modal>

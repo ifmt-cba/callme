@@ -87,7 +87,6 @@ public class UserController {
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
-
     @Transactional
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
@@ -97,5 +96,28 @@ public class UserController {
          userRepository.delete(user);
          return ResponseEntity.noContent().build();
         }
+
+    @Transactional
+    @PutMapping("/users/update/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody CreateUserDto dto) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+
+        // Atualiza os campos do usuário
+        user.setUsername(dto.username());
+        user.setEmail(dto.email());
+
+        // Só atualiza a senha se uma nova senha foi fornecida
+        if (dto.password() != null && !dto.password().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(dto.password()));
+        }
+
+        // Salva as alterações
+        userRepository.save(user);
+
+        // Retorna o usuário atualizado
+        return ResponseEntity.ok(UserResponseDTO.fromEntity(user));
     }
+}
 
