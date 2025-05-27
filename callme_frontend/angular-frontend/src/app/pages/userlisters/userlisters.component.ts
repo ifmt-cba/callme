@@ -78,17 +78,10 @@ export class UserlistersComponent implements OnInit {
         password: userData.password
       };
 
-      console.log('Enviando atualização:', {
-        url: `/users/update/${userPayload.id}`,
-        method: 'PUT',
-        payload: userPayload
-      });
-
       this.userService.updateUser(userPayload).subscribe({
         next: (updatedUser) => {
-          console.log('Usuário atualizado com sucesso:', updatedUser);
           const index = this.users.findIndex(u => u.id === userPayload.id);
-          if (index !== -1) this.users[index] = <User>updatedUser;
+          if (index !== -1) this.users[index] = updatedUser;
           this.closeModal();
         },
         error: (err) => {
@@ -98,9 +91,9 @@ export class UserlistersComponent implements OnInit {
       });
     } else {
       const userPayload = {
-        id: '',
         username: userData.username,
         email: userData.email,
+        password: userData.password,
         roles: [this.selectedRole]
       };
 
@@ -109,7 +102,10 @@ export class UserlistersComponent implements OnInit {
           this.users.push(createdUser);
           this.closeModal();
         },
-        error: (err) => console.error('Erro ao criar usuário:', err),
+        error: (err) => {
+          console.error('Erro ao criar usuário:', err);
+          alert('Erro ao criar usuário. Por favor, tente novamente.');
+        },
       });
     }
   }
