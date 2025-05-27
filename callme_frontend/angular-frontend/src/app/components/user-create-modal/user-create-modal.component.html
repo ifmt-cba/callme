@@ -1,12 +1,18 @@
 <div class="modal-backdrop">
   <div class="modal">
-    <h3>Criar {{ role }}</h3>
+    <h3>{{ isEditing ? 'Editar' : 'Criar' }} {{ role }}</h3>
     <form (ngSubmit)="submitForm()">
       <input type="text" placeholder="Username" [(ngModel)]="username" name="username" required />
       <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required />
-      <input type="password" placeholder="Senha" [(ngModel)]="password" name="password" required />
+      <input
+        type="password"
+        placeholder="Senha"
+        [(ngModel)]="password"
+        name="password"
+        [required]="!isEditing"
+      />
       <div class="buttons">
-        <button type="submit">Criar</button>
+        <button type="submit">{{ isEditing ? 'Salvar' : 'Criar' }}</button>
         <button type="button" (click)="close.emit()">Cancelar</button>
       </div>
     </form>
