@@ -29,7 +29,13 @@ export class UserService {
       ? `${this.baseUrl}/admin`
       : `${this.baseUrl}`;
 
-    return this.http.post<User>(endpoint, user, {
+    const payload = {
+      username: user.username,
+      email: user.email,
+      password: user.password || ''  // Ensure password is always sent
+    };
+
+    return this.http.post<User>(endpoint, payload, {
       headers: this.getAuthHeaders()
     });
   }
