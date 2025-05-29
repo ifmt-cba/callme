@@ -23,13 +23,16 @@ export class UserlistersComponent implements OnInit {
   searchText: string = '';
   isSideNavCollapsed = false;
   screenWidth = window.innerWidth;
+  currentUserId: string | null = null;
 
   dropdownOpen = false;
   selectedRole: string | null = null;
   showModal = false;
   editingUser: User | null = null;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {
+    this.currentUserId = this.userService.getCurrentUserId();
+  }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe({
@@ -114,7 +117,14 @@ export class UserlistersComponent implements OnInit {
     if (confirm('Tem certeza que deseja excluir este usuário?')) {
       this.userService.deleteUser(userId).subscribe({
         next: () => this.users = this.users.filter(u => u.id !== userId),
-        error: (err) => console.error('Erro ao deletar usuário:', err),
+        error: (err) => {
+          console.error('Erro ao deletar usuário:', err);
+          if (err.status === 403) {
+            alert('Não é permitido excluir seu próprio usuário');
+          } else {
+            alert('Erro ao deletar usuário. Por favor, tente novamente.');
+          }
+        },
       });
     }
   }
@@ -123,5 +133,9 @@ export class UserlistersComponent implements OnInit {
     this.selectedRole = user.roles[0];
     this.editingUser = { ...user };
     this.showModal = true;
+  }
+
+  isCurrentUser(userId: string): boolean {
+    return userId === this.currentUserId;
   }
 }

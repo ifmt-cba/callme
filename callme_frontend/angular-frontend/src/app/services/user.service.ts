@@ -18,6 +18,25 @@ export class UserService {
     });
   }
 
+  getCurrentUserId(): string | null {
+    const token = sessionStorage.getItem('acessToken');
+    if (!token) return null;
+    
+    try {
+      // Pega a parte do payload do token JWT
+      const payload = token.split('.')[1];
+      // Decodifica a string base64
+      const decodedPayload = atob(payload);
+      // Converte para objeto JSON
+      const tokenData = JSON.parse(decodedPayload);
+      // Retorna o ID do usuário (sub contém o ID no JWT)
+      return tokenData.sub;
+    } catch (error) {
+      console.error('Erro ao decodificar token:', error);
+      return null;
+    }
+  }
+
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl, {
       headers: this.getAuthHeaders()

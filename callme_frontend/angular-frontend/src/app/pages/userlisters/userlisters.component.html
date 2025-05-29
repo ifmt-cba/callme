@@ -47,7 +47,7 @@
           </td>
           <td>
             <button class="edit-btn" (click)="editUser(user)">Editar</button>
-            <button class="delete-btn" (click)="deleteUser(user.id)">Excluir</button>
+            <button class="delete-btn" (click)="deleteUser(user.id)" *ngIf="!isCurrentUser(user.id)">Excluir</button>
           </td>
         </tr>
         </tbody>
