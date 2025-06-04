@@ -30,7 +30,7 @@ tailscale up \
 
 # Aguarda um pouco para o Tailscale conectar e as rotas serem estabelecidas
 echo "Aguardando conexão do Tailscale..."
-sleep 10
+sleep 10 # Pode aumentar se necessário
 
 # Verifica o status do Tailscale (para debug)
 echo "Status do Tailscale:"
@@ -41,11 +41,25 @@ echo "IPs do Tailscale:"
 tailscale ip -4 || echo "Nenhum IP v4 do Tailscale atribuído ainda"
 tailscale ip -6 || echo "Nenhum IP v6 do Tailscale atribuído ainda"
 
+# --- Adicionar Tailscale Netcheck para Diagnóstico ---
+echo "Executando Tailscale netcheck..."
+tailscale netcheck
+# ----------------------------------------------------
+
+# Configura as propriedades de sistema Java para usar o proxy HTTP do Tailscale
+# para acessar o MinIO (e outras URLs HTTP se necessário)
+JAVA_OPTS=""
+# O proxy HTTP está escutando em localhost:1055 dentro do container
+JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=1055"
+# Se você precisar que localhost e 127.0.0.1 NÃO passem pelo proxy:
+JAVA_OPTS="$JAVA_OPTS -Dhttp.nonProxyHosts=localhost|127.0.0.1"
+# Se você também fosse acessar MinIO via HTTPS, adicionaria:
+# JAVA_OPTS="$JAVA_OPTS -Dhttps.proxyHost=localhost -Dhttps.proxyPort=1055"
+# JAVA_OPTS="$JAVA_OPTS -Dhttps.nonProxyHosts=localhost|127.0.0.1"
+
+echo "Configurações Java (JAVA_OPTS): ${JAVA_OPTS}"
+
 # Finalmente, executa sua aplicação Spring Boot.
-# O 'exec' faz com que o processo Java substitua o processo do shell.
 echo "Iniciando a aplicação Spring Boot..."
-# --- MUDANÇA IMPORTANTE AQUI ---
-# Entra no diretório onde o JAR está localizado, conforme definido no Dockerfile (WORKDIR /app)
 cd /app
-# ------------------------------
-exec java -jar app.jar
+exec java ${JAVA_OPTS} -jar app.jar
