@@ -35,68 +35,38 @@ services:
 
   backend:
     build:
-      context: ./callme_backend/login-auth-api #
-      dockerfile: Dockerfile #
-    container_name: spring_backend #
+      context: ./callme_backend/login-auth-api
+      dockerfile: Dockerfile
+    container_name: spring_backend
     env_file:
-      - .env #
+      - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:${POSTGRES_PORT}/${POSTGRES_DB} #
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER} #
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD} #
-
-      # --- Variáveis do Tailscale ---
-      # ATENÇÃO: TAILSCALE_AUTHKEY é um segredo! Considere usar secrets do Docker ou um arquivo .env não versionado.
-      # Gere sua authkey em https://login.tailscale.com/admin/settings/keys
-      # Exemplo: TAILSCALE_AUTHKEY: tskey-auth-SUA_CHAVE_SUPER_SECRETA-12345
-      # Coloque a sua TAILSCALE_AUTHKEY no seu arquivo .env local
-      # TAILSCALE_AUTHKEY: ${TAILSCALE_AUTHKEY_FROM_ENV} # Se estiver no .env
-      TAILSCALE_AUTHKEY: ${TAILSCALE_AUTHKEY} # Substitua por sua authkey real ou use variável de ambiente
-      TAILSCALE_HOSTNAME: callme-backend-container   # Nome do host na rede Tailscale (opcional)
-      TAILSCALE_ADVERTISE_EXIT_NODE: "false"         # Anunciar como exit node (geralmente false para este caso)
-
-      # --- Variáveis do MinIO (para a aplicação Spring Boot) ---
-      # O endpoint é o IP do Tailscale do seu servidor MinIO
-      MINIO_ENDPOINT: http://100.68.205.102:9000
-      MINIO_ACCESS_KEY: 03022004An@
-      MINIO_SECRET_KEY: 03022004An@
-      # MINIO_BUCKET_NAME: seu-bucket-aqui # Adicione se sua aplicação precisar
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:${POSTGRES_PORT}/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "8080:8080" #
+      - "8080:8080"
     depends_on:
-      - database #
+      - database
     networks:
-      - callme-network #
-    cap_add:
-      - NET_ADMIN
-      # - SYS_ADMIN # Adicione se NET_ADMIN e userspace-networking não forem suficientes
-    # devices: # Descomente se precisar de acesso direto ao /dev/net/tun do host
-    #   - "/dev/net/tun:/dev/net/tun"
-    sysctls:
-      net.ipv4.ip_forward: 1
-      net.ipv6.conf.all.forwarding: 1
-    # Opcional: Define o DNS do Tailscale para resolução de nomes MagicDNS
-    # Se você tem outros resolvers DNS que precisa manter, adicione-os também.
-    # dns:
-    #   - 100.100.100.100 # DNS do Tailscale
-    #   - 8.8.8.8         # Exemplo de DNS público (Google)
+      - callme-network
 
   frontend:
     build:
-      context: ./callme_frontend/angular-frontend #
-      dockerfile: Dockerfile #
-    container_name: angular_frontend #
+      context: ./callme_frontend/angular-frontend
+      dockerfile: Dockerfile
+    container_name: angular_frontend
     ports:
-      - "80:80" #
+      - "80:80"
     depends_on:
-      - backend #
+      - backend
     networks:
-      - callme-network #
+      - callme-network
 
 networks:
   callme-network:
-    driver: bridge #
+    driver: bridge
 
 volumes:
-  postgres_data: #
-  pgadmin_data: #
+  postgres_data:
+  pgadmin_data:
