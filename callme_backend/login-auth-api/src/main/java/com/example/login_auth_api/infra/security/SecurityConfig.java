@@ -71,7 +71,7 @@ public class SecurityConfig {
                         requestMatchers(HttpMethod.GET, "/chamados/listar").permitAll().
                         requestMatchers(HttpMethod.GET, "/token/{tokenEmail}").permitAll().
                         requestMatchers(HttpMethod.GET, "chamados/buscar/{token}").permitAll().
-                        requestMatchers(HttpMethod.PUT, "chamados/editar/token/{tokenEmail}\"").permitAll().
+                        requestMatchers(HttpMethod.PUT, "chamados/editar/token/{tokenEmail}").permitAll().
                         requestMatchers(HttpMethod.POST, "/users").permitAll().
                         anyRequest().authenticated())
                 .csrf(csrf ->csrf.disable())
