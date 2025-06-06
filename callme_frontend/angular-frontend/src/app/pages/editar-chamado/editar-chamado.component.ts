@@ -54,18 +54,18 @@ export class EditarChamadoComponent implements OnInit {
   }
 
   salvar(): void {
-    this.http.put(`http://localhost:8080/chamados/editar/token/${this.tokenEmail}`, {
-      status: this.chamado.status
-    }).subscribe({
-      next: () => {
-        alert('Chamado atualizado com sucesso!');
-        this.router.navigate(['/']); // redireciona se quiser
-      },
-      error: (error) => {
-        console.error('Erro ao salvar chamado:', error);
-        alert('Erro ao salvar chamado.');
-      }
-    });
+    // Apenas esta linha muda: enviamos o objeto 'chamado' inteiro.
+    this.http.put(`http://localhost:8080/chamados/editar/token/${this.tokenEmail}`, this.chamado)
+      .subscribe({
+        next: () => {
+          alert('Chamado atualizado com sucesso!');
+          this.router.navigate(['/chamados']); // Sugestão: redirecionar para a lista de chamados
+        },
+        error: (error) => {
+          console.error('Erro ao salvar chamado:', error);
+          alert('Erro ao salvar chamado.');
+        }
+      });
   }
 
 
