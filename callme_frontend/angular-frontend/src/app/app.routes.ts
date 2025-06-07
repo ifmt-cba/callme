@@ -15,6 +15,11 @@ import {ResetPasswordComponent} from "./pages/reset-password/reset-password.comp
 import {UserlistersComponent} from "./pages/userlisters/userlisters.component";
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/principal',
+    pathMatch: 'full'
+  },
+  {
     path: 'login',
     component: LoginComponent,
   },
@@ -69,10 +74,13 @@ export const routes: Routes = [
     path: 'reset-password',
     component: ResetPasswordComponent
   },
-
   {
     path: 'listar-usuarios',
     component :UserlistersComponent
+  },
+  {
+    path: '**',
+    redirectTo: '/principal'
   }
 
 ];
