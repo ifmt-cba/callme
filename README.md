@@ -26,7 +26,6 @@ Justificativa: A falta de um sistema estruturado pode levar a falhas na comunica
 - **Frontend:** Angular 17+  
 - **Banco de Dados:** PostgreSQL (Alpine)  
 - **Autenticação:** JWT com Spring Security  
-- **Hash de Senha:** ?  
 - **Gerenciamento de Containers:** Docker  
 - **Versionamento:** Git + GitHub  
 - **Gerenciamento de Tarefas (Scrum):** GitHub Projects  
