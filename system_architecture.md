@@ -214,3 +214,159 @@ classDiagram
    - ➡️ Dois níveis de acesso: ADMIN e RT
    - ➡️ ADMINs podem gerenciar outros usuários
    - ➡️ Sistema de autorização baseado em roles 
+
+
+# 📁 Estrutura do Projeto Call Me
+
+## 📊 Diagrama de Caso de Uso
+
+O diagrama abaixo representa os principais atores e suas interações com o sistema Call Me:
+
+```mermaid
+graph TB
+    subgraph "Call Me - Sistema de Gestão de Chamados"
+        User(("👤 Usuário"))
+        Admin(("👨‍💼 Administrador"))
+        Tech(("👨‍🔧 Técnico"))
+        
+        %% Casos de uso do Usuário
+        UC1["Cadastrar-se"]
+        UC2["Fazer Login"]
+        UC3["Abrir Chamado"]
+        UC4["Acompanhar Chamado"]
+        UC5["Receber Notificações"]
+        UC6["Visualizar Histórico"]
+        
+        %% Casos de uso do Administrador
+        UC7["Gerenciar Usuários"]
+        UC8["Gerar Relatórios"]
+        UC9["Configurar Sistema"]
+        
+        %% Casos de uso do Técnico
+        UC10["Atender Chamados"]
+        UC11["Atualizar Status"]
+        UC12["Adicionar Comentários"]
+        
+        %% Relacionamentos do Usuário
+        User --> UC1
+        User --> UC2
+        User --> UC3
+        User --> UC4
+        User --> UC5
+        User --> UC6
+        
+        %% Relacionamentos do Administrador
+        Admin --> UC7
+        Admin --> UC8
+        Admin --> UC9
+        Admin --> UC2
+        
+        %% Relacionamentos do Técnico
+        Tech --> UC10
+        Tech --> UC11
+        Tech --> UC12
+        Tech --> UC2
+        Tech --> UC5
+    end
+```
+
+## 🏗️ Estrutura do Projeto
+
+### 📂 Backend (Java + Spring Boot)
+
+```
+callme_backend/
+├── login-auth-api/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── com/
+│   │   │   │       └── callme/
+│   │   │   │           ├── config/
+│   │   │   │           ├── controller/
+│   │   │   │           ├── dto/
+│   │   │   │           ├── model/
+│   │   │   │           ├── repository/
+│   │   │   │           ├── service/
+│   │   │   │           └── security/
+│   │   │   └── resources/
+│   │   └── test/
+│   └── pom.xml
+└── .gitignore
+```
+
+### 📂 Frontend (Angular)
+
+```
+callme_frontend/
+├── angular-frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── components/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   ├── guards/
+│   │   │   └── shared/
+│   │   ├── assets/
+│   │   └── environments/
+│   ├── package.json
+│   └── angular.json
+└── package-lock.json
+```
+
+## 🎯 Principais Funcionalidades por Ator
+
+### 👤 Usuário Comum
+- Cadastro e login no sistema
+- Abertura de novos chamados
+- Acompanhamento do status dos chamados
+- Recebimento de notificações
+- Visualização do histórico de chamados
+- Atualização de dados pessoais
+
+### 👨‍💼 Administrador
+- Gerenciamento de usuários
+- Geração de relatórios
+- Configurações do sistema
+- Monitoramento geral
+- Definição de políticas de acesso
+
+### 👨‍🔧 Técnico
+- Atendimento aos chamados
+- Atualização de status
+- Adição de comentários e soluções
+- Categorização de problemas
+- Priorização de atendimentos
+
+## 🔧 Tecnologias Utilizadas
+
+### Backend
+- Java 21
+- Spring Boot 3
+- Spring Security
+- JWT Authentication
+- PostgreSQL
+- JPA/Hibernate
+- Maven
+
+### Frontend
+- Angular 17+
+- TypeScript
+- Angular Material
+- RxJS
+- SCSS
+- JWT Interceptor
+
+### DevOps
+- Docker
+- Docker Compose
+- Git
+- GitHub Actions (CI/CD)
+
+## 📡 Integrações
+
+- Sistema de E-mail para notificações
+- Autenticação JWT
+- Banco de dados PostgreSQL
+- Upload de arquivos
+- Logs do sistema 
