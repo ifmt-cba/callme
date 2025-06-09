@@ -10,7 +10,13 @@ Por meio de uma interface intuitiva e recursos como notificações automáticas,
 
 ## 🛠️ Descrição do Projeto
 
-Este projeto foi desenvolvido como parte da disciplina de **Engenharia de Software**, utilizando metodologias ágeis. A arquitetura foi desenhada para ser **modular, escalável, segura e de fácil manutenção**, integrando tecnologias modernas e boas práticas de desenvolvimento.
+ Diagnóstico do Problema
+Contextualização: Muitas empresas e instituições enfrentam dificuldades na gestão eficiente de chamados de suporte técnico, resultando em atrasos no atendimento e falta de controle sobre solicitações. Este projeto visa desenvolver um sistema que automatize a criação, organização e acompanhamento de chamados via e-mail.
+## 
+Público-Alvo: A SEMAS e outras instituições que necessitam de um sistema automatizado para registro e acompanhamento de chamados.
+## 
+Justificativa: A falta de um sistema estruturado pode levar a falhas na comunicação e na resolução de problemas técnicos. A extensão universitária permite o desenvolvimento e aplicação de soluções inovadoras para este cenário, beneficiando tanto a comunidade acadêmica quanto setores administrativos.
+
 
 ---
 
