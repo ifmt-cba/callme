@@ -1,11 +1,13 @@
 package com.example.login_auth_api.controller;
 
+import com.example.login_auth_api.domain.ports.LogPort;
 import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.ForgotPasswordDTO;
 import com.example.login_auth_api.repositories.UserRepository;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @PreAuthorize("permitAll()")
@@ -21,59 +24,75 @@ import java.util.Optional;
 @RequestMapping("/api/password")
 public class PasswordResetController {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final LogPort log;
 
-    @Autowired
-    private UserRepository userRepository;
+    public PasswordResetController(JavaMailSender mailSender,
+                                   UserRepository userRepository,
+                                   PasswordEncoder passwordEncoder,
+                                   LogPort log) {
+        this.mailSender = mailSender;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.log = log;
+    }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private String now() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
     @PreAuthorize("permitAll()")
     @PostMapping("/forgot")
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDTO dto) {
         String email = dto.getEmail().trim().toLowerCase();
+        log.info(String.format("Início: solicitação de forgotPassword | Email: %s | Hora: %s", email, now()));
 
-        Optional<User> user = userRepository.findByEmailIgnoreCase(email);
-        if (user.isEmpty()) {
-            return ResponseEntity.ok("Email nao encontrado");
+        Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
+        if (userOpt.isEmpty()) {
+            log.warn(String.format("Email não encontrado ao solicitar reset | Email: %s", email));
+            return ResponseEntity.ok("Email não encontrado");
         }
 
-        User currentUser = user.get();
-        String token = currentUser.generateResetToken();
-        LocalDateTime expirationTime = LocalDateTime.now().plusHours(1);
-        currentUser.setToken(token);
-        currentUser.setResetTokenExpiration(expirationTime);
-
-        userRepository.save(currentUser);
+        User user = userOpt.get();
+        String token = user.generateResetToken();
+        LocalDateTime expiration = LocalDateTime.now().plusHours(1);
+        user.setToken(token);
+        user.setResetTokenExpiration(expiration);
+        userRepository.save(user);
+        log.info(String.format("Reset token gerado e salvo | UserID: %s | Token expira em: %s", user.getUserid(), expiration));
 
         String resetLink = "http://localhost:4200/reset-password?token=" + token;
         sendResetEmail(email, resetLink);
+        log.info(String.format("Email de reset enviado com sucesso | Email: %s", email));
 
-        return ResponseEntity.ok("email enviado com sucesso");
+        return ResponseEntity.ok("Email enviado com sucesso");
     }
 
-    @PreAuthorize("permitAll()")
     @PostMapping("/reset")
-    public String resetPassword(@RequestParam String token, @RequestParam String newPassword) {
-        Optional<User> user = userRepository.findByToken(token);
+    public ResponseEntity<String> resetPassword(@RequestParam String token,
+                                                @RequestParam String newPassword) {
+        log.info(String.format("Início: resetPassword | Token: %s | Hora: %s", token, now()));
 
-        if (user.isEmpty() || user.get().isTokenExpired()) {
-            return "Token inválido ou expirado";
+        Optional<User> userOpt = userRepository.findByToken(token);
+        if (userOpt.isEmpty() || userOpt.get().isTokenExpired()) {
+            log.warn(String.format("Token inválido ou expirado | Token: %s", token));
+            return ResponseEntity.badRequest().body("Token inválido ou expirado");
         }
 
-        User currentUser = user.get();
-        currentUser.setPassword(passwordEncoder.encode(newPassword));
-        currentUser.setToken(null);
-        currentUser.setResetTokenExpiration(null);
+        User user = userOpt.get();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setToken(null);
+        user.setResetTokenExpiration(null);
+        userRepository.save(user);
 
-        userRepository.save(currentUser);
-
-        return "Senha alterada com sucesso!";
+        log.info(String.format("Senha redefinida com sucesso | UserID: %s", user.getUserid()));
+        return ResponseEntity.ok("Senha alterada com sucesso!");
     }
 
     private void sendResetEmail(String email, String resetLink) {
+        log.debug(String.format("Preparando email de reset | To: %s | Link: %s", email, resetLink));
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -99,10 +118,11 @@ public class PasswordResetController {
                 </html>
             """.formatted(resetLink);
 
-            helper.setText(htmlContent, true); // HTML mode
+            helper.setText(htmlContent, true);
             mailSender.send(message);
+            log.debug("Email de reset enviado pelo JavaMailSender");
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.error("Falha ao enviar email de reset | Email: " + email + " | Erro: " + e.getMessage());
         }
     }
 }

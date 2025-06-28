@@ -17,8 +17,6 @@ public class SendEmail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     private String remetente;
     private String destinatario;
     private String assunto;

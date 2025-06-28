@@ -1,48 +1,75 @@
 package com.example.login_auth_api.controller;
 
+import com.example.login_auth_api.domain.ports.LogPort;
 import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.AtualizarStatusDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.repositories.ChamadoExternoRepository;
 import com.example.login_auth_api.service.ChamadoExternoService;
 import com.example.login_auth_api.service.EmailReceiverService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/chamados")
 public class ChamadoExternoController {
 
-    @Autowired
-    private EmailReceiverService emailReceiverService;
+    private final EmailReceiverService emailReceiverService;
+    private final ChamadoExternoService chamadoService;
+    private final LogPort log;
 
-    @Autowired
-    private ChamadoExternoService chamadoService;
+    public ChamadoExternoController(EmailReceiverService emailReceiverService, ChamadoExternoService chamadoService, LogPort log) {
+        this.emailReceiverService = emailReceiverService;
+        this.chamadoService = chamadoService;
+        this.log = log;
+    }
+
+    private String getTimestamp() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
     // Endpoint para criar chamados a partir dos emails resumidos
-    @GetMapping(    "/abrir")
+    @GetMapping("/abrir")
     public List<ChamadoExterno> criarChamados() {
+        log.info("Início: criar chamados a partir de emails | Hora: " + getTimestamp());
+
         List<EmailResumoDTO> resumos = emailReceiverService.listarResumosEmails();
-        return chamadoService.criarChamadosAPartirDeEmails(resumos);
+        List<ChamadoExterno> chamados = chamadoService.criarChamadosAPartirDeEmails(resumos);
+
+        log.info("Chamados criados com sucesso | Quantidade: " + chamados.size());
+        return chamados;
     }
 
     @GetMapping("/listar")
     public List<ChamadoExterno> listarChamados() {
-        return chamadoService.listarChamados();
+        log.info("Início: listar chamados | Hora: " + getTimestamp());
+
+        List<ChamadoExterno> chamados = chamadoService.listarChamados();
+
+        log.info("Chamados listados | Quantidade: " + chamados.size());
+        return chamados;
     }
 
     @GetMapping("/buscar/{tokenEmail}")
     public ResponseEntity<ChamadoExterno> buscarChamadoPorToken(@PathVariable String tokenEmail) {
+        log.info("Início: buscar chamado por token | Token: " + tokenEmail + " | Hora: " + getTimestamp());
+
         Optional<ChamadoExterno> chamado = chamadoService.buscarChamadoPorToken(tokenEmail);
-        return chamado.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+
+        if (chamado.isPresent()) {
+            log.info("Chamado encontrado | Token: " + tokenEmail);
+            return ResponseEntity.ok(chamado.get());
+        } else {
+            log.warn("Chamado não encontrado | Token: " + tokenEmail);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PutMapping("/editar/token/{tokenEmail}")
@@ -50,13 +77,16 @@ public class ChamadoExternoController {
             @PathVariable String tokenEmail,
             @RequestBody ChamadoExterno chamadoAtualizado) {
 
+        log.info("Início: editar chamado por token | Token: " + tokenEmail + " | Hora: " + getTimestamp());
+
         Optional<ChamadoExterno> chamadoEditado = chamadoService.editarChamadoPorToken(tokenEmail, chamadoAtualizado);
 
-        return chamadoEditado
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        if (chamadoEditado.isPresent()) {
+            log.info("Chamado editado com sucesso | Token: " + tokenEmail);
+            return ResponseEntity.ok(chamadoEditado.get());
+        } else {
+            log.warn("Falha ao editar chamado | Token não encontrado: " + tokenEmail);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
-
-
-
 }
