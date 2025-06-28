@@ -1,24 +1,25 @@
 package com.example.login_auth_api.controller;
 
+import com.example.login_auth_api.domain.ports.LogPort;
 import com.example.login_auth_api.domain.user.Role;
 import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.dto.CreateUserDto;
 import com.example.login_auth_api.dto.UserResponseDTO;
 import com.example.login_auth_api.repositories.RoleRepository;
 import com.example.login_auth_api.repositories.UserRepository;
+
 import jakarta.transaction.Transactional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,96 +29,121 @@ public class UserController {
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final LogPort log;
 
-    public UserController(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository, RoleRepository roleRepository) {
+    public UserController(BCryptPasswordEncoder passwordEncoder,
+                          UserRepository userRepository,
+                          RoleRepository roleRepository,
+                          LogPort log) {
         this.passwordEncoder = passwordEncoder;
-
         this.userRepository = userRepository;
-
         this.roleRepository = roleRepository;
+        this.log = log;
     }
+
+    private String now() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
     @Transactional
     @PostMapping("/users")
-    public ResponseEntity<Void> newUser(@RequestBody CreateUserDto dto){
+    public ResponseEntity<Void> newUser(@RequestBody CreateUserDto dto) {
+        log.info(String.format("Tentativa de criação de usuário RT | Username: %s | Hora: %s", dto.username(), now()));
 
-
-        var RtRole = roleRepository.findByName(Role.Values.RT.name());
-
+        var rtRole = roleRepository.findByName(Role.Values.RT.name());
         var userFromDb = userRepository.findByUsername(dto.username());
         if (userFromDb.isPresent()) {
-
+            log.warn(String.format("Usuário já existe | Username: %s", dto.username()));
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
-
         }
 
         var user = new User();
         user.setUsername(dto.username());
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setEmail(dto.email());
-        user.setRoles(Set.of(RtRole));
+        user.setRoles(Set.of(rtRole));
         userRepository.save(user);
 
+        log.info(String.format("Usuário RT criado com sucesso | Username: %s", dto.username()));
         return ResponseEntity.ok().build();
-
     }
 
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        log.info("Admin solicitou listagem de usuários | Hora: " + now());
+
         var users = userRepository.findAll().stream()
                 .map(UserResponseDTO::fromEntity)
                 .toList();
 
         return ResponseEntity.ok(users);
     }
+
     @Transactional
-    @PostMapping("/users/admin")//Criacao de admin pelo Proprio ADMIN
+    @PostMapping("/users/admin")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<Void> newUserAdmin(@RequestBody CreateUserDto dto){
-        var ADMRole = roleRepository.findByName(Role.Values.ADMIN.name());
+    public ResponseEntity<Void> newUserAdmin(@RequestBody CreateUserDto dto) {
+        log.info(String.format("Tentativa de criação de usuário ADMIN | Username: %s | Hora: %s", dto.username(), now()));
+
+        var admRole = roleRepository.findByName(Role.Values.ADMIN.name());
         var userFromDb = userRepository.findByUsername(dto.username());
         if (userFromDb.isPresent()) {
+            log.warn(String.format("Usuário já existe | Username: %s", dto.username()));
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
         var user = new User();
         user.setUsername(dto.username());
         user.setPassword(passwordEncoder.encode(dto.password()));
         user.setEmail(dto.email());
-        user.setRoles(Set.of(ADMRole));
+        user.setRoles(Set.of(admRole));
         userRepository.save(user);
+
+        log.info(String.format("Usuário ADMIN criado com sucesso | Username: %s", dto.username()));
         return ResponseEntity.ok().build();
     }
+
     @Transactional
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-        public ResponseEntity<Void>deleteuser(@PathVariable UUID id ){
-         var user = userRepository.findById(id).
-                 orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND, "usuario nao encontrado"));
-         userRepository.delete(user);
-         return ResponseEntity.noContent().build();
-        }
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
+        log.info(String.format("Admin solicitou exclusão do usuário | ID: %s | Hora: %s", id, now()));
+
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn(String.format("Usuário para exclusão não encontrado | ID: %s", id));
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+                });
+
+        userRepository.delete(user);
+
+        log.info(String.format("Usuário excluído com sucesso | Username: %s | ID: %s", user.getUsername(), id));
+        return ResponseEntity.noContent().build();
+    }
 
     @Transactional
     @PutMapping("/users/update/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody CreateUserDto dto) {
-        var user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        log.info(String.format("Admin solicitou atualização de usuário | ID: %s | Hora: %s", id, now()));
 
-        // Atualiza os campos do usuário
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn(String.format("Usuário para atualização não encontrado | ID: %s", id));
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
+                });
+
         user.setUsername(dto.username());
         user.setEmail(dto.email());
 
-        // Só atualiza a senha se uma nova senha foi fornecida
         if (dto.password() != null && !dto.password().isEmpty()) {
             user.setPassword(passwordEncoder.encode(dto.password()));
         }
 
-        // Salva as alterações
         userRepository.save(user);
 
-        // Retorna o usuário atualizado
+        log.info(String.format("Usuário atualizado com sucesso | Username: %s | ID: %s", user.getUsername(), id));
         return ResponseEntity.ok(UserResponseDTO.fromEntity(user));
     }
 }
-
