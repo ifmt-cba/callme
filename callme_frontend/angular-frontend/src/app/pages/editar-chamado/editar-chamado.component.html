@@ -30,19 +30,16 @@
       </div>
 
       <div class="form-group">
-        <label for="tecnico">Atribuir Nível Técnico</label>
-        <select id="tecnico" [(ngModel)]="chamado.tecnico" name="tecnico" required>
-          <option value="" disabled selected>Selecione um técnico</option>
-          <option value="joao.silva">N1</option>
-          <option value="maria.souza">N2</option>
-          <option value="ana.costa">N3</option>
+        <label for="tecnico">Atribuir ao Técnico</label>
+        <select id="tecnico" [(ngModel)]="tecnicoIdSelecionado" name="tecnico">
+          <option [ngValue]="null">-- Não atribuir / Remover técnico --</option>
+          <option *ngFor="let tecnico of tecnicos" [value]="tecnico.id">
+            {{ tecnico.username }}
+          </option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="mensagem">Mensagem para o técnico</label>
-        <textarea id="mensagem" [(ngModel)]="chamado.mensagem" name="mensagem" rows="4" placeholder="Ex: Por favor, verificar com urgência..."></textarea>
-      </div>
+
 
       <div class="botoes-acoes">
         <button type="submit" class="btn-salvar">Salvar</button>

@@ -22,6 +22,7 @@ public class ChamadoExternoService {
     @Autowired
     private SendEmailService emailService;
 
+
     // Cria chamados a partir da lista de resumos de email
     public List<ChamadoExterno> criarChamadosAPartirDeEmails(List<EmailResumoDTO> resumos) {
         return resumos.stream().map(resumo -> {
@@ -72,13 +73,14 @@ public class ChamadoExternoService {
 
     public Optional<ChamadoExterno> editarChamadoPorToken(String tokenEmail, ChamadoExterno chamadoAtualizado) {
         return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoExistente -> {
-
+            // Atualiza o status
             chamadoExistente.setStatus(chamadoAtualizado.getStatus());
-            // Atualize outros campos se necessário
-
+            // ADICIONADO: Atualiza também o técnico
+            chamadoExistente.setTecnico(chamadoAtualizado.getTecnico());
             return chamadoRepository.save(chamadoExistente);
         });
     }
+
 
 
 
