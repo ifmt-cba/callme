@@ -4,6 +4,7 @@ import com.example.login_auth_api.domain.ports.LogPort;
 import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.AtualizarStatusDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
+import com.example.login_auth_api.dto.TecnicoDTO;
 import com.example.login_auth_api.repositories.ChamadoExternoRepository;
 import com.example.login_auth_api.service.ChamadoExternoService;
 import com.example.login_auth_api.service.EmailReceiverService;
@@ -101,13 +102,21 @@ public class ChamadoExternoController {
     }
     // NOVO ENDPOINT PARA O FRONTEND BUSCAR OS TÉCNICOS
     @GetMapping("/tecnicos")
-    public ResponseEntity<List<User>> listarTecnicos() {
+    public ResponseEntity<List<TecnicoDTO>> listarTecnicos() {
         log.info("Início: listar técnicos | Hora: " + getTimestamp());
-        // CORREÇÃO: Usando o novo método para buscar pelo nome do perfil "RT" ou "ADMIN"
-        List<User> tecnicos = userRepository.findByRoles_Name("RT");
-        // Se seus técnicos forem administradores, use "ADMIN"
-        // List<User> tecnicos = userRepository.findByRoles_Name("ADMIN");
-        log.info("Técnicos listados | Quantidade: " + tecnicos.size());
-        return ResponseEntity.ok(tecnicos);
+
+        // Busca a lista de entidades User como antes
+        List<User> tecnicosEntities = userRepository.findByRoles_Name("RT");
+
+        // Converte a lista de User para uma lista de TecnicoDTO
+        List<TecnicoDTO> tecnicosDTOs = tecnicosEntities.stream()
+                // A correção está aqui, adicionando .toString() ao ID
+                .map(user -> new TecnicoDTO(user.getUserid().toString(), user.getUsername()))
+                .toList();
+
+        log.info("Técnicos listados | Quantidade: " + tecnicosDTOs.size());
+
+        // Retorna a lista de DTOs
+        return ResponseEntity.ok(tecnicosDTOs);
     }
 }
