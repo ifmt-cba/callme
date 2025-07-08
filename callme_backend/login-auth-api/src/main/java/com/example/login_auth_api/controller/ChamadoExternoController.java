@@ -4,9 +4,13 @@ import com.example.login_auth_api.domain.ports.LogPort;
 import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.AtualizarStatusDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
+import com.example.login_auth_api.dto.TecnicoDTO;
 import com.example.login_auth_api.repositories.ChamadoExternoRepository;
 import com.example.login_auth_api.service.ChamadoExternoService;
 import com.example.login_auth_api.service.EmailReceiverService;
+import com.example.login_auth_api.domain.user.User;
+import com.example.login_auth_api.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +29,17 @@ public class ChamadoExternoController {
     private final ChamadoExternoService chamadoService;
     private final LogPort log;
 
-    public ChamadoExternoController(EmailReceiverService emailReceiverService, ChamadoExternoService chamadoService, LogPort log) {
+    @Autowired
+    private UserRepository userRepository; // Injete o repository de usuário
+
+    public ChamadoExternoController(EmailReceiverService emailReceiverService,
+                                    ChamadoExternoService chamadoService,
+                                    LogPort log,
+                                    UserRepository userRepository) {
         this.emailReceiverService = emailReceiverService;
         this.chamadoService = chamadoService;
         this.log = log;
+        this.userRepository = userRepository;
     }
 
     private String getTimestamp() {
@@ -88,5 +99,24 @@ public class ChamadoExternoController {
             log.warn("Falha ao editar chamado | Token não encontrado: " + tokenEmail);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+    // NOVO ENDPOINT PARA O FRONTEND BUSCAR OS TÉCNICOS
+    @GetMapping("/tecnicos")
+    public ResponseEntity<List<TecnicoDTO>> listarTecnicos() {
+        log.info("Início: listar técnicos | Hora: " + getTimestamp());
+
+        // Busca a lista de entidades User como antes
+        List<User> tecnicosEntities = userRepository.findByRoles_Name("RT");
+
+        // Converte a lista de User para uma lista de TecnicoDTO
+        List<TecnicoDTO> tecnicosDTOs = tecnicosEntities.stream()
+                // A correção está aqui, adicionando .toString() ao ID
+                .map(user -> new TecnicoDTO(user.getUserid().toString(), user.getUsername()))
+                .toList();
+
+        log.info("Técnicos listados | Quantidade: " + tecnicosDTOs.size());
+
+        // Retorna a lista de DTOs
+        return ResponseEntity.ok(tecnicosDTOs);
     }
 }
