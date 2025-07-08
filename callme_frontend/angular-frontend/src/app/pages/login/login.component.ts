@@ -38,9 +38,9 @@ export class LoginComponent {
   }
 
   submit() {
-    // O objeto `this.loginForm.value` já contém { username: '...', password: '...' }
-    // Apenas ele deve ser passado para o serviço.
-    this.loginService.login(this.loginForm.value).subscribe({
+    const { username, password } = this.loginForm.value;
+    // Passando username e password como dois argumentos separados.
+    this.loginService.login(username, password).subscribe({
       next: (response) => {
         console.log('Resposta da API de login:', response);
 
@@ -55,7 +55,12 @@ export class LoginComponent {
       },
       error: (err) => {
         console.error("Erro na chamada de login:", err);
-        this.toastService.error("Senha ou usuário incorretos!");
+        // Exemplo de como tratar diferentes erros de status
+        if (err.status === 401 || err.status === 403) {
+          this.toastService.error("Usuário ou senha inválidos!");
+        } else {
+          this.toastService.error("Ocorreu um erro. Tente novamente mais tarde.");
+        }
       }
     });
   }

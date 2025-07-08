@@ -105,6 +105,9 @@ export class EditarChamadoComponent implements OnInit {
    * Prepara os dados e os envia para a API para salvar as alterações.
    */
   salvar(): void {
+    console.log("%cVerificando localStorage ANTES de salvar:", "color: blue; font-weight: bold;");
+    console.log("Valor de 'acessToken' é:", localStorage.getItem('acessToken'));
+
     if (!this.chamado) {
       alert('Dados do chamado não carregados.');
       return;
@@ -112,6 +115,7 @@ export class EditarChamadoComponent implements OnInit {
 
     // Monta o objeto de dados PARA ENVIAR (payload)
     const dadosParaSalvar = {
+
       status: this.chamado.status,
       // Verifica se um técnico foi selecionado. Se sim, cria o objeto { id: ... }. Se não, envia null.
       tecnico: this.tecnicoIdSelecionado ? { id: this.tecnicoIdSelecionado } : null

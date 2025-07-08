@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   // Pega o token do localStorage
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('acessToken');
 
   // Se o token existir, clona a requisição e adiciona o cabeçalho
   if (token) {
@@ -13,7 +13,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     });
     return next(clonedRequest);
   }
-
+  console.warn('[Interceptor] Nenhum token encontrado no localStorage.');
   // Se não, passa a requisição original
   return next(req);
 };
