@@ -33,7 +33,7 @@ public class ChamadoExterno {
         CANCELADO
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "userid") // Nome da coluna no banco de dados que guardará o ID do usuário técnico
     private User tecnico;
 
