@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.UUID;
 
@@ -78,24 +79,59 @@ public class ChamadoExternoService {
         return chamadoRepository.findByTokenEmail(tokenEmail);
     }
 
-    public Optional<ChamadoExterno> editarChamadoPorToken(String tokenEmail, ChamadoExterno chamadoAtualizado) {
-        // Se não houver técnico para atribuir, apenas atualiza o status
-        if (chamadoAtualizado.getTecnico() == null || chamadoAtualizado.getTecnico().getUserid() == null) {
-            return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoExistente -> {
-                chamadoExistente.setStatus(chamadoAtualizado.getStatus());
-                chamadoExistente.setTecnico(null); // Remove a atribuição do técnico
-                return chamadoRepository.save(chamadoExistente);
-            });
+    // Em: com/example/login_auth_api/service/ChamadoExternoService.java
+
+    @Transactional
+    public Optional<ChamadoExterno> editarChamadoPorToken(String tokenEmail, ChamadoExterno dadosDoFrontend) {
+        // Log 1: Ponto de entrada do método
+        System.out.println("\n--- [SERVICE LOG] Iniciando editarChamadoPorToken ---");
+        System.out.println(">>> Token do Chamado Recebido: " + tokenEmail);
+
+        // Log 2: Verifica os dados recebidos do frontend
+        if (dadosDoFrontend != null) {
+            System.out.println(">>> Dados do Frontend: Status=" + dadosDoFrontend.getStatus());
+            if (dadosDoFrontend.getTecnico() != null && dadosDoFrontend.getTecnico().getUserid() != null) {
+                System.out.println(">>> Dados do Frontend: ID do Tecnico=" + dadosDoFrontend.getTecnico().getUserid());
+            } else {
+                System.out.println(">>> Dados do Frontend: Tecnico está nulo ou sem ID.");
+            }
+        } else {
+            System.out.println(">>> ERRO: O objeto 'chamadoAtualizado' vindo do frontend é NULO!");
         }
-        // Se houver um técnico para atribuir, busca ele no banco primeiro
-        UUID tecnicoId = chamadoAtualizado.getTecnico().getUserid();
-        User tecnicoGerenciado = userRepository.findById(tecnicoId)
-                .orElseThrow(() -> new EntityNotFoundException("Técnico com ID " + tecnicoId + " não encontrado."));
-        // Prossiga com a atualização, agora com o técnico "real"
-        return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoExistente -> {
-            chamadoExistente.setStatus(chamadoAtualizado.getStatus());
-            chamadoExistente.setTecnico(tecnicoGerenciado); // Associa o técnico buscado do banco
-            return chamadoRepository.save(chamadoExistente);
+
+        // Busca o chamado no banco
+        return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoDoBanco -> {
+            // Log 3: Confirma que o chamado foi encontrado
+            System.out.println("\n--- [SERVICE LOG] Chamado encontrado no banco. ID: " + chamadoDoBanco.getId() + " ---");
+            System.out.println(">>> Status ANTES: " + chamadoDoBanco.getStatus());
+            System.out.println(">>> Tecnico ANTES: " + (chamadoDoBanco.getTecnico() != null ? chamadoDoBanco.getTecnico().getUsername() : "Nenhum"));
+
+            // 2. Atualiza o status
+            chamadoDoBanco.setStatus(dadosDoFrontend.getStatus());
+            System.out.println(">>> Status DEPOIS: " + chamadoDoBanco.getStatus());
+
+            // 3. Lógica para atualizar o técnico
+            // Verifica se o frontend enviou um técnico com um ID válido
+            if (dadosDoFrontend.getTecnico() != null && dadosDoFrontend.getTecnico().getUserid() != null) {
+                System.out.println(">>> [BLOCO IF] Tentando atribuir técnico...");
+                UUID tecnicoId = dadosDoFrontend.getTecnico().getUserid();
+                System.out.println("--> Buscando no UserRepository com ID: " + tecnicoId);
+
+                User tecnicoGerenciado = userRepository.findById(tecnicoId)
+                        .orElseThrow(() -> new EntityNotFoundException("Técnico com ID " + tecnicoId + " não encontrado."));
+
+                System.out.println("--> Técnico encontrado no banco: " + tecnicoGerenciado.getUsername());
+                chamadoDoBanco.setTecnico(tecnicoGerenciado);
+                System.out.println(">>> Tecnico DEPOIS: " + chamadoDoBanco.getTecnico().getUsername());
+
+            } else {
+                System.out.println(">>> [BLOCO ELSE] Removendo atribuição de técnico...");
+                chamadoDoBanco.setTecnico(null);
+                System.out.println(">>> Tecnico DEPOIS: Nenhum");
+            }
+
+            System.out.println("\n--- [SERVICE LOG] Fim do método. A transação deve ser comitada agora. ---");
+            return chamadoDoBanco;
         });
     }
 

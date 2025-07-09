@@ -104,38 +104,45 @@ export class EditarChamadoComponent implements OnInit {
   /**
    * Prepara os dados e os envia para a API para salvar as alterações.
    */
+  // Em editar-chamado.component.ts
   salvar(): void {
-    console.log("%cVerificando localStorage ANTES de salvar:", "color: blue; font-weight: bold;");
-    console.log("Valor de 'acessToken' é:", localStorage.getItem('acessToken'));
+    if (!this.chamado) return;
 
-    if (!this.chamado) {
-      alert('Dados do chamado não carregados.');
-      return;
-    }
-
-    // Monta o objeto de dados PARA ENVIAR (payload)
     const dadosParaSalvar = {
-
       status: this.chamado.status,
-      // Verifica se um técnico foi selecionado. Se sim, cria o objeto { id: ... }. Se não, envia null.
-      tecnico: this.tecnicoIdSelecionado ? { id: this.tecnicoIdSelecionado } : null
+      // Aqui está a mágica:
+      // Pegamos o ID selecionado (que agora é this.tecnicoIdSelecionado)
+      // E o enviamos na chave 'userid' que o backend espera.
+      tecnico: this.tecnicoIdSelecionado
+        ? { userid: this.tecnicoIdSelecionado }
+        : null
     };
 
-    console.log('Enviando para o backend:', dadosParaSalvar); // Ótimo para debugar!
+    console.log("ENVIANDO ESTE JSON PARA O BACKEND:", JSON.stringify(dadosParaSalvar, null, 2));
 
-    // Envia o novo objeto 'dadosParaSalvar' em vez de 'this.chamado'
-    this.http.put(`${this.apiUrl}/editar/token/${this.tokenEmail}`, dadosParaSalvar).subscribe({
-      next: () => {
-        alert('Chamado atualizado com sucesso!');
-        this.router.navigate(['/chamados']); // Redireciona para a lista de chamados
-      },
-      error: (error) => {
-        console.error('Erro ao salvar chamado:', error);
-        alert('Erro ao salvar chamado.');
-      }
-    });
+    // O resto do método continua igual...
+    this.http.put(`${this.apiUrl}/editar/token/${this.tokenEmail}`, dadosParaSalvar)
+      .subscribe({
+        next: (response) => {
+          alert('Chamado atualizado com sucesso!');
+          this.chamado = response as Chamado;
+          if (this.chamado.tecnico) {
+            // Se o backend retornar o técnico, atualize o dropdown.
+            // Note que o backend retorna um objeto com 'userid', mas seu frontend agora usa 'id'.
+            // Precisamos garantir que o objeto tecnico tenha a propriedade 'id'.
+            // Uma melhor abordagem seria fazer o backend retornar o DTO TecnicoDTO que já tem 'id'.
+            // Mas para consertar agora:
+            this.tecnicoIdSelecionado = this.chamado.tecnico.id;
+          } else {
+            this.tecnicoIdSelecionado = null;
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao salvar chamado:', err);
+          alert('Falha ao salvar as alterações.');
+        }
+      });
   }
-
   /**
    * Exclui o chamado atual.
    */
