@@ -5,6 +5,7 @@ import {PrimaryInputComponent} from "../../components/primary-input/primary-inpu
 import {Router} from "@angular/router";
 import {LoginService} from "../../services/login.service";
 import {ToastrService} from "ngx-toastr";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -24,26 +25,44 @@ export class LoginComponent {
 
   loginForm!: FormGroup;
 
-  constructor(private router: Router,
-  private loginService: LoginService, private toastService: ToastrService
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private toastService: ToastrService,
+    private authService: AuthService
   ) {
-
     this.loginForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-    })
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+    });
   }
 
   submit() {
-   this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-     next: () => {
-       this.toastService.success("Login successfull")
-       setTimeout(() => {this.router.navigate(["/home"]);
-         },1000)
-     },
-     error: () => this.toastService.error("Senha ou usuario incorretos "),
+    const { username, password } = this.loginForm.value;
+    // Passando username e password como dois argumentos separados.
+    this.loginService.login(username, password).subscribe({
+      next: (response) => {
+        console.log('Resposta da API de login:', response);
 
-   })
+        if (response && response.token) {
+          this.authService.setToken(response.token);
+          this.toastService.success("Login realizado com sucesso!");
+          this.router.navigate(["/home"]);
+        } else {
+          this.toastService.error("Resposta inesperada do servidor.");
+          console.error("A resposta da API não contém a propriedade 'token'.", response);
+        }
+      },
+      error: (err) => {
+        console.error("Erro na chamada de login:", err);
+        // Exemplo de como tratar diferentes erros de status
+        if (err.status === 401 || err.status === 403) {
+          this.toastService.error("Usuário ou senha inválidos!");
+        } else {
+          this.toastService.error("Ocorreu um erro. Tente novamente mais tarde.");
+        }
+      }
+    });
   }
 
   navigate(){
@@ -53,5 +72,4 @@ export class LoginComponent {
   navigateToReset() {
     this.router.navigate(['/resetsenha']);
   }
-
 }

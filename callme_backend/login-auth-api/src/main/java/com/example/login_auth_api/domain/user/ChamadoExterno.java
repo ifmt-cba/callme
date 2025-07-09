@@ -1,5 +1,6 @@
 package com.example.login_auth_api.domain.user;
 
+import com.example.login_auth_api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,4 +32,19 @@ public class ChamadoExterno {
         FECHADO,
         CANCELADO
     }
+
+    @ManyToOne
+    @JoinColumn(name = "userid") // Nome da coluna no banco de dados que guardará o ID do usuário técnico
+    private User tecnico;
+
+    // ... seus getters e setters
+
+    public User getTecnico() {
+        return tecnico;
+    }
+
+    public void setTecnico(User tecnico) {
+        this.tecnico = tecnico;
+    }
+
 }

@@ -10,20 +10,27 @@
     </div>
 
     <div *ngIf="chamado && chamado.length > 0" class="lista-chamados">
-      <div *ngFor="let item of chamado" class="chamado-card">
-        <h3>{{ item.assunto }}</h3>
-        <p><strong>Remetente:</strong> {{ item.remetente }}</p>
-        <p><strong>Descrição:</strong> {{ item.descricao }}</p>
-        <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p>
-        <p><strong>Status:</strong>
+      <div *ngFor="let item of chamado" class="chamado-card" [ngClass]="{'atribuido': item.tecnico}">
+
+        <div *ngIf="item.tecnico" class="tecnico-info">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+          <span>Atribuído a:</span>
+          <strong>{{ item.tecnico.username }}</strong>
+        </div>
+
+        <div class="chamado-conteudo">
+          <h3>{{ item.assunto }}</h3>
+          <p><strong>Remetente:</strong> {{ item.remetente }}</p>
+          <p><strong>Descrição:</strong> {{ item.descricao }}</p>
+          <p><strong>Data/Hora:</strong> {{ item.dataHora }}</p> <p><strong>Status:</strong>
           <span [ngClass]="{
-            'status-aberto': item.status === 'Aberto',
-            'status-fechado': item.status === 'Fechado',
-            'status-outro': item.status !== 'Aberto' && item.status !== 'Fechado'
-          }">{{ item.status || 'Sem status' }}</span>
+          'status-aberto': item.status === 'ABERTO',
+          'status-fechado': item.status === 'FECHADO',
+          'status-andamento': item.status === 'EM_ANDAMENTO'
+        }">{{ item.status }}</span>
         </p>
-        <p><strong>Token:</strong> {{ item.tokenEmail }}</p>
-        <button [routerLink]="['/buscar', item.tokenEmail]">Detalhar</button>
+          <button class="btn-detalhar" [routerLink]="['/buscar', item.tokenEmail]">Detalhar</button>
+        </div>
 
       </div>
     </div>

@@ -61,17 +61,24 @@ export class UsuariosComponent {
   navigate(){
     this.router.navigate(["login"]);
   }
+  // Em usuarios.component.ts
+
   submitLogin() {
     this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-      next: (res: any) => {  // <--- aqui tipa como any
-        const token = res.acessToken; // captura o token
-        sessionStorage.setItem('acessToken', token); // salva no localStorage
+      next: (res: any) => {
+        // Garanta que a resposta do backend tem a chave "accessToken"
+        const token = res.acessToken;
 
-        this.toastService.success("Login realizado com sucesso!");
+        if (token) {
+          // Salve no sessionStorage com a chave padrão "accessToken"
+          sessionStorage.setItem('acessToken', token);
 
-        setTimeout(() => {
+          this.toastService.success("Login realizado com sucesso!");
           this.router.navigate(["/home"]);
-        }, 1000);
+        } else {
+          console.error("A resposta da API de login não contém a propriedade 'acessToken'.", res);
+          this.toastService.error("Resposta de login inesperada.");
+        }
       },
       error: () => this.toastService.error("Senha ou usuário incorretos"),
     });
