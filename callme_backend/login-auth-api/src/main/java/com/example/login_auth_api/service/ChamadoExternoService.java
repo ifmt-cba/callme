@@ -1,8 +1,10 @@
 package com.example.login_auth_api.service;
 
+import com.example.login_auth_api.domain.user.User;
 import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.repositories.ChamadoExternoRepository;
+import com.example.login_auth_api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +14,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import jakarta.persistence.EntityNotFoundException;
+import java.util.UUID;
 
 @Service
 public class ChamadoExternoService {
 
     @Autowired
     private ChamadoExternoRepository chamadoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private SendEmailService emailService;
@@ -72,15 +79,25 @@ public class ChamadoExternoService {
     }
 
     public Optional<ChamadoExterno> editarChamadoPorToken(String tokenEmail, ChamadoExterno chamadoAtualizado) {
+        // Se não houver técnico para atribuir, apenas atualiza o status
+        if (chamadoAtualizado.getTecnico() == null || chamadoAtualizado.getTecnico().getUserid() == null) {
+            return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoExistente -> {
+                chamadoExistente.setStatus(chamadoAtualizado.getStatus());
+                chamadoExistente.setTecnico(null); // Remove a atribuição do técnico
+                return chamadoRepository.save(chamadoExistente);
+            });
+        }
+        // Se houver um técnico para atribuir, busca ele no banco primeiro
+        UUID tecnicoId = chamadoAtualizado.getTecnico().getUserid();
+        User tecnicoGerenciado = userRepository.findById(tecnicoId)
+                .orElseThrow(() -> new EntityNotFoundException("Técnico com ID " + tecnicoId + " não encontrado."));
+        // Prossiga com a atualização, agora com o técnico "real"
         return chamadoRepository.findByTokenEmail(tokenEmail).map(chamadoExistente -> {
-            // Atualiza o status
             chamadoExistente.setStatus(chamadoAtualizado.getStatus());
-            // ADICIONADO: Atualiza também o técnico
-            chamadoExistente.setTecnico(chamadoAtualizado.getTecnico());
+            chamadoExistente.setTecnico(tecnicoGerenciado); // Associa o técnico buscado do banco
             return chamadoRepository.save(chamadoExistente);
         });
     }
-
 
 
 

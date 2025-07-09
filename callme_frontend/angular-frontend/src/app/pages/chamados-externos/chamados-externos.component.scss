@@ -10,6 +10,7 @@
   padding: 2rem;
   max-width: 900px;
   margin: 0 auto;
+  width: 100%;
 }
 
 h2 {
@@ -30,19 +31,61 @@ h4 {
   gap: 1.5rem;
 }
 
+// --- ESTILOS DO CARD PRINCIPAL ---
 .chamado-card {
+  display: flex; // Transforma o card em um container flex para alinhar colunas
   background: #ffffff;
   border-radius: 12px;
-  padding: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-  border-left: 5px solid #3498db;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 6px solid #e0e0e0; // Borda padrão cinza para não atribuídos
 
   &:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   }
 
+  // ADICIONADO: Estilo para quando o chamado tem um técnico
+  &.atribuido {
+    border-left-color: #27ae60; // Borda verde para chamados atribuídos
+  }
+}
+
+// --- ADICIONADO: Coluna da esquerda para o técnico ---
+.tecnico-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  min-width: 150px;
+  text-align: center;
+  border-right: 1px solid #f0f0f0;
+
+  svg {
+    color: #27ae60;
+    margin-bottom: 0.75rem;
+  }
+
+  span {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+  }
+
+  strong {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-top: 0.25rem;
+  }
+}
+
+// --- Coluna da direita para o conteúdo do chamado ---
+.chamado-conteudo {
+  flex-grow: 1; // Faz esta coluna ocupar o resto do espaço
+  padding: 1.5rem;
+
   h3 {
+    margin-top: 0;
     margin-bottom: 1rem;
     color: #34495e;
   }
@@ -57,35 +100,16 @@ h4 {
     }
   }
 
+  .status-aberto { background-color: #eaf2f8; color: #3498db; }
+  .status-fechado { background-color: #f9eaea; color: #c0392b; }
+  .status-andamento { background-color: #fef5e7; color: #f39c12; }
+
   span {
     padding: 0.2rem 0.6rem;
     border-radius: 4px;
     font-weight: bold;
     font-size: 0.85rem;
   }
-
-  .status-aberto {
-    background-color: #e8f6f3;
-    color: #16a085;
-  }
-
-  .status-fechado {
-    background-color: #f9eaea;
-    color: #c0392b;
-  }
-
-  .status-outro {
-    background-color: #ecf0f1;
-    color: #7f8c8d;
-  }
-}
-
-.sem-chamados {
-  text-align: center;
-  color: #999;
-  font-style: italic;
-  font-size: 1.1rem;
-  margin-top: 3rem;
 }
 
 .btn-detalhar {
@@ -102,4 +126,12 @@ h4 {
   &:hover {
     background-color: #2980b9;
   }
+}
+
+.sem-chamados {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  font-size: 1.1rem;
+  margin-top: 3rem;
 }
