@@ -17,8 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -41,14 +39,10 @@ public class UserController {
         this.log = log;
     }
 
-    private String now() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     @Transactional
     @PostMapping("/users")
     public ResponseEntity<Void> newUser(@RequestBody CreateUserDto dto) {
-        log.info(String.format("Tentativa de criação de usuário RT | Username: %s | Hora: %s", dto.username(), now()));
+        log.info(String.format("Criando usuário RT | Username: %s", dto.username()));
 
         var rtRole = roleRepository.findByName(Role.Values.RT.name());
         var userFromDb = userRepository.findByUsername(dto.username());
@@ -71,7 +65,7 @@ public class UserController {
     @GetMapping("/users")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        log.info("Admin solicitou listagem de usuários | Hora: " + now());
+        log.info("Admin listando usuários");
 
         var users = userRepository.findAll().stream()
                 .map(UserResponseDTO::fromEntity)
@@ -84,7 +78,7 @@ public class UserController {
     @PostMapping("/users/admin")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> newUserAdmin(@RequestBody CreateUserDto dto) {
-        log.info(String.format("Tentativa de criação de usuário ADMIN | Username: %s | Hora: %s", dto.username(), now()));
+        log.info(String.format("Criando usuário ADMIN | Username: %s", dto.username()));
 
         var admRole = roleRepository.findByName(Role.Values.ADMIN.name());
         var userFromDb = userRepository.findByUsername(dto.username());
@@ -108,11 +102,11 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
-        log.info(String.format("Admin solicitou exclusão do usuário | ID: %s | Hora: %s", id, now()));
+        log.info(String.format("Admin excluindo do usuário | ID: %s", id));
 
         var user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn(String.format("Usuário para exclusão não encontrado | ID: %s", id));
+                    log.warn(String.format("Usuário não encontrado | ID: %s", id));
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
                 });
 
@@ -126,11 +120,11 @@ public class UserController {
     @PutMapping("/users/update/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody CreateUserDto dto) {
-        log.info(String.format("Admin solicitou atualização de usuário | ID: %s | Hora: %s", id, now()));
+        log.info(String.format("ADM atualizando usuário | ID: %s", id));
 
         var user = userRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.warn(String.format("Usuário para atualização não encontrado | ID: %s", id));
+                    log.warn(String.format("Usuário não encontrado | ID: %s", id));
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado");
                 });
 

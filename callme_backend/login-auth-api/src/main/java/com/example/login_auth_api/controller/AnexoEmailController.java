@@ -4,7 +4,6 @@ import com.example.login_auth_api.domain.ports.LogPort;
 import com.example.login_auth_api.domain.user.AnexoEmail;
 import com.example.login_auth_api.repositories.AnexoEmailRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,9 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/anexos")
@@ -31,8 +27,7 @@ public class AnexoEmailController {
 
     @GetMapping("/visualizar/{id}")
     public ResponseEntity<ByteArrayResource> visualizarAnexo(@PathVariable Long id) {
-        String hora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        log.info(String.format("Início da requisição: visualizar anexo | ID: %d | Hora: %s", id, hora));
+        log.trace(String.format("Iniciando visualização de anexo | ID: %d", id));
 
         AnexoEmail anexoEmail = anexoEmailRepository.findById(id)
                 .orElseThrow(() -> {
@@ -42,12 +37,18 @@ public class AnexoEmailController {
 
         byte[] conteudoPdf = anexoEmail.getConteudo();
         log.info(String.format("Anexo encontrado com sucesso | Nome: %s | Tamanho: %d bytes | ID: %d",
-                anexoEmail.getNomeArquivo(), conteudoPdf.length, id));
+        anexoEmail.getNomeArquivo(), conteudoPdf.length, id));
+
+        if (conteudoPdf.length == 0) {
+            log.error(String.format("Anexo encontrado está vazio | Nome: %s | ID: %d", anexoEmail.getNomeArquivo(), id));
+        }
+
 
         ByteArrayResource resource = new ByteArrayResource(conteudoPdf);
-
-        log.debug(String.format("Finalizando resposta da requisição | ID: %d", id));
-
+        log.debug(String.format("Criado ByteArrayResource | ID: %d", id));
+        
+        
+        log.trace(String.format("Finalizando visualização de anexo | ID: %d", id));
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=" + anexoEmail.getNomeArquivo())
                 .contentType(MediaType.APPLICATION_PDF)

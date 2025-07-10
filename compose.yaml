@@ -50,6 +50,8 @@ services:
       - database
     networks:
       - callme-network
+    volumes:
+      - ./callme_backend/login-auth-api/logs/:/app/logs/
 
   frontend:
     build:
