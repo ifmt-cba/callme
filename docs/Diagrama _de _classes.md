@@ -1,3 +1,4 @@
+```mermaid
 ---
 title: CallMe - Diagrama de Classes
 ---
