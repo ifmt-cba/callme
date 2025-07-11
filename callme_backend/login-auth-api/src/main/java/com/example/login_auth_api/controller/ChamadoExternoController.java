@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,14 +40,10 @@ public class ChamadoExternoController {
         this.userRepository = userRepository;
     }
 
-    private String getTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     // Endpoint para criar chamados a partir dos emails resumidos
     @GetMapping("/abrir")
     public List<ChamadoExterno> criarChamados() {
-        log.info("Início: criar chamados a partir de emails | Hora: " + getTimestamp());
+        log.info("Criando chamados a partir de emails");
 
         List<EmailResumoDTO> resumos = emailReceiverService.listarResumosEmails();
         List<ChamadoExterno> chamados = chamadoService.criarChamadosAPartirDeEmails(resumos);
@@ -60,7 +54,7 @@ public class ChamadoExternoController {
 
     @GetMapping("/listar")
     public List<ChamadoExterno> listarChamados() {
-        log.info("Início: listar chamados | Hora: " + getTimestamp());
+        log.info("Listando chamados");
 
         List<ChamadoExterno> chamados = chamadoService.listarChamados();
 
@@ -70,7 +64,7 @@ public class ChamadoExternoController {
 
     @GetMapping("/buscar/{tokenEmail}")
     public ResponseEntity<ChamadoExterno> buscarChamadoPorToken(@PathVariable String tokenEmail) {
-        log.info("Início: buscar chamado por token | Token: " + tokenEmail + " | Hora: " + getTimestamp());
+        log.info("Buncando chamado por token | Token: " + tokenEmail);
 
         Optional<ChamadoExterno> chamado = chamadoService.buscarChamadoPorToken(tokenEmail);
 
@@ -88,7 +82,7 @@ public class ChamadoExternoController {
             @PathVariable String tokenEmail,
             @RequestBody ChamadoExterno chamadoAtualizado) {
 
-        log.info("Início: editar chamado por token | Token: " + tokenEmail + " | Hora: " + getTimestamp());
+        log.info("Editando chamado por token | Token: " + tokenEmail);
 
         Optional<ChamadoExterno> chamadoEditado = chamadoService.editarChamadoPorToken(tokenEmail, chamadoAtualizado);
 

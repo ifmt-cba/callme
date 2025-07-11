@@ -17,8 +17,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @RestController
@@ -34,15 +32,10 @@ public class ChamadoInternoController {
         this.log = log;
     }
 
-    private String getTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     @GetMapping("/feed")
     public ResponseEntity<FeedDto> feed(@RequestParam(value = "page", defaultValue = "0") int page,
                                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        log.info(String.format("Listagem de feed iniciada | Page: %d | PageSize: %d | Hora: %s",
-                page, pageSize, getTimestamp()));
+        log.info(String.format("Listagem de feed iniciada | Page: %d | PageSize: %d", page, pageSize));
 
         var chamados = chamadoRepository.findAll(
                 PageRequest.of(page, pageSize, Sort.Direction.DESC, "creationTimestamp"))
@@ -62,7 +55,7 @@ public class ChamadoInternoController {
     public ResponseEntity<Void> createChamado(@RequestBody ChamadoInternoDto dto,
                                               JwtAuthenticationToken token) {
         UUID userId = UUID.fromString(token.getName());
-        log.info(String.format("Criação de chamado iniciada | UserID: %s | Hora: %s", userId, getTimestamp()));
+        log.info(String.format("Criando chamado | UserID: %s", userId));
 
         var user = userRepository.findById(userId);
         if (user.isEmpty()) {
@@ -84,8 +77,7 @@ public class ChamadoInternoController {
     public ResponseEntity<Void> deleteChamado(@PathVariable("id") Long chamadoId,
                                               JwtAuthenticationToken token) {
         UUID userId = UUID.fromString(token.getName());
-        log.info(String.format("Requisição para deletar chamado | ChamadoID: %d | UserID: %s | Hora: %s",
-                chamadoId, userId, getTimestamp()));
+        log.info(String.format("Deletando chamado | ChamadoID: %d | UserID: %s", chamadoId, userId));
 
         var user = userRepository.findById(userId);
         var chamado = chamadoRepository.findById(chamadoId)

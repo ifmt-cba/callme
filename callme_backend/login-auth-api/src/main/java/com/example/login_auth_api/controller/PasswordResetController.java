@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @PreAuthorize("permitAll()")
@@ -39,15 +38,11 @@ public class PasswordResetController {
         this.log = log;
     }
 
-    private String now() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     @PreAuthorize("permitAll()")
     @PostMapping("/forgot")
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDTO dto) {
         String email = dto.getEmail().trim().toLowerCase();
-        log.info(String.format("Início: solicitação de forgotPassword | Email: %s | Hora: %s", email, now()));
+        log.info(String.format("Solicitando senha esquecida | Email: %s", email));
 
         Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
         if (userOpt.isEmpty()) {
@@ -73,7 +68,7 @@ public class PasswordResetController {
     @PostMapping("/reset")
     public ResponseEntity<String> resetPassword(@RequestParam String token,
                                                 @RequestParam String newPassword) {
-        log.info(String.format("Início: resetPassword | Token: %s | Hora: %s", token, now()));
+        log.info(String.format("Resetando senha | Token: %s", token));
 
         Optional<User> userOpt = userRepository.findByToken(token);
         if (userOpt.isEmpty() || userOpt.get().isTokenExpired()) {

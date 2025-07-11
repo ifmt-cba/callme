@@ -17,8 +17,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,20 +37,16 @@ public class TokenController {
         this.log = log;
     }
 
-    private String now() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     @Transactional
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         String username = loginRequestDTO.username();
-        log.info(String.format("Tentativa de login iniciada | Username: %s | Hora: %s", username, now()));
+        log.info(String.format("Login iniciado | Username: %s", username));
 
         var userOpt = userRepository.findByUsername(username);
 
         if (userOpt.isEmpty() || !userOpt.get().isLoginCorrect(loginRequestDTO, passwordEncoder)) {
-            log.warn(String.format("Falha de login | Username: %s | Hora: %s", username, now()));
+            log.warn(String.format("Falha de login | Username: %s"));
             throw new BadCredentialsException("Usuário ou senha inválidos.");
         }
 
@@ -75,8 +69,7 @@ public class TokenController {
 
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        log.info(String.format("Login bem-sucedido | UserID: %s | Escopos: [%s] | Hora: %s",
-                user.getUserid(), scopes, now()));
+        log.info(String.format("Login bem-sucedido | UserID: %s | Escopos: [%s]", user.getUserid(), scopes));
 
         return ResponseEntity.ok(new ResponseDTO(jwtValue, expiresIn));
     }

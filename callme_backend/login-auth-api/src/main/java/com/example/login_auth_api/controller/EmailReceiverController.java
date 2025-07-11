@@ -7,8 +7,6 @@ import com.example.login_auth_api.service.EmailReceiverService;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -23,13 +21,9 @@ public class EmailReceiverController {
         this.log = log;
     }
 
-    private String getTimestamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
     @GetMapping("/completo")
     public List<EmailLeituraCompletaDTO> listarEmailsCompletos() {
-        log.info("Requisição iniciada: listar e-mails completos | Hora: " + getTimestamp());
+        log.info("Listando e-mails completos");
 
         List<EmailLeituraCompletaDTO> emails = emailReceiverService.checkInbox();
 
@@ -39,7 +33,7 @@ public class EmailReceiverController {
 
     @GetMapping("/resumo")
     public List<EmailResumoDTO> listarResumos() {
-        log.info("Requisição iniciada: listar resumos de e-mails | Hora: " + getTimestamp());
+        log.info("Listando resumos de e-mails");
 
         List<EmailResumoDTO> resumos = emailReceiverService.listarResumosEmails();
 
