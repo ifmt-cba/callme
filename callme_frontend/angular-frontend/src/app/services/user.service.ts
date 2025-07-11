@@ -10,7 +10,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = sessionStorage.getItem('acessToken');
+    const token = sessionStorage.getItem('accessToken');
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -19,9 +19,9 @@ export class UserService {
   }
 
   getCurrentUserId(): string | null {
-    const token = sessionStorage.getItem('acessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (!token) return null;
-    
+
     try {
       // Pega a parte do payload do token JWT
       const payload = token.split('.')[1];

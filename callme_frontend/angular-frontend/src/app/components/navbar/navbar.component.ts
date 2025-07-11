@@ -3,6 +3,7 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {RouterLink, RouterModule, Routes} from "@angular/router";
 import {navbarData} from "./nav-data";
 import {HomeComponent} from "../../pages/home/home.component";
+import { AuthService } from "../../services/auth.service";
 import {trigger} from "@angular/animations";
 
 interface SideNavToggle{
@@ -33,7 +34,9 @@ const routes: Routes = [
 export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.screenWidth = window.innerWidth;
+
   }
+  constructor(public authService: AuthService) {}
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -49,10 +52,26 @@ export class NavbarComponent implements OnInit {
   collapsed = false;
   screenWidth =0;
   navData = navbarData
+  filteredNavData: any[] = [];
 
   ToggleCollapsed() {
     this.collapsed = !this.collapsed;
     this.onToggleSideNav.emit({collapsed:this.collapsed, screenWidth: this.screenWidth});
+  }
+
+
+
+  filterNavData(): void {
+    this.filteredNavData = this.navData.filter(item => {
+      if (!item.role) {
+        return true;
+      }
+      if (Array.isArray(item.role)) {
+        return item.role.some(role => this.authService.hasRole(role));
+      } else {
+        return this.authService.hasRole(item.role);
+      }
+    });
   }
 
   CloseSidenav() {

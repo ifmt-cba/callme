@@ -3,9 +3,10 @@ import {LoginService} from "../../services/login.service";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
+import { AuthService } from '../../services/auth.service';
 
 interface  LoginResponse{
-  acessToken: string;
+  accessToken: string;
 }
 interface SignupForm {
   username: FormControl,
@@ -31,7 +32,7 @@ export class UsuariosComponent {
   loginForm!: FormGroup;
   @ViewChild('container', { static: true }) containerRef!: ElementRef;
   constructor(private renderer: Renderer2, private loginService : LoginService, private router: Router,
-              private toastService: ToastrService) {
+              private toastService: ToastrService, private authService : AuthService) {
     this.loginForm = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
@@ -66,17 +67,18 @@ export class UsuariosComponent {
   submitLogin() {
     this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: (res: any) => {
-        // Garanta que a resposta do backend tem a chave "accessToken"
-        const token = res.acessToken;
+        // A chave no backend agora é "accessToken" (com dois 's')
+        const token = res.accessToken;
 
         if (token) {
-          // Salve no sessionStorage com a chave padrão "accessToken"
-          sessionStorage.setItem('acessToken', token);
+          // AQUI ESTÁ A CORREÇÃO PRINCIPAL:
+          // Usamos o AuthService para salvar, que usa a chave "accessToken"
+          this.authService.setToken(token);
 
           this.toastService.success("Login realizado com sucesso!");
           this.router.navigate(["/home"]);
         } else {
-          console.error("A resposta da API de login não contém a propriedade 'acessToken'.", res);
+          console.error("A resposta da API de login não contém a propriedade 'accessToken'.", res);
           this.toastService.error("Resposta de login inesperada.");
         }
       },

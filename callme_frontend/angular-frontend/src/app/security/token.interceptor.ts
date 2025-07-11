@@ -1,10 +1,10 @@
+// callme_frontend/angular-frontend/src/app/security/token.interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  // Pega o token do localStorage
-  const token = sessionStorage.getItem('acessToken');
+  // Pega o token do sessionStorage usando a chave CORRETA
+  const token = sessionStorage.getItem('accessToken'); // <== CORREÇÃO AQUI
 
-  // Se o token existir, clona a requisição e adiciona o cabeçalho
   if (token) {
     const clonedRequest = req.clone({
       setHeaders: {
@@ -13,7 +13,8 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     });
     return next(clonedRequest);
   }
-  console.warn('[Interceptor] Nenhum token encontrado no localStorage.');
-  // Se não, passa a requisição original
+
+  // Este aviso não é um erro, apenas informa que a requisição está indo sem token
+  console.warn('[Interceptor] Nenhum token encontrado no sessionStorage.');
   return next(req);
 };
