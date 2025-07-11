@@ -17,7 +17,7 @@ public class ChamadoExterno {
 
     private String remetente;
     private String assunto;
-    @Column(length = 2000)
+    @Column(length = 10000)
     private String descricao;  // corpo do email resumido
     private String dataHora;
     private String tokenEmail;// token do email para evitar duplicidade

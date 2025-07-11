@@ -218,6 +218,11 @@ graph TD
         email_receiver_service["EmailReceiverService"]
         email_scheduler_service["EmailSchedulerService"]
         send_email_service["SendEmailService"]
+        password_reset_service["PasswordResetService"]
+        token_service["TokenService"]
+        user_service["UserService"]
+        auth_service["AuthService"]
+        chamado_interno_service["ChamadoInternoService"]
     end
 
     application --> auth_controller
@@ -379,7 +384,7 @@ graph TB
 - **Interface Gráfica:** Portainer para gerenciamento
 - **Load Balancing:** Traefik para distribuição
 
-### 7.3. Estratégia 3: Docker Compose (Implementado) `SIMPLES`
+### 7.3. Estratégia 3: Docker Compose (Implementando) `SIMPLES`
 
 ```mermaid
 graph TB
