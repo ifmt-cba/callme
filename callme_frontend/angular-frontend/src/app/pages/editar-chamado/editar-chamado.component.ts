@@ -120,7 +120,6 @@ export class EditarChamadoComponent implements OnInit {
 
     console.log("ENVIANDO ESTE JSON PARA O BACKEND:", JSON.stringify(dadosParaSalvar, null, 2));
 
-    // O resto do método continua igual...
     this.http.put(`${this.apiUrl}/editar/token/${this.tokenEmail}`, dadosParaSalvar)
       .subscribe({
         next: (response) => {
