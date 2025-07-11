@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/chamados")
@@ -38,6 +40,10 @@ public class ChamadoExternoController {
         this.chamadoService = chamadoService;
         this.log = log;
         this.userRepository = userRepository;
+    }
+
+    private String getTimestamp() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     // Endpoint para criar chamados a partir dos emails resumidos
