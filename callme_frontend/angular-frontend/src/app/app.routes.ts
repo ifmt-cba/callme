@@ -77,6 +77,7 @@ export const routes: Routes = [
   {
     path: 'listar-usuarios',
     component :UserlistersComponent
+
   },
   {
     path: '**',

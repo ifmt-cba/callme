@@ -22,7 +22,8 @@ export const navbarData = [
   {
     routeLink: 'listar-usuarios',
     icon: 'fal fa-users',
-    label: 'Usuários'
+    label: 'Usuários',
+    role: 'ADMIN'
   },
   {
     routeLink: 'principal',
