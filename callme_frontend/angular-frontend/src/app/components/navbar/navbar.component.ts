@@ -32,54 +32,50 @@ const routes: Routes = [
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
-  ngOnInit() {
-    this.screenWidth = window.innerWidth;
-
-  }
+  @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
+  collapsed = false;
+  screenWidth = 0;
+  navData = navbarData; // Mantemos os dados originais
+  filteredNavData: any[] = [];
   constructor(public authService: AuthService) {}
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
+  ngOnInit(): void {
     this.screenWidth = window.innerWidth;
-    if(this.screenWidth <= 768){
-      this.collapsed = false;
-      this.onToggleSideNav.emit({collapsed:this.collapsed, screenWidth: this.screenWidth});
-
-    }
+    this.filterNavData();
   }
-
-  @Output()onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
-  collapsed = false;
-  screenWidth =0;
-  navData = navbarData
-  filteredNavData: any[] = [];
-
-  ToggleCollapsed() {
-    this.collapsed = !this.collapsed;
-    this.onToggleSideNav.emit({collapsed:this.collapsed, screenWidth: this.screenWidth});
-  }
-
-
 
   filterNavData(): void {
     this.filteredNavData = this.navData.filter(item => {
       if (!item.role) {
         return true;
       }
+      // Se o item tem a propriedade 'role'
       if (Array.isArray(item.role)) {
+        // Se for um array, verifica se o usuário tem pelo menos uma das roles
         return item.role.some(role => this.authService.hasRole(role));
       } else {
+        // Se for uma string, verifica se o usuário tem aquela role
         return this.authService.hasRole(item.role);
       }
     });
   }
 
-  CloseSidenav() {
-    this.collapsed = false;
-    this.onToggleSideNav.emit({collapsed:this.collapsed, screenWidth: this.screenWidth});
-
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    this.screenWidth = window.innerWidth;
+    if (this.screenWidth <= 768) {
+      this.collapsed = false;
+      this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+    }
   }
 
+  ToggleCollapsed(): void {
+    this.collapsed = !this.collapsed;
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+  }
 
-
+  CloseSidenav(): void {
+    this.collapsed = false;
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+  }
 }
