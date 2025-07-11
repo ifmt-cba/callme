@@ -135,3 +135,43 @@ h4 {
   font-size: 1.1rem;
   margin-top: 3rem;
 }
+
+/* Adicione este código ao final do seu arquivo .scss */
+
+.filtros-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.input-pesquisa {
+  flex-grow: 1; /* Faz a barra de pesquisa ocupar mais espaço */
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  }
+}
+
+.select-filtro {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  background-color: white;
+  cursor: pointer;
+  min-width: 180px;
+
+  &:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  }
+}

@@ -1,23 +1,27 @@
+/* --- Container principal, agora seguindo o padrão da listagem --- */
 .editar-chamado-container {
-  max-width: 1000px;
+  max-width: 900px; /* Mesma largura da outra tela */
   margin: 2rem auto;
-  padding: 3rem;
+  padding: 2rem 2.5rem; /* Espaçamento interno mais refinado */
   background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border: 1px solid #ddd;
+  border-radius: 12px; /* Mesmo arredondamento dos cards */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra sutil, igual à da listagem */
 
   fieldset {
     border: none;
     padding: 0;
   }
 
+  /* --- Título padronizado --- */
   legend {
+    width: 100%;
     text-align: center;
     font-size: 2rem;
-    color: #2b6cb0;
-    font-weight: 700;
-    margin-bottom: 2rem;
+    font-weight: bold;
+    color: #2c3e50; /* Cor primária de texto do site */
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ecf0f1;
   }
 
   form {
@@ -26,6 +30,7 @@
     gap: 1.5rem;
   }
 
+  /* --- Estilo dos campos de formulário padronizados --- */
   .form-group {
     display: flex;
     flex-direction: column;
@@ -33,77 +38,72 @@
 
     label {
       font-weight: 600;
-      color: #444;
+      color: #34495e; /* Cor mais suave para os labels */
+      font-size: 0.9rem;
     }
 
+    /* Estilo base para todos os inputs */
     input,
     textarea,
     select {
-      padding: 0.9rem 1.2rem;
+      padding: 0.75rem 1rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-      transition: border 0.2s, box-shadow 0.2s;
+      border: 1px solid #dcdcdc; /* Borda padrão do input da listagem */
+      border-radius: 8px; /* Arredondamento padrão do input da listagem */
+      background-color: #fff;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
       &:focus {
         outline: none;
-        border-color: #3182ce;
-        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
-        background-color: #fff;
+        border-color: #3498db; /* Cor de foco azul da listagem */
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Sombra de foco da listagem */
+      }
+
+      // Estilo para campos desabilitados/somente leitura
+      &[readonly],
+      &[disabled] {
+        background-color: #f2f5f9; // Cor de fundo principal do site
+        cursor: not-allowed;
+        color: #7f8c8d;
       }
     }
-
-    select {
-      background-color: white;
-    }
   }
 
+  /* --- Botões padronizados --- */
   .botoes-acoes {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    justify-content: flex-end; /* Alinha botões à direita */
     gap: 1rem;
     margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #ecf0f1;
   }
 
+  // Estilo base para os botões
   .btn-salvar,
   .btn-excluir {
-    flex: 1 1 48%;
-    padding: 1rem;
-    font-size: 1.1rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px; /* Arredondamento padrão */
     color: white;
     cursor: pointer;
     text-align: center;
-    transition: all 0.3s ease;
-  }
-
-  .btn-salvar {
-    background: linear-gradient(to right, #3182ce, #2b6cb0);
+    transition: all 0.2s ease-in-out;
 
     &:hover {
-      background: linear-gradient(to right, #2b6cb0, #2c5282);
       transform: translateY(-2px);
+      filter: brightness(1.1);
     }
+  }
 
-    &:active {
-      transform: scale(0.98);
-    }
+  // Removemos gradientes para usar cores sólidas, como na outra tela
+  .btn-salvar {
+    background-color: #27ae60; // Verde de "sucesso" da listagem
   }
 
   .btn-excluir {
-    background: linear-gradient(to right, #e53e3e, #c53030);
-
-    &:hover {
-      background: linear-gradient(to right, #c53030, #9b2c2c);
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
+    background-color: #c0392b; // Vermelho de "fechado" da listagem
   }
 }
