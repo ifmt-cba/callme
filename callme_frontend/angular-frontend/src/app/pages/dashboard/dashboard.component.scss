@@ -1,1 +1,174 @@
-/* dashboard.css */
+// ====================================================
+// ESTILOS DO LAYOUT PRINCIPAL (COM NAVBAR)
+// ====================================================
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.main-content {
+  position: relative;
+  width: 100%;
+  transition: margin-left .5s ease;
+}
+
+// Ajusta a margem quando a navbar está EXPANDIDA
+.container.main-trimmed {
+  .main-content {
+    margin-left: 16.5625rem;
+  }
+}
+
+// Ajusta a margem quando a navbar está RECOLHIDA
+.container.main-md-trimmed {
+  .main-content {
+    margin-left: 5rem;
+  }
+}
+
+
+// ====================================================
+// ESTILOS DO PAINEL DO DASHBOARD (O NOVO DESIGN)
+// ====================================================
+:host {
+  --primary-bg: #f0f4f8;
+  --widget-bg: #ffffff;
+  --text-color: #333;
+  --text-muted: #6c757d;
+  --accent-color: #0d6efd;
+  --border-color: #e3e6f0;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-container {
+  padding: 2rem;
+  background-color: var(--primary-bg);
+  height: 100%;
+  min-height: 100vh;
+}
+
+// Cabeçalho
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--widget-bg);
+}
+
+.search-bar {
+  display: flex;
+  input {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px 0 0 6px;
+    outline: none;
+    &:focus {
+      border-color: var(--accent-color);
+    }
+  }
+  .search-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+  }
+}
+
+// Grid para os Widgets
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.widget-card {
+  background-color: var(--widget-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.placeholder-text, .loading-message {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+// Posição dos widgets no grid
+.line-chart { grid-column: span 2; }
+.bar-chart { grid-column: span 1; }
+.pie-chart { grid-column: span 1; }
+.list-view { grid-column: span 2; }
+
+// Responsividade
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .line-chart, .bar-chart, .pie-chart, .list-view {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.widget-card {
+  position: relative;
+  padding-top: 3.5rem;
+}
+
+.widget-title {
+  position: absolute;
+  top: 1rem;
+  left: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.widget-total-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--text-color);
+  opacity: 0.8;
+  // Garante que o número fique atrás da legenda interativa do gráfico
+  pointer-events: none;
+}

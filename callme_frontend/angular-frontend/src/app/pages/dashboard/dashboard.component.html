@@ -1,1 +1,54 @@
-<p>dashboard works!</p>
+<div class="container" [ngClass]="{
+  'main-trimmed': isSideNavCollapsed,
+  'main-md-trimmed': !isSideNavCollapsed
+}">
+
+  <aside class="sidebar">
+    <app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
+  </aside>
+
+  <main class="main-content">
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <h1 class="dashboard-title">DASHBOARD</h1>
+        <div class="filters-container">
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <div class="widget-card line-chart">
+          <h3 class="widget-title">Chamados na Semana</h3>
+          <div *ngIf="isLoading" class="loading-message">Carregando...</div>
+          <canvas *ngIf="!isLoading" baseChart
+                  [data]="lineChartData"
+                  [type]="lineChartType"
+                  [options]="lineChartOptions">
+          </canvas>
+        </div>
+
+        <div class="widget-card bar-chart">
+          <h3 class="widget-title">Status dos Chamados</h3>
+          <div *ngIf="isLoading" class="loading-message">Carregando...</div>
+          <canvas *ngIf="!isLoading" baseChart
+                  [data]="barChartData"
+                  [type]="barChartType"
+                  [options]="barChartOptions">
+          </canvas>
+        </div>
+
+        <div class="widget-card pie-chart">
+          <h3 class="widget-title">Total Geral</h3>
+          <div class="widget-total-number" *ngIf="!isLoading">{{ totalChamadosStatus }}</div>
+
+          <div *ngIf="isLoading" class="loading-message">Carregando...</div>
+          <canvas *ngIf="!isLoading" baseChart
+                  [data]="pieChartData"
+                  [type]="pieChartType"
+                  [options]="pieChartOptions">
+          </canvas>
+        </div>
+      </main>
+
+    </div>
+  </main>
+</div>
