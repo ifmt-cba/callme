@@ -119,4 +119,12 @@ public class ChamadoExternoController {
         // Retorna a lista de DTOs
         return ResponseEntity.ok(tecnicosDTOs);
     }
+
+    @GetMapping("/meus-chamados")
+    public ResponseEntity<List<ChamadoExterno>> getMeusChamados() {
+        // Não precisamos do log aqui, pois o service já poderia logar se necessário
+        List<ChamadoExterno> chamados = chamadoService.listarChamadosDoTecnicoLogado();
+        return ResponseEntity.ok(chamados);
+    }
+
 }

@@ -5,6 +5,11 @@ export const navbarData = [
     label: 'Início'
   },
   {
+    routeLink: 'meus-chamados',
+    icon: 'fal fa-ticket',
+    label: 'Meus Chamados'
+  },
+  {
     routeLink: 'ChamadosInternos',
     icon: 'fal fa-file',
     label: 'Internos'

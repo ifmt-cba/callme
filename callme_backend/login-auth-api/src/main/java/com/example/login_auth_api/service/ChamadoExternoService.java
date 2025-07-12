@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.UUID;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 @Service
 public class ChamadoExternoService {
 
@@ -133,6 +135,34 @@ public class ChamadoExternoService {
             System.out.println("\n--- [SERVICE LOG] Fim do método. A transação deve ser comitada agora. ---");
             return chamadoDoBanco;
         });
+    }
+
+    public List<ChamadoExterno> listarChamadosDoTecnicoLogado() {
+        System.out.println("\n--- [SERVICE LOG] Iniciando listarChamadosDoTecnicoLogado ---");
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt principal = (Jwt) authentication.getPrincipal();
+
+        // Pega o 'subject' do token, que é o ID do usuário (em formato de String)
+        String userIdAsString = principal.getSubject();
+        System.out.println(">>> ID do usuário extraído do token: " + userIdAsString);
+
+        // Converte a String do ID para o tipo UUID
+        UUID userId = UUID.fromString(userIdAsString);
+
+        // CORREÇÃO: Usa o ID para buscar o usuário com findById, não findByUsername
+        System.out.println("--> Buscando no UserRepository com ID (UUID): " + userId);
+        User tecnicoLogado = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário com ID " + userId + " do token não foi encontrado no banco."));
+
+        System.out.println("--> Técnico encontrado: " + tecnicoLogado.getUsername());
+
+        // Usa a entidade User correta para buscar os chamados
+        List<ChamadoExterno> chamados = chamadoRepository.findByTecnico(tecnicoLogado);
+        System.out.println("--> Encontrados " + chamados.size() + " chamados para este técnico.");
+        System.out.println("--- [SERVICE LOG] Fim do método ---");
+
+        return chamados;
     }
 
 

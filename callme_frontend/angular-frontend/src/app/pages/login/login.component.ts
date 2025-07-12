@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {LoginService} from "../../services/login.service";
 import {ToastrService} from "ngx-toastr";
 import { AuthService } from '../../services/auth.service';
+import {LoginResponse} from "../../types/login-response.type";
 
 @Component({
   selector: 'app-login',
@@ -39,23 +40,28 @@ export class LoginComponent {
 
   submit() {
     const { username, password } = this.loginForm.value;
-    // Passando username e password como dois argumentos separados.
+
     this.loginService.login(username, password).subscribe({
-      next: (response) => {
+      // Tipar a resposta ajuda a evitar erros
+      next: (response: LoginResponse) => {
         console.log('Resposta da API de login:', response);
 
-        if (response && response.token) {
-          this.authService.setToken(response.token);
+        // CORREÇÃO: Verifique e use a propriedade correta 'accessToken'
+        if (response && response.accessToken) {
+
+          // Usa o AuthService para salvar, que já sabe a chave e o local corretos ('accessToken' e sessionStorage)
+          this.authService.setToken(response.accessToken);
+
           this.toastService.success("Login realizado com sucesso!");
           this.router.navigate(["/home"]);
+
         } else {
           this.toastService.error("Resposta inesperada do servidor.");
-          console.error("A resposta da API não contém a propriedade 'token'.", response);
+          console.error("A resposta da API não contém a propriedade 'accessToken'.", response);
         }
       },
       error: (err) => {
         console.error("Erro na chamada de login:", err);
-        // Exemplo de como tratar diferentes erros de status
         if (err.status === 401 || err.status === 403) {
           this.toastService.error("Usuário ou senha inválidos!");
         } else {

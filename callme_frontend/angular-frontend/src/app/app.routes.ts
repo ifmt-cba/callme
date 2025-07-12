@@ -14,6 +14,8 @@ import { EditarChamadoComponent } from './pages/editar-chamado/editar-chamado.co
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
 import {UserlistersComponent} from "./pages/userlisters/userlisters.component";
 import {DashboardComponent} from "./pages/dashboard/dashboard.component";
+import {ChamadoDoUsuarioComponent} from "./pages/chamado-do-usuario/chamado-do-usuario.component";
+
 export const routes: Routes = [
   {
     path: '',
@@ -82,6 +84,11 @@ export const routes: Routes = [
     data :{
       roles : ['ADMIN']
     }
+  },
+  {
+    path: 'meus-chamados',
+    component: ChamadoDoUsuarioComponent,
+    canActivate: [AuthGuard]
   },
 
   {
