@@ -5,6 +5,8 @@ import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { FormsModule } from "@angular/forms";
 import { NgClass, NgIf, NgForOf } from "@angular/common";
 import { UserCreateModalComponent } from '../../components/user-create-modal/user-create-modal.component';
+import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 interface SideNavToggle {
   screenWidth: number;
@@ -30,20 +32,24 @@ export class UserlistersComponent implements OnInit {
   showModal = false;
   editingUser: User | null = null;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private cdr: ChangeDetectorRef ,private toastr: ToastrService) {
     this.currentUserId = this.userService.getCurrentUserId();
   }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe({
       next: (res) => (this.users = res),
-      error: (err) => console.error('Erro ao buscar usuários:', err),
+      error: (err) => {
+        console.error('Erro ao buscar usuários:', err);
+        this.toastr.error('Não foi possível carregar a lista de usuários.');
+      },
     });
   }
 
+
   filteredUsers(): User[] {
     return this.users.filter((user) =>
-      user.username.toLowerCase().includes(this.searchText.toLowerCase())
+      user && user.username && user.username.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
@@ -86,10 +92,12 @@ export class UserlistersComponent implements OnInit {
           const index = this.users.findIndex(u => u.id === userPayload.id);
           if (index !== -1) this.users[index] = updatedUser;
           this.closeModal();
+          this.cdr.detectChanges();
+          this.toastr.success('Usuário atualizado com sucesso!', 'Sucesso');
         },
         error: (err) => {
           console.error('Erro ao editar usuário:', err);
-          alert('Erro ao editar usuário. Por favor, tente novamente.');
+          this.toastr.error('Não foi possível editar o usuário.', 'Erro');
         },
       });
     } else {
@@ -102,12 +110,15 @@ export class UserlistersComponent implements OnInit {
 
       this.userService.createUser(userPayload, this.selectedRole).subscribe({
         next: (createdUser) => {
-          this.users.push(createdUser);
+          this.ngOnInit();
+
           this.closeModal();
+
+          this.toastr.success('Usuário criado com sucesso!', 'Sucesso');
         },
         error: (err) => {
           console.error('Erro ao criar usuário:', err);
-          alert('Erro ao criar usuário. Por favor, tente novamente.');
+          this.toastr.error('Não foi possível criar o usuário. Verifique os dados.', 'Erro');
         },
       });
     }
@@ -116,13 +127,19 @@ export class UserlistersComponent implements OnInit {
   deleteUser(userId: string): void {
     if (confirm('Tem certeza que deseja excluir este usuário?')) {
       this.userService.deleteUser(userId).subscribe({
-        next: () => this.users = this.users.filter(u => u.id !== userId),
+        next: () => {
+          this.users = this.users.filter(u => u.id !== userId);
+          // Toast de informação
+          this.toastr.info('Usuário excluído.', 'Aviso');
+        },
         error: (err) => {
           console.error('Erro ao deletar usuário:', err);
           if (err.status === 403) {
-            alert('Não é permitido excluir seu próprio usuário');
+            // Toast de aviso
+            this.toastr.warning('Não é permitido excluir seu próprio usuário.', 'Ação Proibida');
           } else {
-            alert('Erro ao deletar usuário. Por favor, tente novamente.');
+            // Toast de erro
+            this.toastr.error('Erro ao deletar usuário.', 'Erro');
           }
         },
       });
@@ -133,6 +150,7 @@ export class UserlistersComponent implements OnInit {
     this.selectedRole = user.roles[0];
     this.editingUser = { ...user };
     this.showModal = true;
+    this.cdr.detectChanges();
   }
 
   isCurrentUser(userId: string): boolean {

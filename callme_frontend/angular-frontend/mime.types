@@ -8,4 +8,5 @@ types {
     application/xml           xml;
     text/xml                  xml;
     image/png                 png;
+    application/svg+xml       svg;
 }
