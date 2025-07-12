@@ -12,6 +12,7 @@ export const navbarData = [
   {
     routeLink: 'CriarChamados',
     icon: 'fal fa-plus-square',
+    role: 'ADMIN',
     label: 'CriarChamado'
   },
   {
@@ -25,9 +26,17 @@ export const navbarData = [
     label: 'Usuários',
     role: 'ADMIN'
   },
+
+  {
+    routeLink: 'Dashboard',
+    icon: 'fal fa-chart-bar',
+    label: 'Dashboard',
+  },
+
   {
     routeLink: 'principal',
     icon: 'fal fa-sign-out',
     label: 'Sair'
-  }
+  },
+
 ];

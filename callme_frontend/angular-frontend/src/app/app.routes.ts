@@ -13,6 +13,7 @@ import {AcompanhamentoComponent} from "./pages/acompanhamento/acompanhamento.com
 import { EditarChamadoComponent } from './pages/editar-chamado/editar-chamado.component';
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
 import {UserlistersComponent} from "./pages/userlisters/userlisters.component";
+import {DashboardComponent} from "./pages/dashboard/dashboard.component";
 export const routes: Routes = [
   {
     path: '',
@@ -76,12 +77,16 @@ export const routes: Routes = [
   },
   {
     path: 'listar-usuarios',
-    component :UserlistersComponent
-
+    component :UserlistersComponent,
+    canActivate : [AuthGuard],
+    data :{
+      roles : ['ADMIN']
+    }
   },
+
   {
-    path: '**',
-    redirectTo: '/principal'
+    path : 'Dashboard',
+    component :DashboardComponent,
   }
 
 ];
