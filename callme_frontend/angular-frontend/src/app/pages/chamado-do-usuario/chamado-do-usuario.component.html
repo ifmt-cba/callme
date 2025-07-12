@@ -1,0 +1,58 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <div class="conteudo">
+    <h2>📝 Meus Chamados</h2>
+    <h4>Chamados que estão atribuídos a você</h4>
+
+    <div *ngIf="isLoading" class="feedback">Carregando seus chamados...</div>
+    <div *ngIf="!isLoading && meusChamados.length === 0" class="feedback">
+      Você não tem nenhum chamado atribuído no momento.
+    </div>
+
+    <div class="lista-chamados" *ngIf="!isLoading && meusChamados.length > 0">
+      <div *ngFor="let chamado of meusChamados" class="chamado-item" [class.expandido]="chamadoExpandidoId === chamado.id">
+
+        <div class="chamado-header" (click)="toggleDetalhes(chamado.id)">
+          <div class="header-info">
+            <span class="assunto">{{ chamado.assunto }}</span>
+            <span class="remetente">De: {{ chamado.remetente }}</span>
+          </div>
+          <div class="header-status">
+            <span class="status" [ngClass]="'status-' + chamado.status.toLowerCase()">{{ chamado.status }}</span>
+            <i class="chevron" [class.rotacionado]="chamadoExpandidoId === chamado.id"></i>
+          </div>
+        </div>
+
+        <div class="chamado-detalhes" *ngIf="chamadoExpandidoId === chamado.id">
+          <div class="detalhe-item">
+            <strong>Descrição:</strong>
+            <p>{{ chamado.descricao }}</p>
+          </div>
+          <div class="detalhe-item">
+            <strong>Data/Hora:</strong>
+            <span>{{ chamado.dataHora }}</span>
+          </div>
+
+          <div class="detalhes-acoes">
+            <button class="btn-acao" (click)="toggleComentario(chamado.id)">
+              <i class="icon-comentario"></i> Adicionar Comentário
+            </button>
+            <button class="btn-acao btn-fechar" (click)="fecharChamado(chamado.id)">
+              <i class="icon-fechar"></i> Fechar Chamado
+            </button>
+          </div>
+
+          <div class="comentario-form" *ngIf="comentarioAbertoId === chamado.id">
+            <textarea
+              rows="4"
+              placeholder="Digite seu comentário aqui..."
+              [(ngModel)]="comentarioAtual"></textarea>
+            <button (click)="enviarComentario(chamado.id)">Salvar Comentário</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
