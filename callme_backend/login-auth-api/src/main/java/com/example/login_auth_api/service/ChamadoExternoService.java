@@ -170,7 +170,7 @@ public class ChamadoExternoService {
         System.out.println("--> Encontrados " + chamados.size() + " chamados para este técnico.");
         System.out.println("--- [SERVICE LOG] Fim do método listarChamadosDoTecnicoLogado(). ---");
 
-        return chamados;
+        return chamadoRepository.findByTecnicoAndStatusIsNot(tecnicoLogado, ChamadoExterno.StatusChamado.FECHADO);
     }
 
 
@@ -210,6 +210,30 @@ public class ChamadoExternoService {
             // A transação cuidará de salvar as alterações
             return chamadoDoBanco;
         });
+    }
+
+    // Em: src/main/java/com/example/login_auth_api/service/ChamadoExternoService.java
+    @Transactional(readOnly = true)
+    public List<ChamadoExterno> listarChamadosPorStatus(ChamadoExterno.StatusChamado status) {
+        return chamadoRepository.findByStatus(status);
+    }
+
+    @Transactional
+    public ChamadoExterno finalizarChamado(Long chamadoId) {
+        // Busca o chamado no banco
+        ChamadoExterno chamado = chamadoRepository.findById(chamadoId)
+                .orElseThrow(() -> new EntityNotFoundException("Chamado com ID " + chamadoId + " não encontrado."));
+
+        // Pega o técnico logado para registrar a ação (opcional, mas bom para auditoria)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tecnicoUsername = authentication.getName();
+        System.out.println("Técnico '" + tecnicoUsername + "' está finalizando o chamado ID " + chamadoId);
+
+        // Define o status como FECHADO
+        chamado.setStatus(ChamadoExterno.StatusChamado.FECHADO);
+
+        // O @Transactional já salva a alteração, mas podemos chamar save() para clareza
+        return chamadoRepository.save(chamado);
     }
 }
 

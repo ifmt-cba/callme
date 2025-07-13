@@ -15,6 +15,7 @@ import {ResetPasswordComponent} from "./pages/reset-password/reset-password.comp
 import {UserlistersComponent} from "./pages/userlisters/userlisters.component";
 import {DashboardComponent} from "./pages/dashboard/dashboard.component";
 import {ChamadoDoUsuarioComponent} from "./pages/chamado-do-usuario/chamado-do-usuario.component";
+import {ChamadosFinalizadosComponent} from "./pages/chamados-finalizados/chamados-finalizados.component";
 
 export const routes: Routes = [
   {
@@ -94,6 +95,11 @@ export const routes: Routes = [
   {
     path : 'Dashboard',
     component :DashboardComponent,
-  }
+  },
+  {
+    path: 'chamados-finalizados',
+    component: ChamadosFinalizadosComponent,
+    canActivate: [AuthGuard]
+  },
 
 ];

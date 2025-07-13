@@ -17,6 +17,11 @@ public interface ChamadoExternoRepository extends JpaRepository<ChamadoExterno, 
 
     List<ChamadoExterno> findByTecnico(User tecnico);
 
+    List<ChamadoExterno> findByStatus(ChamadoExterno.StatusChamado status);
+
+    List<ChamadoExterno> findByTecnicoAndStatusIsNot(User tecnico, ChamadoExterno.StatusChamado status);
+
+
 }
 
 

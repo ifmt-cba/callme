@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+<div class="container">
+  <div class="conteudo">
+    <h2>✅ Chamados Finalizados</h2>
+    <h4>Histórico de todos os chamados concluídos</h4>
+
+    <div *ngIf="isLoading" class="feedback">Carregando...</div>
+    <div *ngIf="!isLoading && chamadosFinalizados.length === 0" class="feedback">
+      Nenhum chamado finalizado encontrado.
+    </div>
+
+    <div class="tabela-container" *ngIf="!isLoading && chamadosFinalizados.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Assunto</th>
+          <th>Remetente</th>
+          <th>Técnico Responsável</th>
+          <th>Data de Abertura</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let chamado of chamadosFinalizados">
+          <td>#{{ chamado.id }}</td>
+          <td>{{ chamado.assunto }}</td>
+          <td>{{ chamado.remetente }}</td>
+          <td>{{ chamado.tecnico?.username || 'N/A' }}</td>
+          <td>{{ chamado.dataHora }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

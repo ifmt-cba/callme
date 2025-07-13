@@ -15,6 +15,7 @@ export interface Comentario {
 
 
 export interface ChamadosItem {
+  id: number;
   remetente: string;
   assunto: string;
   descricao: string;

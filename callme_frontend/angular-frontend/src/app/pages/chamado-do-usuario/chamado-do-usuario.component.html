@@ -25,7 +25,6 @@
         </div>
 
         <div class="chamado-detalhes" *ngIf="chamadoExpandidoId === chamado.id">
-
           <div class="detalhes-wrapper">
 
             <div class="detalhe-item">
@@ -48,19 +47,22 @@
                   <option value="ABERTO">Aberto</option>
                   <option value="EM_ANDAMENTO">Em Andamento</option>
                   <option value="FECHADO">Fechado</option>
-                  <option value="CANCELADO">Cancelado</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="comentario-{{chamado.id}}">Adicionar Novo Comentário</label>
                 <textarea id="comentario-{{chamado.id}}" rows="4" placeholder="Digite seu parecer técnico aqui..." [(ngModel)]="comentarios[chamado.id]"></textarea>
               </div>
+
               <div class="botoes-acoes">
                 <button class="btn-salvar" (click)="salvarAlteracoes(chamado)">Salvar Alterações</button>
+                <button type="button" class="btn-finalizar" (click)="finalizarChamado(chamado)">Finalizar Chamado</button>
               </div>
             </div>
+          </div>
+        </div>
 
-          </div> </div> </div>
+      </div>
     </div>
   </div>
 </div>
