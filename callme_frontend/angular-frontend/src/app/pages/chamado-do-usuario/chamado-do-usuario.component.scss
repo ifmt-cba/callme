@@ -203,3 +203,28 @@ h4 {
   &.status-em_andamento { background-color: #fef5e7; color: #f39c12; }
   &.status-cancelado { background-color: #ecf0f1; color: #7f8c8d; }
 }
+
+/* Adicione este estilo para o novo botão */
+
+.botoes-acoes {
+  /* Garante que os botões fiquem lado a lado */
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-finalizar {
+  background-color: #c0392b; // Um vermelho para indicar uma ação final
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #e74c3c;
+    transform: translateY(-2px);
+  }
+}

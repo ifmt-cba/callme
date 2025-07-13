@@ -145,4 +145,11 @@ public class ChamadoExternoController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/finalizados")
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN', 'SCOPE_RT')")
+    public ResponseEntity<List<ChamadoExterno>> getChamadosFinalizados() {
+        List<ChamadoExterno> chamados = chamadoService.listarChamadosPorStatus(ChamadoExterno.StatusChamado.FECHADO);
+        return ResponseEntity.ok(chamados);
+    }
+
 }

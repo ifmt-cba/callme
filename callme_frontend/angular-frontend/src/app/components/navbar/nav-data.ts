@@ -39,9 +39,17 @@ export const navbarData = [
   },
 
   {
+    routeLink: 'chamados-finalizados',
+    icon: 'fal fa-sign-out',
+    label: 'Chamados finalizados'
+  },
+
+  {
     routeLink: 'principal',
     icon: 'fal fa-sign-out',
     label: 'Sair'
   },
+
+
 
 ];

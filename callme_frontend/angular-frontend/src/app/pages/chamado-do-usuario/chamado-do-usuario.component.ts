@@ -78,30 +78,44 @@ export class ChamadoDoUsuarioComponent implements OnInit {
    * Salva as alterações de status e o novo comentário para um chamado.
    * @param chamado O objeto do chamado que foi modificado na tela.
    */
+// Em chamado-do-usuario.component.ts
+
   salvarAlteracoes(chamado: Chamado): void {
     const comentario = this.comentarios[chamado.id] || '';
-
-    // Prepara os dados para enviar ao backend
     const payload = {
       status: chamado.status,
       comentario: comentario.trim()
     };
 
-    console.log(`Salvando alterações para o chamado ID ${chamado.id}`, payload);
-
-    // --- LÓGICA DA API (será criada no backend) ---
-    // O endpoint ideal seria específico para esta ação
     this.http.put(`${this.apiUrl}/${chamado.id}/tecnico-update`, payload).subscribe({
-      next: () => {
+      next: (response: any) => {
         this.toastService.success('Chamado atualizado com sucesso!');
-        this.comentarios[chamado.id] = ''; // Limpa o campo de comentário após salvar
-        // Opcional: recolher o card após salvar
-        // this.chamadoExpandidoId = null;
+        this.comentarios[chamado.id] = '';
+
+        // LÓGICA ADICIONADA: se o chamado foi fechado, remova-o da tela
+        if (chamado.status === 'FECHADO') {
+          this.meusChamados = this.meusChamados.filter(c => c.id !== chamado.id);
+        } else {
+          // Se não, apenas atualiza os dados na lista
+          const index = this.meusChamados.findIndex(c => c.id === chamado.id);
+          if(index !== -1) {
+            this.meusChamados[index] = response;
+          }
+        }
       },
-      error: (err) => {
-        console.error('Erro ao salvar alterações:', err);
-        this.toastService.error('Não foi possível salvar as alterações.');
-      }
+      error: (err) => { /* ... seu tratamento de erro ... */ }
     });
   }
+
+  finalizarChamado(chamado: Chamado): void {
+    if (confirm('Tem certeza que deseja finalizar este chamado?')) {
+
+      // 1. Muda o status do chamado para 'FECHADO' no objeto local
+      chamado.status = 'FECHADO';
+
+      // 2. Chama o método de salvar que JÁ FUNCIONA
+      this.salvarAlteracoes(chamado);
+    }
+  }
 }
+
