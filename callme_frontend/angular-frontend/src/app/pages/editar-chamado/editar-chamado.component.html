@@ -19,6 +19,14 @@
         <textarea id="descricao" [(ngModel)]="chamado.descricao" name="descricao" rows="5" readonly></textarea>
       </div>
 
+      <div class="form-group historico-comentarios" *ngIf="chamado.comentarios && chamado.comentarios.length > 0">
+        <label>Histórico de Comentários</label>
+        <div class="comentario-card" *ngFor="let comentario of chamado.comentarios">
+          <p class="comentario-texto">{{ comentario.texto }}</p>
+          <span class="comentario-meta">Por {{ comentario.autor.username }} em {{ comentario.dataCriacao | date:'dd/MM/yy HH:mm' }}</span>
+        </div>
+      </div>
+
       <div class="form-group">
         <label for="status">Status</label>
         <select id="status" [(ngModel)]="chamado.status" name="status" required>
@@ -28,6 +36,9 @@
           <option value="FECHADO">Fechado</option>
         </select>
       </div>
+
+
+
 
       <div class="form-group">
         <label for="tecnico">Atribuir ao Técnico</label>

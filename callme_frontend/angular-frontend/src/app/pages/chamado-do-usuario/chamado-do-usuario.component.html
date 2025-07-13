@@ -3,7 +3,7 @@
 <div class="container">
   <div class="conteudo">
     <h2>📝 Meus Chamados</h2>
-    <h4>Chamados que estão atribuídos a você</h4>
+    <h4>Chamados que estão atribuídos a você para atuação</h4>
 
     <div *ngIf="isLoading" class="feedback">Carregando seus chamados...</div>
     <div *ngIf="!isLoading && meusChamados.length === 0" class="feedback">
@@ -25,34 +25,42 @@
         </div>
 
         <div class="chamado-detalhes" *ngIf="chamadoExpandidoId === chamado.id">
-          <div class="detalhe-item">
-            <strong>Descrição:</strong>
-            <p>{{ chamado.descricao }}</p>
-          </div>
-          <div class="detalhe-item">
-            <strong>Data/Hora:</strong>
-            <span>{{ chamado.dataHora }}</span>
-          </div>
 
-          <div class="detalhes-acoes">
-            <button class="btn-acao" (click)="toggleComentario(chamado.id)">
-              <i class="icon-comentario"></i> Adicionar Comentário
-            </button>
-            <button class="btn-acao btn-fechar" (click)="fecharChamado(chamado.id)">
-              <i class="icon-fechar"></i> Fechar Chamado
-            </button>
-          </div>
+          <div class="detalhes-wrapper">
 
-          <div class="comentario-form" *ngIf="comentarioAbertoId === chamado.id">
-            <textarea
-              rows="4"
-              placeholder="Digite seu comentário aqui..."
-              [(ngModel)]="comentarioAtual"></textarea>
-            <button (click)="enviarComentario(chamado.id)">Salvar Comentário</button>
-          </div>
+            <div class="detalhe-item">
+              <strong>Descrição do Problema (Cliente):</strong>
+              <p>{{ chamado.descricao }}</p>
+            </div>
 
-        </div>
-      </div>
+            <div class="detalhe-item historico-comentarios" *ngIf="chamado.comentarios && chamado.comentarios.length > 0">
+              <strong>Histórico de Atuação:</strong>
+              <div class="comentario-card" *ngFor="let comentario of chamado.comentarios">
+                <p class="comentario-texto">{{ comentario.texto }}</p>
+                <span class="comentario-meta">Por {{ comentario.autor.username }} em {{ comentario.dataCriacao | date:'dd/MM/yy HH:mm' }}</span>
+              </div>
+            </div>
+
+            <div class="form-edicao">
+              <div class="form-group">
+                <label for="status-{{chamado.id}}">Alterar Status</label>
+                <select id="status-{{chamado.id}}" name="status" [(ngModel)]="chamado.status">
+                  <option value="ABERTO">Aberto</option>
+                  <option value="EM_ANDAMENTO">Em Andamento</option>
+                  <option value="FECHADO">Fechado</option>
+                  <option value="CANCELADO">Cancelado</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="comentario-{{chamado.id}}">Adicionar Novo Comentário</label>
+                <textarea id="comentario-{{chamado.id}}" rows="4" placeholder="Digite seu parecer técnico aqui..." [(ngModel)]="comentarios[chamado.id]"></textarea>
+              </div>
+              <div class="botoes-acoes">
+                <button class="btn-salvar" (click)="salvarAlteracoes(chamado)">Salvar Alterações</button>
+              </div>
+            </div>
+
+          </div> </div> </div>
     </div>
   </div>
 </div>

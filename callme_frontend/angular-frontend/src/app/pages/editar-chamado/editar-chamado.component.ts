@@ -13,6 +13,15 @@ interface User {
   // outros campos que sua API retornar...
 }
 
+export interface Comentario {
+  id: number;
+  texto: string;
+  dataCriacao: string;
+  autor: {
+    username: string;
+  };
+}
+
 // Interface para o Chamado, incluindo o técnico opcional
 interface Chamado {
   id: number;
@@ -22,6 +31,7 @@ interface Chamado {
   status: 'ABERTO' | 'EM_ANDAMENTO' | 'FECHADO';
   tokenEmail: string;
   tecnico?: User | null; // O técnico pode não estar definido
+  comentarios?: Comentario[];
 }
 
 

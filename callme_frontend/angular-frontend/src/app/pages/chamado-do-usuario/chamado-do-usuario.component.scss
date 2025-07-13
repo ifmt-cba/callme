@@ -1,4 +1,5 @@
-// Importando estilos globais para consistência
+// Estilos para a página Meus Chamados
+
 :host {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -40,50 +41,146 @@ h4 {
   gap: 1rem;
 }
 
-// Estilos do item expansível (acordeão)
+// Estilos do item de chamado (acordeão)
 .chamado-item {
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  transition: all 0.3s ease;
-  border-left: 5px solid #3498db;
+  transition: box-shadow 0.3s ease;
+  border-left: 5px solid #3498db; // Borda azul para status padrão
 
   &.expandido {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-left-color: #e67e22;
+    border-left-color: #e67e22; // Borda laranja quando expandido
   }
 }
 
+// Cabeçalho clicável
 .chamado-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
   cursor: pointer;
+
+  .header-info {
+    .assunto { font-weight: 600; color: #34495e; }
+    .remetente { font-size: 0.85rem; color: #7f8c8d; margin-top: 0.25rem; }
+  }
+
+  .header-status {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 }
 
-.header-info {
-  .assunto { font-weight: 600; color: #34495e; }
-  .remetente { font-size: 0.85rem; color: #7f8c8d; margin-top: 0.25rem; }
+// Detalhes que expandem
+.chamado-detalhes {
+  // Animação de expandir/recolher
+  display: grid;
+  grid-template-rows: 0fr; // Começa com altura zero
+  transition: grid-template-rows 0.4s ease-out;
+
+  .chamado-item.expandido & {
+    grid-template-rows: 1fr; // Expande para a altura do conteúdo
+  }
+
+  > div {
+    overflow: hidden; // Essencial para a animação funcionar
+  }
 }
 
-.header-status {
+.detalhes-wrapper {
+  padding: 1.5rem;
+  border-top: 1px solid #ecf0f1;
+}
+
+.detalhe-item {
+  margin-bottom: 1.5rem;
+  strong { display: block; margin-bottom: 0.4rem; color: #34495e; font-size: 0.9rem; }
+  p, span { color: #555; white-space: pre-wrap; }
+}
+
+// Histórico de comentários
+.historico-comentarios {
+  .sem-comentarios {
+    font-style: italic;
+    color: #7f8c8d;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 8px;
+  }
+  .comentario-card {
+    background-color: #f2f5f9;
+    border-left: 4px solid #3498db;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.75rem;
+
+    .comentario-texto { margin: 0 0 0.5rem 0; color: #34495e; }
+    .comentario-meta { font-size: 0.75rem; color: #7f8c8d; }
+  }
+}
+
+// Formulário de edição dentro do card
+.form-edicao {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #dcdcdc;
+}
+
+.form-group {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+
+  label {
+    font-weight: 600;
+    color: #34495e;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  select, textarea {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    font-family: inherit;
+    &:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
 }
 
-.status {
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  &.status-aberto { background-color: #f9eaea; color: #c0392b; }
-  &.status-fechado { background-color: #e8f6f3; color: #16a085; }
-  &.status-em_andamento { background-color: #fef5e7; color: #f39c12; }
+.botoes-acoes {
+  display: flex;
+  justify-content: flex-end;
 }
 
+.btn-salvar {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+}
+
+// Ícone de chevron para expandir
 .chevron {
   border: solid #7f8c8d;
   border-width: 0 2px 2px 0;
@@ -94,73 +191,15 @@ h4 {
   &.rotacionado { transform: rotate(-135deg); }
 }
 
-// Área de detalhes que expande
-.chamado-detalhes {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease-out;
-
-  .chamado-item.expandido & {
-    max-height: 1000px; // Altura máxima para animação
-  }
-
-  .detalhe-item, .detalhes-acoes, .comentario-form {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    border-top: 1px solid #ecf0f1;
-  }
-
-  .detalhe-item:first-child, .detalhes-acoes{
-    padding-top: 1.5rem;
-  }
-}
-
-.detalhe-item {
-  strong { display: block; margin-bottom: 0.4rem; color: #34495e; font-size: 0.9rem; }
-  p, span { color: #555; white-space: pre-wrap; }
-}
-
-.detalhes-acoes {
-  display: flex;
-  gap: 1rem;
-  border-top: 1px solid #ecf0f1;
-  .btn-acao {
-    background-color: #ecf0f1;
-    color: #34495e;
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-    &:hover { background-color: #bdc3c7; }
-    &.btn-fechar {
-      background-color: #e74c3c;
-      color: white;
-      &:hover { background-color: #c0392b; }
-    }
-  }
-}
-
-.comentario-form {
-  padding-top: 1.5rem;
-  border-top: 1px solid #ecf0f1;
-  textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
-    resize: vertical;
-  }
-  button {
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    &:hover { filter: brightness(1.1); }
-  }
+// Estilos de status
+.status {
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  &.status-aberto { background-color: #f9eaea; color: #c0392b; }
+  &.status-fechado { background-color: #e8f6f3; color: #16a085; }
+  &.status-em_andamento { background-color: #fef5e7; color: #f39c12; }
+  &.status-cancelado { background-color: #ecf0f1; color: #7f8c8d; }
 }

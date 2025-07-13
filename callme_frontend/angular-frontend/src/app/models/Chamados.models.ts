@@ -4,6 +4,16 @@ export interface Tecnico {
   username: string;
 }
 
+export interface Comentario {
+  id: number;
+  texto: string;
+  dataCriacao: string;
+  autor: { // Apenas os dados que queremos exibir
+    username: string;
+  };
+}
+
+
 export interface ChamadosItem {
   remetente: string;
   assunto: string;
@@ -12,6 +22,8 @@ export interface ChamadosItem {
   tokenEmail: string;
   status: string;
   tecnico?: Tecnico | null
+  comentarios?: Comentario[];
+
 }
 
 export interface ChamadoResponse {

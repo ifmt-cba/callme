@@ -3,13 +3,21 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { ToastrService } from 'ngx-toastr'; // Importe o ToastrService
 
-// Interfaces (estão corretas)
+// As interfaces podem ser movidas para um arquivo models.ts
 export interface Tecnico {
   userid: string;
   username: string;
 }
-
+export interface Comentario {
+  id: number;
+  texto: string;
+  dataCriacao: string;
+  autor: {
+    username: string;
+  };
+}
 export interface Chamado {
   id: number;
   remetente: string;
@@ -18,75 +26,82 @@ export interface Chamado {
   dataHora: string;
   status: 'ABERTO' | 'EM_ANDAMENTO' | 'FECHADO' | 'CANCELADO';
   tecnico?: Tecnico | null;
-}
+  comentarios?: Comentario[]; }
 
 @Component({
-  selector: 'app-meus-chamados', // O seletor correto para este componente
+  selector: 'app-meus-chamados',
   standalone: true,
   imports: [CommonModule, FormsModule, NavbarComponent],
-  templateUrl: './chamado-do-usuario.component.html',
+  templateUrl: './chamado-do-usuario.component.html', // Corrija se o nome do seu arquivo for diferente
   styleUrls: ['./chamado-do-usuario.component.scss']
 })
 export class ChamadoDoUsuarioComponent implements OnInit {
 
   meusChamados: Chamado[] = [];
   isLoading = true;
-
   chamadoExpandidoId: number | null = null;
-  comentarioAbertoId: number | null = null;
-  comentarioAtual: string = '';
 
-  private apiUrl = 'http://localhost:8080/chamados/meus-chamados';
+  // Guarda o texto do novo comentário PARA CADA chamado
+  comentarios: { [chamadoId: number]: string } = {};
 
-  constructor(private http: HttpClient) {}
+  private apiUrl = 'http://localhost:8080/chamados';
+
+  constructor(
+    private http: HttpClient,
+    private toastService: ToastrService // Injete o ToastrService
+  ) {}
 
   ngOnInit(): void {
-    console.log('[MeusChamados] Componente iniciado. Buscando dados da API...');
-    this.http.get<Chamado[]>(this.apiUrl).subscribe({
+    this.carregarMeusChamados();
+  }
+
+  carregarMeusChamados(): void {
+    this.isLoading = true;
+    this.http.get<Chamado[]>(`${this.apiUrl}/meus-chamados`).subscribe({
       next: (data) => {
-        console.log('%c[MeusChamados] Dados recebidos com sucesso!', 'color: green', data);
         this.meusChamados = data;
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('%c[MeusChamados] Erro ao carregar chamados:', 'color: red', err);
+        console.error('Erro ao carregar meus chamados:', err);
+        this.toastService.error('Falha ao carregar seus chamados.');
         this.isLoading = false;
       }
     });
   }
 
   toggleDetalhes(id: number): void {
-    const estavaAberto = this.chamadoExpandidoId === id;
-    this.chamadoExpandidoId = estavaAberto ? null : id;
-    console.log(`[MeusChamados] Toggle Detalhes: Chamado ID ${id} foi ${estavaAberto ? 'recolhido' : 'expandido'}.`);
-
-    if (this.chamadoExpandidoId !== id) {
-      this.comentarioAbertoId = null;
-    }
+    this.chamadoExpandidoId = (this.chamadoExpandidoId === id) ? null : id;
   }
 
-  toggleComentario(id: number): void {
-    const estavaAberto = this.comentarioAbertoId === id;
-    this.comentarioAbertoId = estavaAberto ? null : id;
-    this.comentarioAtual = '';
-    console.log(`[MeusChamados] Toggle Comentário: Formulário para o chamado ID ${id} foi ${estavaAberto ? 'fechado' : 'aberto'}.`);
-  }
+  /**
+   * Salva as alterações de status e o novo comentário para um chamado.
+   * @param chamado O objeto do chamado que foi modificado na tela.
+   */
+  salvarAlteracoes(chamado: Chamado): void {
+    const comentario = this.comentarios[chamado.id] || '';
 
-  enviarComentario(chamadoId: number): void {
-    if (!this.comentarioAtual.trim()) {
-      alert('O comentário não pode estar vazio.');
-      return;
-    }
-    console.log(`%c[MeusChamados] SIMULANDO ENVIO: Comentário para o chamado ${chamadoId}: "${this.comentarioAtual}"`, 'color: orange');
-    alert('Comentário enviado (simulação)');
-    this.comentarioAbertoId = null;
-    this.comentarioAtual = '';
-  }
+    // Prepara os dados para enviar ao backend
+    const payload = {
+      status: chamado.status,
+      comentario: comentario.trim()
+    };
 
-  fecharChamado(chamadoId: number): void {
-    if (confirm('Tem certeza que deseja fechar este chamado?')) {
-      console.log(`%c[MeusChamados] SIMULANDO AÇÃO: Fechando o chamado ${chamadoId}`, 'color: red');
-      alert('Chamado fechado (simulação)');
-    }
+    console.log(`Salvando alterações para o chamado ID ${chamado.id}`, payload);
+
+    // --- LÓGICA DA API (será criada no backend) ---
+    // O endpoint ideal seria específico para esta ação
+    this.http.put(`${this.apiUrl}/${chamado.id}/tecnico-update`, payload).subscribe({
+      next: () => {
+        this.toastService.success('Chamado atualizado com sucesso!');
+        this.comentarios[chamado.id] = ''; // Limpa o campo de comentário após salvar
+        // Opcional: recolher o card após salvar
+        // this.chamadoExpandidoId = null;
+      },
+      error: (err) => {
+        console.error('Erro ao salvar alterações:', err);
+        this.toastService.error('Não foi possível salvar as alterações.');
+      }
+    });
   }
 }
