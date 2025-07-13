@@ -4,6 +4,8 @@ import com.example.login_auth_api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -37,6 +39,9 @@ public class ChamadoExterno {
     @JoinColumn(name = "userid") // Nome da coluna no banco de dados que guardará o ID do usuário técnico
     private User tecnico;
 
+    @OneToMany(mappedBy = "chamado", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderBy("dataCriacao DESC") // Ordena os comentários do mais novo para o mais antigo
+    private List<Comentario> comentarios;
     // ... seus getters e setters
 
     public User getTecnico() {

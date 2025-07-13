@@ -5,6 +5,7 @@ import com.example.login_auth_api.domain.user.ChamadoExterno;
 import com.example.login_auth_api.dto.AtualizarStatusDTO;
 import com.example.login_auth_api.dto.EmailResumoDTO;
 import com.example.login_auth_api.dto.TecnicoDTO;
+import com.example.login_auth_api.dto.TecnicoUpdateDTO;
 import com.example.login_auth_api.repositories.ChamadoExternoRepository;
 import com.example.login_auth_api.service.ChamadoExternoService;
 import com.example.login_auth_api.service.EmailReceiverService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -125,6 +127,22 @@ public class ChamadoExternoController {
         // Não precisamos do log aqui, pois o service já poderia logar se necessário
         List<ChamadoExterno> chamados = chamadoService.listarChamadosDoTecnicoLogado();
         return ResponseEntity.ok(chamados);
+    }
+
+
+    // Em: com/example/login_auth_api/controller/ChamadoExternoController.java
+
+    @PutMapping("/{id}/tecnico-update")
+    @PreAuthorize("hasAuthority('SCOPE_RT') or hasAuthority('SCOPE_ADMIN')") // Protege a rota
+    public ResponseEntity<ChamadoExterno> atualizarPorTecnico(
+            @PathVariable Long id,
+            @RequestBody TecnicoUpdateDTO updateData) {
+
+        Optional<ChamadoExterno> chamadoAtualizado = chamadoService.atualizarChamadoComoTecnico(id, updateData);
+
+        return chamadoAtualizado
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }
