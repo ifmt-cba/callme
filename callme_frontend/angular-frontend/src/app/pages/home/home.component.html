@@ -7,39 +7,57 @@
       <div class="filters">
         <div class="search-wrapper">
           <i class="fal fa-search"></i>
-          <input type="text" placeholder="Search">
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar no chamado...">
         </div>
-        <select>
-          <option value="">Usuário</option>
+        <select [(ngModel)]="selectedStatus">
+          <option value="">Todos Status</option>
+          <option value="Aberto">Aberto</option>
+          <option value="EM_ANDAMENTO">Em andamento</option>
+          <option value="FECHADO">Fechado</option>
+          <option value="Novo">Novo</option>
         </select>
-        <select>
-          <option value="">Status</option>
+        <select [(ngModel)]="selectedType">
+          <option value="">Todos Tipos</option>
+          <option value="INTERNO">Interno</option>
+          <option value="EXTERNO">Externo</option>
         </select>
       </div>
     </header>
 
     <div class="tickets-list">
-      <div class="ticket-card" *ngFor="let chamado of chamadosUnificados">
+      <div class="ticket-card" *ngFor="let chamado of filteredChamados">
+
         <div class="card-header">
           <span class="ticket-type">{{ chamado.tipo }}</span>
-          <span class="ticket-id">#{{ chamado.id }}</span>
+          <span class="ticket-id">#{{ chamado.id | slice:0:8 }}</span>
         </div>
+
         <div class="card-body">
           <h3>{{ chamado.assunto }}</h3>
           <p>{{ chamado.descricao | slice:0:100 }}...</p>
         </div>
+
         <div class="card-footer">
           <div class="user-info">
             <i class="fal fa-user"></i>
             <span>{{ chamado.solicitante }}</span>
           </div>
-          <span class="status" [ngClass]="'status-' + chamado.tipo.toLowerCase()">
-            {{ chamado.tipo === 'INTERNO' ? 'Aberto' : 'Em andamento' }}
-          </span>
+          <div class="footer-actions">
+            <span class="status"
+                  [ngClass]="'status-' + chamado.status.toLowerCase().replace('_', '-').replace(' ', '-')">
+              {{ chamado.status }}
+            </span>
+            <button *ngIf="chamado.tipo === 'EXTERNO'"
+                    (click)="navigateToExternalDetails(chamado.id)"
+                    class="details-btn">
+              Detalhar
+            </button>
+          </div>
         </div>
       </div>
-      <div class="empty-state" *ngIf="chamadosUnificados.length === 0">
-        <p>Nenhum chamado para exibir.</p>
+
+      <div class="empty-state" *ngIf="filteredChamados.length === 0">
+        <p>Nenhum chamado encontrado com os filtros atuais.</p>
       </div>
     </div>
   </div>
