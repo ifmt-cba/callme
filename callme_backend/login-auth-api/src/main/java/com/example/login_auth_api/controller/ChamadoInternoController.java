@@ -56,8 +56,7 @@ public class ChamadoInternoController {
         var chamado = new ChamadoInterno();
         chamado.setUser(user.get());
         chamado.setContent(dto.content());
-        // Aqui você adicionaria a descrição, se ela vier no DTO
-        // chamado.setDescricao(dto.descricao());
+        // chamado.setDescricao(dto.descricao()); // Descomente se o DTO tiver descrição
 
         chamadoInternoRepository.save(chamado);
         log.info(String.format("Chamado criado com sucesso | UserID: %s | ChamadoID: %d", userId, chamado.getChamadoID()));
@@ -108,22 +107,25 @@ public class ChamadoInternoController {
 
         Stream<ChamadoUnificadoDTO> internosStream = chamadoInternoRepository.findAll().stream()
                 .map(chamado -> new ChamadoUnificadoDTO(
-                        chamado.getChamadoID(),
+                        String.valueOf(chamado.getChamadoID()),
                         "INTERNO",
                         chamado.getContent(),
                         chamado.getDescricao(),
                         chamado.getUser().getUsername(),
+                        "Aberto", // ✅ CORREÇÃO 1: Adicionado o status padrão aqui.
                         chamado.getCreationTimestamp()
                 ));
 
         Stream<ChamadoUnificadoDTO> externosStream = chamadoExternoRepository.findAll().stream()
                 .map(chamado -> new ChamadoUnificadoDTO(
-                        chamado.getId(),
+                        // ✅ CORRIGIDO: Converte o ID (UUID) para String
+                        chamado.getTokenEmail(),
                         "EXTERNO",
                         chamado.getAssunto(),
                         chamado.getDescricao(),
                         chamado.getRemetente(),
-                        Instant.now() // Ajuste se houver campo de data no chamado externo
+                        (chamado.getStatus() != null ? chamado.getStatus().name() : "Novo"),
+                        Instant.now()
                 ));
 
         List<ChamadoUnificadoDTO> chamadosUnificados = Stream.concat(internosStream, externosStream)
