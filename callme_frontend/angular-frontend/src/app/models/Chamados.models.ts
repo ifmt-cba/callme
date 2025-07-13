@@ -1,9 +1,7 @@
-// src/app/models/models.ts
 
 export interface Tecnico {
   userid: string;
   username: string;
-  // adicione outros campos do técnico se necessário
 }
 
 export interface ChamadosItem {

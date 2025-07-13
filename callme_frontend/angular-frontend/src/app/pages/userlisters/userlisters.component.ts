@@ -5,6 +5,7 @@ import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { FormsModule } from "@angular/forms";
 import { NgClass, NgIf, NgForOf } from "@angular/common";
 import { UserCreateModalComponent } from '../../components/user-create-modal/user-create-modal.component';
+import { ToastrService } from 'ngx-toastr'; // 1. Importe o ToastrService
 
 interface SideNavToggle {
   screenWidth: number;
@@ -30,20 +31,24 @@ export class UserlistersComponent implements OnInit {
   showModal = false;
   editingUser: User | null = null;
 
-  constructor(private userService: UserService) {
+  // 2. Injete o ToastrService no construtor
+  constructor(private userService: UserService, private toastr: ToastrService) {
     this.currentUserId = this.userService.getCurrentUserId();
   }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe({
       next: (res) => (this.users = res),
-      error: (err) => console.error('Erro ao buscar usuários:', err),
+      error: (err) => this.toastr.error('Falha ao carregar a lista de usuários.', 'Erro'),
     });
   }
 
-  filteredUsers(): User[] {
+  get filteredUsers(): User[] {
+    if (!this.searchText) {
+      return this.users;
+    }
     return this.users.filter((user) =>
-      user.username.toLowerCase().includes(this.searchText.toLowerCase())
+      user.username?.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
@@ -72,7 +77,7 @@ export class UserlistersComponent implements OnInit {
   createUser(userData: { username: string; email: string; password: string }): void {
     if (!this.selectedRole) return;
 
-    if (this.editingUser) {
+    if (this.editingUser) { // Lógica de EDIÇÃO
       const userPayload: User = {
         id: this.editingUser.id,
         username: userData.username,
@@ -83,16 +88,15 @@ export class UserlistersComponent implements OnInit {
 
       this.userService.updateUser(userPayload).subscribe({
         next: (updatedUser) => {
-          const index = this.users.findIndex(u => u.id === userPayload.id);
-          if (index !== -1) this.users[index] = updatedUser;
           this.closeModal();
+          // 3. Adicione o toast verde de sucesso
+          this.toastr.success('Usuário atualizado com sucesso!', 'Sucesso');
+          // 4. Recarregue a página após um curto intervalo
+          setTimeout(() => window.location.reload(), 300);
         },
-        error: (err) => {
-          console.error('Erro ao editar usuário:', err);
-          alert('Erro ao editar usuário. Por favor, tente novamente.');
-        },
+        error: (err) => this.toastr.error('Erro ao atualizar usuário.', 'Erro'),
       });
-    } else {
+    } else { // Lógica de CRIAÇÃO
       const userPayload = {
         username: userData.username,
         email: userData.email,
@@ -102,13 +106,13 @@ export class UserlistersComponent implements OnInit {
 
       this.userService.createUser(userPayload, this.selectedRole).subscribe({
         next: (createdUser) => {
-          this.users.push(createdUser);
           this.closeModal();
+          // 3. Adicione o toast verde de sucesso
+          this.toastr.success('Usuário criado com sucesso!', 'Sucesso');
+          // 4. Recarregue a página
+          setTimeout(() => window.location.reload(), 300);
         },
-        error: (err) => {
-          console.error('Erro ao criar usuário:', err);
-          alert('Erro ao criar usuário. Por favor, tente novamente.');
-        },
+        error: (err) => this.toastr.error('Erro ao criar usuário.', 'Erro'),
       });
     }
   }
@@ -116,13 +120,17 @@ export class UserlistersComponent implements OnInit {
   deleteUser(userId: string): void {
     if (confirm('Tem certeza que deseja excluir este usuário?')) {
       this.userService.deleteUser(userId).subscribe({
-        next: () => this.users = this.users.filter(u => u.id !== userId),
+        next: () => {
+          // 3. Adicione o toast azul de informação
+          this.toastr.info('Usuário excluído com sucesso.', 'Excluído');
+          // 4. Recarregue a página
+          setTimeout(() => window.location.reload(), 300);
+        },
         error: (err) => {
-          console.error('Erro ao deletar usuário:', err);
           if (err.status === 403) {
-            alert('Não é permitido excluir seu próprio usuário');
+            this.toastr.warning('Não é permitido excluir seu próprio usuário.', 'Aviso');
           } else {
-            alert('Erro ao deletar usuário. Por favor, tente novamente.');
+            this.toastr.error('Erro ao deletar usuário.', 'Erro');
           }
         },
       });

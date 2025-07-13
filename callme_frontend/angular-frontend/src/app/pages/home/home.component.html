@@ -1,77 +1,46 @@
-<div class="container" [ngClass]="{ 'expanded': isSideNavCollapsed }">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="logo">
-      <img src="assets/headset-icon.png" alt="logo" />
-    </div>
-    <nav class="menu">
-      <app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
-    </nav>
-  </aside>
+<app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
 
-  <!-- Main Content -->
-  <main class="main">
-    <header class="header">
-      <h2>Dashboard</h2>
-      <div class="user-menu">
-        João Silva
-        <img src="assets/user-icon.png" alt="Usuário" />
-        <div class="settings-select">
-          <i class="bi bi-gear-fill"></i>
-          <select>
-            <option>Conta</option>
-            <option>Perfil</option>
-            <option>Sair</option>
-          </select>
+<main class="content" [ngClass]="{'content-trimmed': isSideNavCollapsed}">
+  <div class="tickets-container">
+    <header class="tickets-header">
+      <h1>Chamados</h1>
+      <div class="filters">
+        <div class="search-wrapper">
+          <i class="fal fa-search"></i>
+          <input type="text" placeholder="Search">
         </div>
+        <select>
+          <option value="">Usuário</option>
+        </select>
+        <select>
+          <option value="">Status</option>
+        </select>
       </div>
     </header>
 
-    <section class="cards">
-      <div class="card" (click)="navigateToChamado()">
-        <div class="icon">💳</div>
-        <h3>124</h3>
-        <p>Chamados totais</p>
+    <div class="tickets-list">
+      <div class="ticket-card" *ngFor="let chamado of chamadosUnificados">
+        <div class="card-header">
+          <span class="ticket-type">{{ chamado.tipo }}</span>
+          <span class="ticket-id">#{{ chamado.id }}</span>
+        </div>
+        <div class="card-body">
+          <h3>{{ chamado.assunto }}</h3>
+          <p>{{ chamado.descricao | slice:0:100 }}...</p>
+        </div>
+        <div class="card-footer">
+          <div class="user-info">
+            <i class="fal fa-user"></i>
+            <span>{{ chamado.solicitante }}</span>
+          </div>
+          <span class="status" [ngClass]="'status-' + chamado.tipo.toLowerCase()">
+            {{ chamado.tipo === 'INTERNO' ? 'Aberto' : 'Em andamento' }}
+          </span>
+        </div>
       </div>
-      <div class="card" (click)="navigateToCreate()">
-        <div class="icon">⏳</div>
-        <h3>45</h3>
-        <p>Em atendimento</p>
+      <div class="empty-state" *ngIf="chamadosUnificados.length === 0">
+        <p>Nenhum chamado para exibir.</p>
       </div>
-      <div class="card">
-        <div class="icon">⚠️</div>
-        <h3>28</h3>
-        <p>Aguardando resolução</p>
-      </div>
-    </section>
-
-    <section class="table-section">
-      <h3>Chamados Recentes</h3>
-      <table>
-        <thead>
-        <tr>
-          <th>ID</th>
-          <th>Assunto</th>
-          <th>Solicitante</th>
-          <th>Prioridade</th>
-          <th>Status</th>
-          <th>Data</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let item of chamados">
-          <td><strong>#{{ item.chamadoId }}</strong></td>
-          <td>{{ item.content }}</td>
-          <td><em>{{ item.username }}</em></td>
-          <td>Alta</td>
-          <td>Em atendimento</td>
-          <td>12/05/2025</td>
-        </tr>
-        <tr *ngIf="chamados.length === 0">
-          <td colspan="6" style="text-align: center;">Nenhum chamado encontrado.</td>
-        </tr>
-        </tbody>
-      </table>
-    </section>
-  </main>
-</div>
+    </div>
+  </div>
+</main>

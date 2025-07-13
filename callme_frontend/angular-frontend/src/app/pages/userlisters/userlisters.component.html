@@ -1,66 +1,59 @@
-<div class="container" [ngClass]="{ 'expanded': isSideNavCollapsed }">
-  <aside class="sidebar">
-    <div class="logo">
-      <img src="assets/headset-icon.png" alt="logo" />
-    </div>
-    <nav class="menu">
-      <app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
-    </nav>
-  </aside>
+<app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
 
-  <main class="main">
-    <header class="header">
-      <h2>Gerenciamento de Usuários</h2>
-      <div class="right">
-        <input type="text" [(ngModel)]="searchText" placeholder="Buscar usuários..." />
+<main class="content" [ngClass]="{'content-trimmed': isSideNavCollapsed}">
+  <div class="users-container">
+    <header class="users-header">
+      <h1>Lista de Usuários</h1>
+      <div class="actions">
+        <input type="text" [(ngModel)]="searchText" placeholder="Buscar por nome..." class="search-input">
+
         <div class="dropdown">
-          <button class="novo-btn" (click)="toggleDropdown()">+ Novo Usuário</button>
+          <button (click)="toggleDropdown()" class="add-user-btn">
+            Adicionar Usuário <i class="fal fa-chevron-down"></i>
+          </button>
           <div class="dropdown-menu" *ngIf="dropdownOpen">
-            <button (click)="openCreateModal('ADMIN')">Criar Admin</button>
-            <button (click)="openCreateModal('RT')">Criar RT</button>
+            <a (click)="openCreateModal('ADMIN')">Como Administrador</a>
+            <a (click)="openCreateModal('USER')">Como Usuário</a>
           </div>
         </div>
       </div>
     </header>
 
-    <section class="table-section">
+    <div class="users-table">
       <table>
         <thead>
         <tr>
-          <th>ID</th>
-          <th>USERNAME</th>
-          <th>EMAIL</th>
-          <th>ROLE</th>
+          <th>Nome de Usuário</th>
+          <th>Email</th>
+          <th>Cargos</th>
           <th>Ações</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let user of filteredUsers()">
-          <td>{{ user.id.slice(0, 12) }}</td>
-          <td>{{ user.username }}</td>
+        <tr *ngFor="let user of filteredUsers">
+          <td>{{ user.username || 'N/A' }}</td>
           <td>{{ user.email }}</td>
+          <td>{{ user.roles.join(', ') }}</td>
           <td>
-              <span *ngFor="let role of user.roles" class="badge"
-                    [ngClass]="{ 'admin': role === 'ADMIN', 'rt': role === 'RT' }">
-                {{ role }}
-              </span>
+            <button (click)="editUser(user)" class="action-btn edit">Editar</button>
+            <button (click)="deleteUser(user.id)" [disabled]="isCurrentUser(user.id)" class="action-btn delete">
+              Excluir
+            </button>
           </td>
-          <td>
-            <button class="edit-btn" (click)="editUser(user)">Editar</button>
-            <button class="delete-btn" (click)="deleteUser(user.id)" *ngIf="!isCurrentUser(user.id)">Excluir</button>
-          </td>
+        </tr>
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="4">Nenhum usuário encontrado.</td>
         </tr>
         </tbody>
       </table>
-      <p class="summary">Mostrando {{ users.length }} usuário(s)</p>
-    </section>
-  </main>
+    </div>
+  </div>
+</main>
 
-  <app-user-create-modal
-    *ngIf="showModal"
-    [role]="selectedRole!"
-    [editingUser]="editingUser"
-    (create)="createUser($event)"
-    (close)="closeModal()"
-  ></app-user-create-modal>
-</div>
+<app-user-create-modal
+  *ngIf="showModal"
+  [selectedRole]="selectedRole"
+  [editingUser]="editingUser"
+  (close)="closeModal()"
+  (submitUser)="createUser($event)">
+</app-user-create-modal>

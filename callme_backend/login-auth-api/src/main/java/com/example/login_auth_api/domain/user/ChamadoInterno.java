@@ -16,6 +16,8 @@ public class ChamadoInterno {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+
+
     private User user;
 
     public void setChamadoID(long chamadoID) {
@@ -55,4 +57,14 @@ public class ChamadoInterno {
     @CreationTimestamp
     private Instant creationTimestamp;
 
+    @Column(length = 10000)
+    private String descricao;
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }

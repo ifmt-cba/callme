@@ -11,7 +11,7 @@ export const navbarData = [
   },
   {
     routeLink: 'ChamadosInternos',
-    icon: 'fal fa-file',
+    icon: 'fal fa-building',
     label: 'Internos'
   },
   {

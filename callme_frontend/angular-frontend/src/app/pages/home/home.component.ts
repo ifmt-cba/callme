@@ -3,7 +3,8 @@ import { FeedService } from "../../services/feed.service";
 import { Router } from "@angular/router";
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { FeedItem } from "../../models/feed.models";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf, SlicePipe} from "@angular/common";
+import {ChamadoUnificado} from "../../models/chamado-unificado.model";
 
 interface SideNavToggle {
   screenWidth: number;
@@ -17,7 +18,8 @@ interface SideNavToggle {
     NavbarComponent,
     NgForOf,
     NgIf,
-    NgClass
+    NgClass,
+    SlicePipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -26,16 +28,19 @@ export class HomeComponent {
   isSideNavCollapsed: boolean = false;
   screenWidth: number = window.innerWidth;
   chamados: FeedItem[] = [];
+  chamadosUnificados: ChamadoUnificado[] = [];
 
   constructor(private feedService: FeedService, private router: Router) {}
 
   ngOnInit(): void {
-    this.feedService.getFeed().subscribe({
+    // Chamar o novo método ao iniciar o componente
+    this.feedService.getChamadosUnificados().subscribe({
       next: (res) => {
-        this.chamados = res.feedItens;
+        this.chamadosUnificados = res;
+        console.log('Chamados unificados recebidos:', this.chamadosUnificados);
       },
       error: (err) => {
-        console.error('Erro ao carregar chamados:', err);
+        console.error('Erro ao carregar chamados unificados:', err);
       }
     });
   }

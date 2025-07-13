@@ -1,197 +1,159 @@
-.container {
-  display: flex;
-  height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f6f7fb;
+// Estilos para o container principal que se ajusta à navbar
+.content {
+  // A linha 'width' foi removida daqui.
+  margin-left: 5rem;
+  padding: 2rem;
+  background: #f0f4f8;
+  transition: margin-left .5s ease; // Transição focada na margem para mais performance
+  min-height: 100vh;
+}
 
-  // SIDEBAR padrão: colapsada (menor)
-  .sidebar {
-    width: 80px;
-    padding: 0px;
-    transition: width 0.3s ease;
+.content-trimmed {
+  // A linha 'width' também foi removida daqui.
+  margin-left: 16.5625rem;
+}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      margin-bottom: 30px;
+// Estilos do seu novo layout
+.tickets-container {
+  width: 100%;
+}
 
-      img {
-        width: 30px;
-        margin-right: 10px;
-      }
+.tickets-header {
+  background-color: #034d9c;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
-      h1 {
-        color: #2874f0;
-        font-size: 22px;
-        display: none; // escondido por padrão
-      }
-    }
-
-    .menu {
-      display: flex;
-      flex-direction: column;
-
-      span {
-        display: none; // escondido por padrão
-      }
-
-      a {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        margin-bottom: 8px;
-        text-decoration: none;
-        color: #333;
-        border-radius: 8px;
-        cursor: pointer;
-
-        i {
-          margin-right: 10px;
-        }
-
-        &.active,
-        &:hover {
-          background-color: #e7efff;
-          color: #2874f0;
-        }
-      }
-    }
+  h1 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
   }
 
-  // MAIN padrão: mais espaço (porque sidebar está pequena)
-  .main {
-    flex: 1;
-    padding-left: 100px;
-    padding: 20px;
-    overflow-y: auto;
-    transition: padding 0.3s ease;
+  .filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .search-wrapper {
+      position: relative;
+      flex-grow: 1;
 
-      h2 {
-        font-size: 24px;
-        color: #333;
+      .fa-search {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9ca3af;
       }
 
-      .user-menu {
-        display: flex;
-        align-items: center;
-
-        img {
-          width: 30px;
-          border-radius: 50%;
-          margin-left: 10px;
-        }
-
-        select {
-          margin-left: 10px;
-          padding: 5px;
-        }
-      }
-    }
-
-    .cards {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-      cursor: pointer;
-
-      .card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        flex: 1;
-
-        .icon {
-          font-size: 30px;
-          margin-bottom: 10px;
-        }
-
-        h3 {
-          font-size: 36px;
-          margin-bottom: 10px;
-        }
-
-        p {
-          color: #666;
-        }
-      }
-    }
-
-    .table-section {
-      margin-top: 30px;
-
-      table {
+      input {
         width: 100%;
-        border-collapse: collapse;
-
-        th,
-        td {
-          padding: 12px 15px;
-          border-bottom: 1px solid #ddd;
-        }
-
-        th {
-          background-color: #f4f6f9;
-          text-align: left;
-        }
-
-        tr:hover {
-          background-color: #f1f1f1;
-        }
-      }
-    }
-  }
-
-  // Quando sidebar está expandida
-  &.expanded {
-    .sidebar {
-      width: 250px;
-
-      .logo h1 {
-        display: inline;
-      }
-
-      .menu span {
-        display: inline;
+        padding: 0.8rem 1rem 0.8rem 2.5rem;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
       }
     }
 
-    .main {
-      padding-left: 20px;
+    select {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: none;
+      background-color: white;
+      color: #374151;
+      font-size: 1rem;
+      cursor: pointer;
     }
   }
 }
 
-// Responsividade
-@media (max-width: 768px) {
-  .main {
-    .cards {
-      flex-direction: column;
-    }
-
-    .table-section table {
-      font-size: 14px;
-    }
-  }
-}
-
-.settings-select {
+.tickets-list {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-  i {
-    margin-right: 5px;
-    font-size: 18px;
-    color: #555;
+.ticket-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   }
 
-  select {
-    padding: 5px;
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .ticket-type {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #034d9c;
+      background-color: #e0f2fe;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+    }
+
+    .ticket-id {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+  }
+
+  .card-body {
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0 0 0.5rem 0;
+    }
+    p {
+      font-size: 0.95rem;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #6b7280;
+    }
+
+    .status {
+      padding: 0.25rem 0.8rem;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 0.8rem;
+
+      &.status-interno {
+        background-color: #dcfce7;
+        color: #166534;
+      }
+      &.status-externo {
+        background-color: #ffedd5;
+        color: #9a3412;
+      }
+    }
   }
 }
