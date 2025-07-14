@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -106,19 +106,35 @@ public class ChamadoExternoService {
 
     @Transactional
     public Optional<ChamadoExterno> atualizarChamadoComoTecnico(Long chamadoId, TecnicoUpdateDTO updateData) {
+        // Pega o técnico logado (esta parte está correta)
         Jwt principal = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID userId = UUID.fromString(principal.getSubject());
         User tecnicoLogado = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Técnico do token não encontrado no banco"));
+
         return chamadoRepository.findById(chamadoId).map(chamadoDoBanco -> {
+            // Validação de segurança
             if (chamadoDoBanco.getTecnico() == null || !chamadoDoBanco.getTecnico().getUserid().equals(tecnicoLogado.getUserid())) {
                 throw new AccessDeniedException("Você não tem permissão para editar este chamado.");
             }
-            chamadoDoBanco.setStatus(ChamadoExterno.StatusChamado.valueOf(updateData.status()));
+
+            // 1. Guarda o novo status em uma variável
+            ChamadoExterno.StatusChamado novoStatus = ChamadoExterno.StatusChamado.valueOf(updateData.status());
+
+            // 2. Atualiza o status do chamado
+            chamadoDoBanco.setStatus(novoStatus);
+
+            // 3. SE o novo status for FECHADO, grava a data de finalização
+            if (novoStatus == ChamadoExterno.StatusChamado.FECHADO) {
+                chamadoDoBanco.setDataFinalizacao(LocalDateTime.now());
+            }
+
+            // 4. Adiciona o novo comentário (lógica que já funciona)
             if (updateData.comentario() != null && !updateData.comentario().isBlank()) {
                 Comentario novoComentario = new Comentario(updateData.comentario(), chamadoDoBanco, tecnicoLogado);
                 chamadoDoBanco.getComentarios().add(novoComentario);
             }
+
             return chamadoDoBanco;
         });
     }

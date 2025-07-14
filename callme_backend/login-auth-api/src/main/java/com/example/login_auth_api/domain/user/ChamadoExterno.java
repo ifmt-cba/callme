@@ -1,5 +1,6 @@
 package com.example.login_auth_api.domain.user;
 
+import java.time.LocalDateTime;
 import com.example.login_auth_api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,8 @@ public class ChamadoExterno {
 
     @Enumerated(EnumType.STRING)
     private StatusChamado status;
+
+    private LocalDateTime dataFinalizacao;
 
     public enum StatusChamado {
         ABERTO,
