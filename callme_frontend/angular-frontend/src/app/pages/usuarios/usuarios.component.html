@@ -17,15 +17,16 @@
 
         <input type="submit" value="entrar" class="btn solid" />
 
-        <p class="social-text">Ou entre com</p>
-        <div class="social-media">
-          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-        </div>
+        <!-- ✅ TEXTO ALTERADO -->
+        <p class="social-text">Ou acompanhar seu chamado</p>
+
+        <!-- ✅ NOVO BOTÃO ADICIONADO (no lugar dos ícones sociais) -->
+        <button type="button" class="btn solid btn-secondary" (click)="navigateToAcompanhamentos()">
+          Acompanhar sem entrar
+        </button>
       </form>
-      <!-- SIGNUP FORM -->
+
+      <!-- SIGNUP FORM (permanece igual) -->
       <form [formGroup]="signupForm" (ngSubmit)="submit()" class="sign-up-form">
         <h2 class="title">Cadastrar-se</h2>
         <div class="input-field">
@@ -53,6 +54,7 @@
     </div>
   </div>
 
+  <!-- Panels (permanecem iguais) -->
   <div class="panels-container">
     <div class="panel left-panel">
       <div class="content">

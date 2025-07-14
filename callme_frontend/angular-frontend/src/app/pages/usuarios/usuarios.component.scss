@@ -130,9 +130,11 @@ form.sign-in-form {
   border-color: #4481eb;
 }
 
+/* Estilo base para todos os botões */
 .btn {
-  width: 150px;
-  background-color: #5995fd;
+  width: 100%;
+  max-width: 380px; /* Garante que os botões tenham a mesma largura dos inputs */
+  background-color: #5995fd; /* Cor padrão (azul claro) para o botão "Entrar" */
   border: none;
   outline: none;
   height: 49px;
@@ -146,8 +148,20 @@ form.sign-in-form {
 }
 
 .btn:hover {
-  background-color: #4d84e2;
+  background-color: #4d84e2; /* Cor de hover padrão */
 }
+
+/* ✅ NOVO: Estilo para o botão secundário "Acompanhar Chamado" */
+.btn.btn-secondary {
+  background-color: #4d84e2; /* Tom de azul um pouco mais escuro */
+  margin-top: 0; /* Remove a margem de cima para ficar mais perto do texto */
+}
+
+.btn.btn-secondary:hover {
+  background-color: #3c6db3; /* Um tom ainda mais escuro para o hover */
+}
+
+
 .panels-container {
   position: absolute;
   height: 100%;
@@ -266,6 +280,18 @@ form.sign-in-form {
 
 .container.sign-up-mode .right-panel {
   pointer-events: all;
+}
+
+/* Link "Esqueceu a senha ?" */
+a.btn-forgot {
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  width: 100%;
+  max-width: 380px;
+  text-align: right;
+  padding-right: 15px;
+  color: #555;
 }
 
 @media (max-width: 870px) {
@@ -395,13 +421,4 @@ form.sign-in-form {
     bottom: 28%;
     left: 50%;
   }
-
-
-}
-a{
-  font-size: 14px;
-  text-decoration: underline;
-  text-align: end;
-  text-underline: aqua;
-  cursor: pointer;
 }

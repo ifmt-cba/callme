@@ -108,7 +108,7 @@ public class ChamadoExternoService {
 
     @Transactional
     public Optional<ChamadoExterno> atualizarChamadoComoTecnico(Long chamadoId, TecnicoUpdateDTO updateData) {
-        // Pega o técnico logado (esta parte está correta)
+        // Pega o técnico logado
         Jwt principal = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID userId = UUID.fromString(principal.getSubject());
         User tecnicoLogado = userRepository.findById(userId)
@@ -120,14 +120,14 @@ public class ChamadoExternoService {
                 throw new AccessDeniedException("Você não tem permissão para editar este chamado.");
             }
 
-            // 1. Guarda o novo status em uma variável
             ChamadoExterno.StatusChamado novoStatus = ChamadoExterno.StatusChamado.valueOf(updateData.status());
             chamadoDoBanco.setStatus(novoStatus);
 
-            // 3. SE o novo status for FECHADO, grava a data de finalização
+            // Se o novo status for FECHADO, grava a data E ENVIA O E-MAIL
             if (novoStatus == ChamadoExterno.StatusChamado.FECHADO) {
                 chamadoDoBanco.setDataFinalizacao(LocalDateTime.now());
 
+                // --- ADICIONE A CHAMADA PARA ENVIAR O E-MAIL AQUI ---
                 try {
                     emailService.sendChamadoFinalizadoResponse(
                             chamadoDoBanco.getRemetente(),
@@ -139,7 +139,7 @@ public class ChamadoExternoService {
                 }
             }
 
-            // 4. Adiciona o novo comentário (lógica que já funciona)
+            // Adiciona o novo comentário
             if (updateData.comentario() != null && !updateData.comentario().isBlank()) {
                 Comentario novoComentario = new Comentario(updateData.comentario(), chamadoDoBanco, tecnicoLogado);
                 chamadoDoBanco.getComentarios().add(novoComentario);
