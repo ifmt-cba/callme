@@ -29,7 +29,7 @@
 
           <td>{{ chamado.dataHora }}</td>
 
-          <td>{{ chamado.dataFinalizacao }}</td>
+          <td>{{ chamado.dataFinalizacao | date:'dd/MM/yyyy HH:mm' }}</td>
         </tr>
         </tbody>
       </table>
