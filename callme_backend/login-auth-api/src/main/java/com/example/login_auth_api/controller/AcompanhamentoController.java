@@ -26,6 +26,7 @@ public class AcompanhamentoController {
     }
 
     @GetMapping("/{token}")
+
     public ResponseEntity<AcompanhamentoDTO> getAcompanhamentoPorToken(@PathVariable String token) {
         log.info(String.format("Buscando acompanhamento público para o token: %s", token));
 
