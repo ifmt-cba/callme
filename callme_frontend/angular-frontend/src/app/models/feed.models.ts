@@ -3,6 +3,8 @@ export interface FeedItem{
   chamadoId: string;
   content: string;
   username: string;
+  descricao: string;
+
 
 }
 

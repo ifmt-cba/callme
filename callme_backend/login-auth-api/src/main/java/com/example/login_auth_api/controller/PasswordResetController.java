@@ -8,6 +8,7 @@ import com.example.login_auth_api.repositories.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 @PreAuthorize("permitAll()")
@@ -40,14 +43,16 @@ public class PasswordResetController {
 
     @PreAuthorize("permitAll()")
     @PostMapping("/forgot")
-    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDTO dto) {
+    // ✅ TIPO DE RETORNO ALTERADO PARA MAP (JSON)
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody ForgotPasswordDTO dto) {
         String email = dto.getEmail().trim().toLowerCase();
         log.info(String.format("Solicitando senha esquecida | Email: %s", email));
 
         Optional<User> userOpt = userRepository.findByEmailIgnoreCase(email);
         if (userOpt.isEmpty()) {
             log.warn(String.format("Email não encontrado ao solicitar reset | Email: %s", email));
-            return ResponseEntity.ok("Email não encontrado");
+            // ✅ RETORNA JSON DE ERRO
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Email não encontrado"));
         }
 
         User user = userOpt.get();
@@ -62,18 +67,21 @@ public class PasswordResetController {
         sendResetEmail(email, resetLink);
         log.info(String.format("Email de reset enviado com sucesso | Email: %s", email));
 
-        return ResponseEntity.ok("Email enviado com sucesso");
+        // ✅ RETORNA JSON DE SUCESSO
+        return ResponseEntity.ok(Collections.singletonMap("message", "Email enviado com sucesso"));
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(@RequestParam String token,
-                                                @RequestParam String newPassword) {
+    // ✅ TIPO DE RETORNO ALTERADO PARA MAP (JSON)
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestParam String token,
+                                                             @RequestParam String newPassword) {
         log.info(String.format("Resetando senha | Token: %s", token));
 
         Optional<User> userOpt = userRepository.findByToken(token);
         if (userOpt.isEmpty() || userOpt.get().isTokenExpired()) {
             log.warn(String.format("Token inválido ou expirado | Token: %s", token));
-            return ResponseEntity.badRequest().body("Token inválido ou expirado");
+            // ✅ RETORNA JSON DE ERRO
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Token inválido ou expirado"));
         }
 
         User user = userOpt.get();
@@ -83,9 +91,11 @@ public class PasswordResetController {
         userRepository.save(user);
 
         log.info(String.format("Senha redefinida com sucesso | UserID: %s", user.getUserid()));
-        return ResponseEntity.ok("Senha alterada com sucesso!");
+        // ✅ RETORNA JSON DE SUCESSO
+        return ResponseEntity.ok(Collections.singletonMap("message", "Senha alterada com sucesso!"));
     }
 
+    // (O método sendResetEmail permanece o mesmo, pois não tem retorno)
     private void sendResetEmail(String email, String resetLink) {
         log.debug(String.format("Preparando email de reset | To: %s | Link: %s", email, resetLink));
         try {

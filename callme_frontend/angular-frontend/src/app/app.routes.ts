@@ -4,7 +4,7 @@ import {LoginComponent} from "./pages/login/login.component";
 import {SignupComponent} from "./pages/signup/signup.component";
 import {HomeComponent} from "./pages/home/home.component";
 import {AuthGuard} from "./services/auth-guard.service";
-import {ResetSenhaComponent} from "./pages/resetsenha/reset-senha.component";
+import {ResetsenhaComponent} from "./pages/resetsenha/reset-senha.component";
 import {ChamadosInternosComponent} from "./pages/chamados-internos/chamados-internos.component";
 import {ChamadosExternosComponent} from "./pages/chamados-externos/chamados-externos.component";
 import {CriarChamadosComponent} from "./pages/criar-chamados/criar-chamados.component";
@@ -41,7 +41,7 @@ export const routes: Routes = [
 
   {
     path: 'resetsenha',
-    component: ResetSenhaComponent,
+    component: ResetsenhaComponent,
   },
 
   {

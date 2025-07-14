@@ -1,4 +1,4 @@
 package com.example.login_auth_api.dto;
 
-public record FeedItemDto(long chamadoId, String content, String username) {
+public record FeedItemDto(Long chamadoId, String content, String descricao, String authorName) {
 }

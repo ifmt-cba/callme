@@ -1,24 +1,29 @@
-<!-- criar-chamado-interno.component.html -->
 <div class="layout">
-  <!-- Menu lateral -->
+  <app-navbar></app-navbar>
 
-    <app-navbar></app-navbar>
-
-
-  <!-- Conteúdo da tela -->
   <main class="content">
+    <form [formGroup]="chamadoForm" (ngSubmit)="onSubmit()" class="form-container">
 
-    <form class="form-container">
-      <label for="conteudo">Conteúdo do Chamado:</label>
+      <label for="content">Assunto do Chamado:</label>
+      <input
+        id="content"
+        type="text"
+        placeholder="Dê um título para o chamado..."
+        formControlName="content"
+        class="input-assunto"
+      />
+
+      <label for="descricao">Descrição Detalhada:</label>
       <textarea
-        id="conteudo"
-        name="conteudo"
+        id="descricao"
         placeholder="Descreva o problema ou solicitação..."
+        formControlName="descricao"
+        rows="8"
       ></textarea>
 
-      <button type="submit">Enviar Chamado</button>
+      <button type="submit" [disabled]="chamadoForm.invalid">Enviar Chamado</button>
 
-      <p class="mensagem" style="display: none;">Chamado criado com sucesso!</p>
+      <p *ngIf="mensagemSucesso" class="mensagem">Chamado criado com sucesso!</p>
     </form>
   </main>
 </div>

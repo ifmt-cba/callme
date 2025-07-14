@@ -1,21 +1,57 @@
 <div class="reset-container">
-  <div class="reset-card">
-    <div class="reset-header">
-      <div class="logo"></div>
-      <h2>Recuperar Senha</h2>
-      <p>Digite seu e-mail para receber o link de redefinição</p>
+  <header class="header">
+    <div class="logo" (click)="navigateToLogin()">
+      Call<span>Me</span>
     </div>
+    <nav>
+      <a (click)="navigateToLogin()">Voltar ao Login</a>
+    </nav>
+  </header>
 
-    <form [formGroup]="resetForm" (ngSubmit)="submit()">
-      <label for="email">E-mail</label>
-      <div class="input-group">
-        <span class="icon">📧</span>
-        <input type="email" id="email" formControlName="email" placeholder="exemplo@email.com" />
+  <main class="main-content">
+    <div class="reset-card">
+      <div class="card-header">
+        <h2>Redefinir Senha</h2>
+        <p>Insira seu e-mail para receber o link de redefinição.</p>
       </div>
 
-      <button type="submit" class="submit-btn" [disabled]="resetForm.invalid">
-        Solicitar Reset
-      </button>
-    </form>
+      <form [formGroup]="emailForm" (ngSubmit)="submitEmail()" class="reset-form">
+        <div class="input-wrapper">
+          <i class="fa-solid fa-envelope"></i>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="seu.email@exemplo.com"
+            [class.is-invalid]="emailForm.get('email')?.invalid && emailForm.get('email')?.touched">
+        </div>
+
+        <button type="submit" [disabled]="emailForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Enviar Link</span>
+          <div *ngIf="isLoading" class="loader"></div>
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-section">
+      <h5>Sobre</h5>
+      <p>CallMe é uma plataforma de gerenciamento de chamados.</p>
+    </div>
+    <div class="footer-section">
+      <h5>Links Úteis</h5>
+      <ul>
+        <li><a (click)="navigateToLogin()">Login</a></li>
+        <li><a href="#">Termos de Serviço</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h5>Contato</h5>
+      <p>suporte&#64;callme.com</p>
+    </div>
+  </footer>
+  <div class="copy">
+    &copy; 2025 CallMe. Todos os direitos reservados.
   </div>
 </div>
