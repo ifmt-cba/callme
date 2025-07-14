@@ -1,8 +1,9 @@
 package com.example.login_auth_api.dto;
 
-import java.time.Instant;
+import java.util.List; // Importe a classe List
 
 public record AcompanhamentoDTO(
         String status,
-        Instant dataAbertura
+        String dataAbertura,
+        List<ComentarioDTO> comentarios
 ) {}

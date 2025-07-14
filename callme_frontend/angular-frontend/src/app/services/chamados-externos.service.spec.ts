@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ChamadosExternosService } from './chamados-externos.service';
+import { ChamadoExternoService } from './chamados-externos.service';
 
-describe('ChamadosExternosService', () => {
-  let service: ChamadosExternosService;
+describe('ChamadoExternoService', () => {
+  let service: ChamadoExternoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ChamadosExternosService);
+    service = TestBed.inject(ChamadoExternoService);
   });
 
   it('should be created', () => {
