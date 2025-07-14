@@ -1,41 +1,48 @@
-<div class="layout-container">
+<app-navbar (onToggleSideNav)="onToggleSideNav($event)"></app-navbar>
 
-<app-navbar></app-navbar>
-  <!-- Conteúdo principal -->
-  <main class="main-content">
-
-    <!-- Cabeçalho -->
-    <div class="feed-header">
-      <div class="left">
-        <label for="filter">Filtrar:</label>
-        <select id="filter">
-          <option value="">Todos os chamados</option>
-          <option value="recentes">Mais recentes</option>
-          <option value="antigos">Mais antigos</option>
-        </select>
+<main class="content" [ngClass]="{'content-trimmed': isSideNavCollapsed}">
+  <div class="tickets-container">
+    <header class="tickets-header">
+      <h1>Feed de Chamados Internos</h1>
+      <div class="filters">
+        <div class="search-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Pesquisar por ID, título, descrição ou solicitante...">
+        </div>
       </div>
+    </header>
 
-      <div class="right">
-        <label for="user">Usuário:</label>
-        <select id="user">
-          <option value="admin">admin</option>
-          <option value="karina">karina</option>
-        </select>
-      </div>
+    <div *ngIf="isLoading" class="loading-container">
+      <p>Carregando chamados...</p>
     </div>
 
-    <!-- Listagem -->
-    <div class="chamado-container" *ngIf="chamados.length > 0; else vazio">
-      <div class="chamado-card" *ngFor="let item of chamados">
-        <p class="chamado-id"><strong>#{{ item.chamadoId }}</strong></p>
-        <p class="username"><em>{{ item.username }}</em></p>
-        <p class="content">{{ item.content }}</p>
+    <div class="tickets-list" *ngIf="!isLoading">
+      <div class="ticket-card" *ngFor="let chamado of filteredChamados">
+        <div class="card-header">
+          <span class="ticket-type">INTERNO</span>
+          <span class="ticket-id">#{{ chamado.chamadoId }}</span>
+        </div>
+        <div class="card-body">
+          <h3>{{ chamado.content }}</h3>
+          <p>{{ chamado.descricao || 'Nenhuma descrição fornecida.' }}</p>
+        </div>
+        <div class="card-footer">
+          <div class="user-info">
+            <i class="fa-solid fa-user"></i>
+            <span>{{ chamado.authorName }}</span>
+          </div>
+          <div class="footer-actions">
+            <span class="status status-aberto">Aberto</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredChamados.length === 0">
+        <p>Nenhum chamado encontrado com os filtros atuais.</p>
       </div>
     </div>
-
-    <ng-template #vazio>
-      <p>Nenhum chamado interno disponível.</p>
-    </ng-template>
-
-  </main>
-</div>
+  </div>
+</main>

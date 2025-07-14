@@ -55,8 +55,9 @@ public class ChamadoInternoController {
 
         var chamado = new ChamadoInterno();
         chamado.setUser(user.get());
+        chamado.setDescricao(dto.descricao());
         chamado.setContent(dto.content());
-        // chamado.setDescricao(dto.descricao()); // Descomente se o DTO tiver descrição
+
 
         chamadoInternoRepository.save(chamado);
         log.info(String.format("Chamado criado com sucesso | UserID: %s | ChamadoID: %d", userId, chamado.getChamadoID()));
@@ -73,7 +74,9 @@ public class ChamadoInternoController {
                 .map(chamado ->
                         new FeedItemDto(chamado.getChamadoID(),
                                 chamado.getContent(),
+                                chamado.getDescricao(),
                                 chamado.getUser().getUsername()));
+
 
         return ResponseEntity.ok(new FeedDto(chamados.getContent(), page, pageSize,
                 chamados.getTotalPages(),

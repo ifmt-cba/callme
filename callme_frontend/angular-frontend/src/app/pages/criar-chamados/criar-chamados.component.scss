@@ -1,95 +1,99 @@
-/* Layout geral */
-.layout {
-  display: flex;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  background-color: #f3f4f6;
-}
+// Definição das variáveis de cores (movidas para o topo)
+$primary-color : #034d9c;
+$secondary-color : #031e41;
+$text-color : #494952;
+$gray-bg : #EEEEEEEE;
+$gray-secondary-bg : #e1e3e7;
+$text-primary: #ffffff; // Adicionei esta variável para a cor do texto do botão
 
-/* Menu lateral */
-.sidebar {
-  width: 220px;
-  background-color: #1f2937;
-  color: white;
-  padding: 2rem 1rem;
-}
-
-.logo {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.menu a {
-  display: block;
-  color: white;
-  text-decoration: none;
-  padding: 0.75rem 1rem;
-  border-radius: 5px;
-  margin-bottom: 0.5rem;
-  transition: background-color 0.3s ease;
-}
-
-.menu a.active,
-.menu a:hover {
-  background-color: #374151;
-}
-
-/* Conteúdo principal */
-.content {
-  flex: 1;
-  display: flex;
-  justify-content: center; /* Centraliza horizontalmente */
-  align-items: center;     /* Centraliza verticalmente */
-  padding: 2rem;
-}
-
-/* Formulário */
+// Container principal do formulário
 .form-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 600px;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; // Espaçamento entre os elementos do formulário
+  max-width: 700px; // Largura máxima para melhor leitura
+  margin: 40px auto; // Centraliza o formulário na página
+  padding: 35px;
+  background-color: #ffffff; // Fundo branco para o card do formulário
+  border-radius: 12px; // Bordas mais arredondadas
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); // Sombra suave para dar profundidade
 }
 
-.form-container label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.form-container textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 1rem;
+// Estilo para os rótulos (labels)
+label {
   font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  resize: vertical;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #4A4A4A; // Cor de texto um pouco mais suave
+  margin-bottom: -12px; // Ajusta o espaço entre o rótulo e o campo
 }
 
-/* Botão */
+// Estilos comuns para os campos de input e textarea
+input,
+textarea {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-family: inherit; // Usa a mesma fonte do resto do corpo
+  border: 1px solid #D1D1D1; // Borda sutil
+  border-radius: 8px;
+  background-color: #F9F9F9; // Fundo levemente acinzentado
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; // Transição suave
+
+  // Efeito ao focar no campo
+  &:focus {
+    outline: none;
+    border-color: $secondary-color; // Usa a cor secundária do projeto
+    // Ajuste na sombra para usar a cor $secondary-color
+    box-shadow: 0 0 0 3px rgba(3, 30, 65, 0.15);
+  }
+}
+
+// Estilos específicos para o textarea
+textarea {
+  resize: vertical; // Permite que o usuário redimensione apenas na vertical
+  min-height: 160px;
+}
+
+// Estilo principal do botão de envio
 button[type="submit"] {
-  padding: 0.75rem 1.5rem;
-  background-color: #3b82f6;
-  color: white;
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $text-primary; // Texto branco
+  background-color: $secondary-color; // Cor secundária do projeto
   border: none;
   border-radius: 8px;
-  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  // Ajuste na sombra para usar a cor $secondary-color
+  box-shadow: 0 4px 10px rgba(3, 30, 65, 0.2);
+
+  // Efeito ao passar o mouse
+  &:hover {
+    background-color: $primary-color; // Usa a cor primária mais escura no hover
+    transform: translateY(-2px); // Leve elevação
+  }
+
+  // Estilo para o botão desabilitado
+  &:disabled {
+    background-color: #BDBDBD;
+    color: #666666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 }
 
-button[type="submit"]:hover {
-  background-color: #2563eb;
-}
-
-/* Mensagem de sucesso/erro */
+// Estilo para a mensagem de sucesso
 .mensagem {
-  margin-top: 1rem;
-  font-weight: bold;
-  color: green;
+  text-align: center;
+  color: #28a745;
+  font-weight: 500;
+  margin-top: 10px;
+  background-color: #e9f7ec;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #a3e0b3;
 }

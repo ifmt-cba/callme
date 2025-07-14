@@ -43,38 +43,41 @@ export class UsuariosComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
     })
   }
+
   onSignUp(): void {
     this.renderer.addClass(this.containerRef.nativeElement, 'sign-up-mode');
   }
+
   onSignIn(): void {
     this.renderer.removeClass(this.containerRef.nativeElement, 'sign-up-mode');
   }
+
+  // ✅ FUNÇÃO CORRIGIDA
   submit() {
     this.loginService.signup(this.signupForm.value.username, this.signupForm.value.password, this.signupForm.value.email).subscribe({
       next: () => {
-        this.toastService.success("Usuario Criado com sucesso")
-        setTimeout(() => {this.router.navigate(["/usuarios"]);
-        },1200)
+        this.toastService.success("Usuario Criado com sucesso");
+
+        // Em vez de navegar, chamamos a função que volta para a tela de login
+        setTimeout(() => {
+          this.onSignIn();
+        }, 1200); // 1.2 segundos para o usuário ler a mensagem
       },
-      error: () => this.toastService.error("Tente se registrar mais tarde  "),
+      error: () => this.toastService.error("Tente se registrar mais tarde"),
     })
   }
+
   navigate(){
     this.router.navigate(["login"]);
   }
-  // Em usuarios.component.ts
 
   submitLogin() {
     this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
       next: (res: any) => {
-        // A chave no backend agora é "accessToken" (com dois 's')
         const token = res.accessToken;
 
         if (token) {
-          // AQUI ESTÁ A CORREÇÃO PRINCIPAL:
-          // Usamos o AuthService para salvar, que usa a chave "accessToken"
           this.authService.setToken(token);
-
           this.toastService.success("Login realizado com sucesso!");
           this.router.navigate(["/home"]);
         } else {
@@ -89,7 +92,12 @@ export class UsuariosComponent {
   navigateTosup(){
     this.router.navigate(["signup"]);
   }
+
   navigateToReset() {
     this.router.navigate(['/resetsenha']);
+  }
+
+  navigateToAcompanhamentos(): void {
+    this.router.navigate(['/acompanhamentos']);
   }
 }
