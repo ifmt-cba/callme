@@ -208,8 +208,9 @@ A documentação completa do projeto está organizada na pasta `docs/`:
 
 | Documento | Descrição |
 |-----------|-----------|
-| [Arquitetura do Sistema](docs/system_architecture.md) | Visão detalhada da arquitetura, componentes e fluxos |
+| [Arquitetura do Sistema](docs/SYSTEM_ARCHITECTURE.md) | Visão detalhada da arquitetura, componentes e fluxos |
 | [Diagrama ER](docs/diagrama_er.md) | Modelo de dados e relacionamentos |
+| [Diagrama de Classes](docs/diagrama%20_de%20_classes.md) | Representação das classes do sistema |
 | [Backend](docs/backend_documentation.md) | API, endpoints e estrutura do backend |
 | [Frontend](docs/frontend_documentation.md) | Componentes e estrutura do frontend |
 
