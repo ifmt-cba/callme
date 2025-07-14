@@ -24,6 +24,7 @@ export interface ChamadosItem {
   status: string;
   tecnico?: Tecnico | null
   comentarios?: Comentario[];
+  dataFinalizacao?: string;
 
 }
 

@@ -16,17 +16,20 @@
           <th>ID</th>
           <th>Assunto</th>
           <th>Remetente</th>
-          <th>Técnico Responsável</th>
+          <th>Técnico</th>
           <th>Data de Abertura</th>
-        </tr>
+          <th>Data de Finalização</th> </tr>
         </thead>
         <tbody>
         <tr *ngFor="let chamado of chamadosFinalizados">
-          <td>#{{ chamado.id }}</td>
+          <td><span class="id-badge">#{{ chamado.id }}</span></td>
           <td>{{ chamado.assunto }}</td>
           <td>{{ chamado.remetente }}</td>
           <td>{{ chamado.tecnico?.username || 'N/A' }}</td>
+
           <td>{{ chamado.dataHora }}</td>
+
+          <td>{{ chamado.dataFinalizacao }}</td>
         </tr>
         </tbody>
       </table>

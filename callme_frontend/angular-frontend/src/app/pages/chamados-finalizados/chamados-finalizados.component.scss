@@ -1,10 +1,51 @@
-// Reutilize os estilos de .container, .conteudo, h2, h4, .feedback da sua outra página
+// Estilos para a página de Chamados Finalizados
+
+// Estilos base reutilizados
+.container {
+  background-color: #f2f5f9;
+  min-height: 100vh;
+}
+
+.conteudo {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2, h4 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #7f8c8d;
+}
+
+.feedback {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  font-size: 1.1rem;
+  padding: 3rem;
+}
+
+// --- Novos estilos para a tabela ---
+
+// Animação sutil para as linhas da tabela aparecerem
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .tabela-container {
   background-color: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  overflow: hidden; // Garante que o border-radius seja aplicado à tabela
 }
 
 table {
@@ -14,25 +55,47 @@ table {
   th, td {
     padding: 1rem 1.5rem;
     text-align: left;
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ecf0f1; // Borda mais suave
   }
 
   thead th {
     background-color: #f9fafb;
     color: #34495e;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky; // Cabeçalho fixo no topo ao rolar a página
+    top: 0;
+    z-index: 1;
   }
 
   tbody tr {
-    transition: background-color 0.2s ease;
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+
+    // Efeito "zebra" para melhor legibilidade
+    &:nth-child(even) {
+      background-color: #fcfcfd;
+    }
+
     &:hover {
-      background-color: #f2f5f9;
+      background-color: #f0f4f8;
     }
   }
 
   td {
     color: #555;
+    font-size: 0.95rem;
+  }
+
+  // Estilo para a coluna de ID
+  .id-badge {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
   }
 }
