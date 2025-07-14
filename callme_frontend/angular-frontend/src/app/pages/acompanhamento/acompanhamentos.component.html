@@ -9,7 +9,7 @@
 
   <main class="main-content">
     <h1>Acompanhe seu Chamado</h1>
-    <p>Digite o token do seu chamado para verificar o status e a data de abertura.</p>
+    <p>Digite o token do seu chamado para verificar o status e o histórico de atuação.</p>
 
     <div class="token-input">
       <input
@@ -20,23 +20,35 @@
         [disabled]="isLoading" />
       <button (click)="buscarChamado()" [disabled]="isLoading">
         <span *ngIf="!isLoading">Verificar</span>
-        <span *ngIf="isLoading" class="loader"></span> </button>
+        <span *ngIf="isLoading" class="loader"></span>
+      </button>
     </div>
 
     <div *ngIf="erro" class="error-message">
       {{ erro }}
     </div>
 
-    <section class="status-card" *ngIf="chamado && !erro">
-      <div class="status-header">
-        <h2>Status do Chamado</h2>
-        <span class="status-tag" [ngClass]="chamado.status.toLowerCase()">
+    <div *ngIf="chamado && !erro">
+      <section class="status-card">
+        <div class="status-header">
+          <h2>Status do Chamado</h2>
+          <span class.bind="'status-tag ' + chamado.status.toLowerCase()">
           {{ chamado.status }}
         </span>
-      </div>
-      <p class="data-abertura">Aberto em: {{ chamado.dataAbertura | date:'dd/MM/yyyy HH:mm' }}</p>
-    </section>
+        </div>
+        <p class="data-abertura">Aberto em: {{ chamado.dataAbertura }}</p>
+      </section>
 
+      <section class="historico-comentarios" *ngIf="chamado.comentarios && chamado.comentarios.length > 0">
+        <h3>Histórico de Atuação</h3>
+        <div class="comentario-card" *ngFor="let comentario of chamado.comentarios">
+          <p class="comentario-texto">{{ comentario.texto }}</p>
+          <span class="comentario-meta">
+          Comentário de {{ comentario.autorUsername }} em {{ comentario.dataCriacao | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="footer">
