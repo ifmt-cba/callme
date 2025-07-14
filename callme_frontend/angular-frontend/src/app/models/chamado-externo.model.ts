@@ -9,5 +9,6 @@ export interface ChamadoExterno {
   dataHora: string;
   status: 'ABERTO' | 'EM_ANDAMENTO' | 'FECHADO' | 'NOVO'; // Usa os mesmos valores do seu Enum no Java
   tokenEmail: string;
-  tecnico?: User | null; // O técnico pode ser opcional ou nulo
+  tecnico?: User | null;
+  dataFinalizacao?: string;
 }
