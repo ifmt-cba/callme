@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FeedResponse } from "../models/feed.models";
 import {ChamadoUnificado} from "../models/chamado-unificado.model";
+import {Acompanhamento} from "../models/acompanhamento.model";
 
 
 @Injectable({
@@ -18,5 +19,8 @@ export class FeedService {
   }
   getChamadosUnificados(): Observable<ChamadoUnificado[]> {
     return this.http.get<ChamadoUnificado[]>(`${this.apiUrl}/chamados-unificados`);
+  }
+  getAcompanhamentoPorToken(token: string): Observable<Acompanhamento> {
+    return this.http.get<Acompanhamento>(`${this.apiUrl}/acompanhamentos/${token}`);
   }
 }

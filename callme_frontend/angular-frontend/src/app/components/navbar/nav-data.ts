@@ -40,7 +40,7 @@ export const navbarData = [
 
   {
     routeLink: 'chamados-finalizados',
-    icon: 'fal fa-sign-out',
+    icon: 'fal fa-clipboard-check',
     label: 'Chamados finalizados'
   },
 
@@ -49,7 +49,5 @@ export const navbarData = [
     icon: 'fal fa-sign-out',
     label: 'Sair'
   },
-
-
 
 ];

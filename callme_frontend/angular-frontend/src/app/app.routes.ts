@@ -9,7 +9,7 @@ import {ChamadosInternosComponent} from "./pages/chamados-internos/chamados-inte
 import {ChamadosExternosComponent} from "./pages/chamados-externos/chamados-externos.component";
 import {CriarChamadosComponent} from "./pages/criar-chamados/criar-chamados.component";
 import {UsuariosComponent} from "./pages/usuarios/usuarios.component";
-import {AcompanhamentoComponent} from "./pages/acompanhamento/acompanhamento.component";
+import {AcompanhamentosComponent} from "./pages/acompanhamento/acompanhamentos.component";
 import { EditarChamadoComponent } from './pages/editar-chamado/editar-chamado.component';
 import {ResetPasswordComponent} from "./pages/reset-password/reset-password.component";
 import {UserlistersComponent} from "./pages/userlisters/userlisters.component";
@@ -66,7 +66,7 @@ export const routes: Routes = [
   },
   {
     path:'acompanhamentos',
-    component: AcompanhamentoComponent,
+    component: AcompanhamentosComponent,
   },
 
   {

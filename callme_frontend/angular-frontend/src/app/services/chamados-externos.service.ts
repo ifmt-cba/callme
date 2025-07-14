@@ -1,32 +1,25 @@
-
-// src/app/services/chamados-externos.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {ChamadoResponse, ChamadosItem} from '../models/Chamados.models';
+import { ChamadoExterno } from '../models/chamado-externo.model'; // Modelo no singular
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChamadosExternosService {
+export class ChamadoExternoService {
 
-  private apiUrl = 'http://localhost:8080/chamados/abrir';
+  private apiUrl = 'http://localhost:8080/chamados';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getFeed(): Observable<ChamadosItem[]> {
-    return this.http.get<ChamadosItem[]>(this.apiUrl);
+  // ✅ CORREÇÃO AQUI: O tipo de retorno deve ser 'ChamadoExterno[]' (singular)
+  listarChamados(): Observable<ChamadoExterno[]> {
+    return this.http.get<ChamadoExterno[]>(`${this.apiUrl}/listar`);
   }
 
-  getChamadoById(id: string): Observable<ChamadosItem> {
-    return this.http.get<ChamadosItem>(`/chamados/buscar/${id}`);
+  // (O resto dos seus métodos do serviço...)
+  getMeusChamados(): Observable<ChamadoExterno[]> {
+    return this.http.get<ChamadoExterno[]>(`${this.apiUrl}/meus-chamados`);
   }
 
-  updateChamado(chamado: ChamadosItem): Observable<any> {
-    return this.http.put(`http://localhost:8080/chamados/editar/token/${chamado.tokenEmail}`, chamado);
-  }
-
-  deleteChamado(tokenEmail: string): Observable<any> {
-    return this.http.delete(`/api/chamados/${tokenEmail}`);
-  }
 }

@@ -1,0 +1,65 @@
+<div class="acompanhamento-container">
+  <header class="header">
+    <a class="logo" routerLink="/principal">Call<span>Me</span></a>
+    <nav>
+      <a href="#">Suporte</a>
+      <a href="#">Contato</a>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <h1>Acompanhe seu Chamado</h1>
+    <p>Digite o token do seu chamado para verificar o status e a data de abertura.</p>
+
+    <div class="token-input">
+      <input
+        type="text"
+        [(ngModel)]="token"
+        placeholder="Digite seu token aqui"
+        (keyup.enter)="buscarChamado()"
+        [disabled]="isLoading" />
+      <button (click)="buscarChamado()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Verificar</span>
+        <span *ngIf="isLoading" class="loader"></span> </button>
+    </div>
+
+    <div *ngIf="erro" class="error-message">
+      {{ erro }}
+    </div>
+
+    <section class="status-card" *ngIf="chamado && !erro">
+      <div class="status-header">
+        <h2>Status do Chamado</h2>
+        <span class="status-tag" [ngClass]="chamado.status.toLowerCase()">
+          {{ chamado.status }}
+        </span>
+      </div>
+      <p class="data-abertura">Aberto em: {{ chamado.dataAbertura | date:'dd/MM/yyyy HH:mm' }}</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="sobre">
+      <h5>Sobre Nós</h5>
+      <p>Fornecemos soluções eficientes para o acompanhamento de chamados técnicos.</p>
+    </div>
+    <div class="contato">
+      <h5>Contato</h5>
+      <p>📞 0800 123 4567</p>
+      <p>✉️ suporte&#64;callme.com</p>
+      <p>📍 Cuiabá, MT</p>
+    </div>
+    <div class="links">
+      <h5>Links Úteis</h5>
+      <ul>
+        <li><a href="#">Termos de Uso</a></li>
+        <li><a href="#">Política de Privacidade</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <div class="copy">
+    © 2025 CallMe. Todos os direitos reservados.
+  </div>
+</div>

@@ -50,7 +50,8 @@ public class SecurityConfig {
                 .securityMatcher(
                         "/login",
                         "/register", // se tiver uma rota de registro
-                        "/api/password/**"
+                        "/api/password/**",
+                        "/acompanhamentos/**"
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll() // Permite tudo que foi listado no securityMatcher
