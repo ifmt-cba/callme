@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 public class ChamadoExternoService {
 
+
+
     private final ChamadoExternoRepository chamadoRepository;
     private final UserRepository userRepository;
     private final SendEmailService emailService;
@@ -120,13 +122,21 @@ public class ChamadoExternoService {
 
             // 1. Guarda o novo status em uma variável
             ChamadoExterno.StatusChamado novoStatus = ChamadoExterno.StatusChamado.valueOf(updateData.status());
-
-            // 2. Atualiza o status do chamado
             chamadoDoBanco.setStatus(novoStatus);
 
             // 3. SE o novo status for FECHADO, grava a data de finalização
             if (novoStatus == ChamadoExterno.StatusChamado.FECHADO) {
                 chamadoDoBanco.setDataFinalizacao(LocalDateTime.now());
+
+                try {
+                    emailService.sendChamadoFinalizadoResponse(
+                            chamadoDoBanco.getRemetente(),
+                            chamadoDoBanco.getMessageId(),
+                            chamadoDoBanco.getAssunto()
+                    );
+                } catch (Exception e) {
+                    System.err.println("Falha ao enviar e-mail de finalização para o chamado ID: " + chamadoDoBanco.getId() + ". Erro: " + e.getMessage());
+                }
             }
 
             // 4. Adiciona o novo comentário (lógica que já funciona)
