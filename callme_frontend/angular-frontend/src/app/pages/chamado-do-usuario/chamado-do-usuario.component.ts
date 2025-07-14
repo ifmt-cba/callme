@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ToastrService } from 'ngx-toastr'; // Importe o ToastrService
 
