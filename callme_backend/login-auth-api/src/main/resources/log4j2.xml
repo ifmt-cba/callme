@@ -9,7 +9,7 @@
         <!-- Console -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}" />
-            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
         </Console>
 
         <!-- File -->
@@ -27,7 +27,7 @@
         </Logger>
 
         <!-- Root logger para console -->
-        <Root level="warn">
+        <Root level="trace">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>
